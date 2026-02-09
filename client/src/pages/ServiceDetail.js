@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useParams } from 'react-router-dom';
 import { Phone, Mail, Globe } from 'lucide-react';
 

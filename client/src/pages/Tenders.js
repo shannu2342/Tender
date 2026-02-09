@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Filter, Download, Share } from 'lucide-react';
 
 const Tenders = () => {

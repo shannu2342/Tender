@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const FAQ = () => {
     const [expandedIndex, setExpandedIndex] = useState(null);
