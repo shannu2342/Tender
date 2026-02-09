@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Lock, Mail, AlertCircle } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ShieldCheck, Sparkles } from 'lucide-react';
 
 const AdminLogin = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('admin@example.com');
+    const [password, setPassword] = useState('admin123');
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -26,7 +26,7 @@ const AdminLogin = () => {
             } else {
                 setError(response.message || 'Login failed. Please check your credentials.');
             }
-        } catch (error) {
+        } catch (submitError) {
             setError('An error occurred while logging in. Please try again.');
         } finally {
             setLoading(false);
@@ -34,185 +34,113 @@ const AdminLogin = () => {
     };
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f8f9fa',
-            padding: '20px'
-        }}>
-            <div style={{
-                width: '100%',
-                maxWidth: '400px',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                padding: '40px'
-            }}>
-                {/* Logo and Title */}
-                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                    <div style={{
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#007bff',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        color: 'white',
-                        fontSize: '2rem',
-                        fontWeight: 'bold'
-                    }}>
-                        G
-                    </div>
-                    <h1 style={{
-                        fontSize: '1.8rem',
-                        fontWeight: '700',
-                        color: '#2c3e50',
-                        marginBottom: '10px'
-                    }}>
-                        Admin Login
-                    </h1>
-                    <p style={{
-                        color: '#6c757d',
-                        fontSize: '0.9rem'
-                    }}>
-                        Government e-Marketplace Services
+        <section className="admin-login-page">
+            <div className="admin-login-bg admin-login-bg--one" aria-hidden="true" />
+            <div className="admin-login-bg admin-login-bg--two" aria-hidden="true" />
+
+            <div className="admin-login-shell">
+                <aside className="admin-login-showcase">
+                    <span className="admin-login-pill">
+                        <Sparkles size={14} />
+                        Enterprise-grade portal
+                    </span>
+                    <h1>Secure Admin Access</h1>
+                    <p>
+                        Centralized control for services, tenders, enquiries, and users with production-ready performance and governance.
                     </p>
-                </div>
 
-                {/* Error Message */}
-                {error && (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'start',
-                        gap: '10px',
-                        backgroundColor: '#f8d7da',
-                        border: '1px solid #f5c6cb',
-                        borderRadius: '6px',
-                        padding: '15px',
-                        marginBottom: '20px',
-                        color: '#721c24'
-                    }}>
-                        <AlertCircle style={{ width: '20px', height: '20px', flexShrink: 0 }} />
-                        <span style={{ fontSize: '0.9rem' }}>{error}</span>
+                    <ul>
+                        <li><ShieldCheck size={16} /> Role-based access architecture</li>
+                        <li><ShieldCheck size={16} /> Streamlined content workflows</li>
+                        <li><ShieldCheck size={16} /> Fast and responsive on every screen</li>
+                    </ul>
+                </aside>
+
+                <div className="admin-login-card">
+                    <div className="admin-login-card__head">
+                        <span className="brand__badge">G</span>
+                        <div>
+                            <h2>Admin Login</h2>
+                            <p>Government e-Marketplace Services</p>
+                        </div>
                     </div>
-                )}
 
-                {/* Login Form */}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-                            <Mail style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                            Email
+                    {error && (
+                        <div className="admin-login-error" role="alert">
+                            <AlertCircle size={18} />
+                            <span>{error}</span>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="admin-login-form">
+                        <div className="form-group">
+                            <label htmlFor="email">
+                                <Mail size={15} />
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="admin@example.com"
+                                className="form-control"
+                                required
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">
+                                <Lock size={15} />
+                                Password
+                            </label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter your password"
+                                className="form-control"
+                                required
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <label className="checkbox-row" htmlFor="remember">
+                            <input
+                                type="checkbox"
+                                id="remember"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                disabled={loading}
+                            />
+                            <span>Keep me signed in on this device</span>
                         </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@example.com"
-                            className="form-control"
-                            required
-                            disabled={loading}
-                        />
+
+                        <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                            {loading ? (
+                                <span className="btn-loading">
+                                    <span className="spinner" />
+                                    Logging in...
+                                </span>
+                            ) : (
+                                'Login to Dashboard'
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="admin-login-links">
+                        <p>
+                            Need access? <Link to="/contact">Contact Support</Link>
+                        </p>
+                        <p>
+                            Lost password? <Link to="/contact">Reset Password</Link>
+                        </p>
                     </div>
-
-                    <div className="form-group">
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-                            <Lock style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            className="form-control"
-                            required
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        marginBottom: '25px'
-                    }}>
-                        <input
-                            type="checkbox"
-                            id="remember"
-                            checked={rememberMe}
-                            onChange={(e) => setRememberMe(e.target.checked)}
-                            disabled={loading}
-                        />
-                        <label htmlFor="remember" style={{
-                            fontSize: '0.9rem',
-                            color: '#6c757d',
-                            cursor: 'pointer'
-                        }}>
-                            Remember me
-                        </label>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        style={{ width: '100%', marginBottom: '20px' }}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{
-                                    width: '18px',
-                                    height: '18px',
-                                    border: '2px solid rgba(255, 255, 255, 0.3)',
-                                    borderTop: '2px solid white',
-                                    borderRadius: '50%',
-                                    animation: 'spin 1s linear infinite'
-                                }}></div>
-                                <span>Logging in...</span>
-                            </div>
-                        ) : (
-                            'Login'
-                        )}
-                    </button>
-                </form>
-
-                {/* Footer Links */}
-                <div style={{ textAlign: 'center' }}>
-                    <p style={{
-                        color: '#6c757d',
-                        fontSize: '0.85rem',
-                        marginBottom: '10px'
-                    }}>
-                        Don't have an account?{' '}
-                        <Link to="/contact" style={{
-                            color: '#007bff',
-                            textDecoration: 'none',
-                            fontWeight: '500'
-                        }}>
-                            Contact Support
-                        </Link>
-                    </p>
-                    <p style={{
-                        color: '#6c757d',
-                        fontSize: '0.85rem'
-                    }}>
-                        Forgot your password?{' '}
-                        <Link to="/contact" style={{
-                            color: '#007bff',
-                            textDecoration: 'none',
-                            fontWeight: '500'
-                        }}>
-                            Reset Password
-                        </Link>
-                    </p>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

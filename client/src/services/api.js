@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Create axios instance
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -40,11 +40,11 @@ api.interceptors.response.use(
 
 // Auth Services
 export const authService = {
-    login: (email, password) => api.post('/auth/admin/login', { email, password }),
-    getProfile: () => api.get('/auth/admin/profile'),
-    updateProfile: (data) => api.put('/auth/admin/profile', data),
+    login: (email, password) => api.post('/auth/login', { email, password }),
+    getProfile: () => api.get('/auth/profile'),
+    updateProfile: (data) => api.put('/auth/profile', data),
     changePassword: (oldPassword, newPassword) =>
-        api.put('/auth/admin/change-password', { oldPassword, newPassword })
+        api.put('/auth/change-password', { oldPassword, newPassword })
 };
 
 // Pages Services

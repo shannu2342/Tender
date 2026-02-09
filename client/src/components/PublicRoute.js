@@ -10,38 +10,26 @@ const PublicRoute = ({ element, isAdminRoute = false }) => {
     if (loading) {
         return (
             <div className="loading">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{
-                        width: '20px',
-                        height: '20px',
-                        border: '2px solid #e0e0e0',
-                        borderTop: '2px solid #007bff',
-                        borderRadius: '50%',
-                        animation: 'spin 1s linear infinite'
-                    }}></div>
+                <div className="btn-loading">
+                    <span className="spinner" />
                     <span>Loading...</span>
                 </div>
             </div>
         );
     }
 
-    // If accessing admin login page and already authenticated, redirect to dashboard
     if (isAdminRoute && admin) {
         return <Navigate to="/admin/dashboard" replace />;
     }
 
-    // If accessing admin login page, show without header/footer
     if (isAdminRoute) {
         return element;
     }
 
-    // For public pages, show with header and footer
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="main-shell">
             <Header />
-            <main style={{ flex: 1 }}>
-                {element}
-            </main>
+            <main style={{ flex: 1 }}>{element}</main>
             <Footer />
         </div>
     );
