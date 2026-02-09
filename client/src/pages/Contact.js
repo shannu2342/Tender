@@ -112,7 +112,7 @@ const Contact = () => {
                     <div style={{ marginTop: '40px' }}>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '20px', color: '#2d3748' }}>Follow Us</h3>
                         <div style={{ display: 'flex', gap: '15px' }}>
-                            <a href="#" style={{
+                            <button style={{
                                 width: '40px',
                                 height: '40px',
                                 backgroundColor: '#f7fafc',
@@ -122,11 +122,13 @@ const Contact = () => {
                                 justifyContent: 'center',
                                 color: '#3182ce',
                                 textDecoration: 'none',
-                                transition: 'background-color 0.3s ease'
+                                transition: 'background-color 0.3s ease',
+                                border: 'none',
+                                cursor: 'pointer'
                             }}>
                                 F
-                            </a>
-                            <a href="#" style={{
+                            </button>
+                            <button style={{
                                 width: '40px',
                                 height: '40px',
                                 backgroundColor: '#f7fafc',
@@ -136,11 +138,13 @@ const Contact = () => {
                                 justifyContent: 'center',
                                 color: '#3182ce',
                                 textDecoration: 'none',
-                                transition: 'background-color 0.3s ease'
+                                transition: 'background-color 0.3s ease',
+                                border: 'none',
+                                cursor: 'pointer'
                             }}>
                                 T
-                            </a>
-                            <a href="#" style={{
+                            </button>
+                            <button style={{
                                 width: '40px',
                                 height: '40px',
                                 backgroundColor: '#f7fafc',
@@ -150,11 +154,13 @@ const Contact = () => {
                                 justifyContent: 'center',
                                 color: '#3182ce',
                                 textDecoration: 'none',
-                                transition: 'background-color 0.3s ease'
+                                transition: 'background-color 0.3s ease',
+                                border: 'none',
+                                cursor: 'pointer'
                             }}>
                                 L
-                            </a>
-                            <a href="#" style={{
+                            </button>
+                            <button style={{
                                 width: '40px',
                                 height: '40px',
                                 backgroundColor: '#f7fafc',
@@ -164,10 +170,12 @@ const Contact = () => {
                                 justifyContent: 'center',
                                 color: '#3182ce',
                                 textDecoration: 'none',
-                                transition: 'background-color 0.3s ease'
+                                transition: 'background-color 0.3s ease',
+                                border: 'none',
+                                cursor: 'pointer'
                             }}>
                                 I
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
