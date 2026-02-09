@@ -421,14 +421,14 @@ const Tenders = () => {
                                 <a href={`/tenders/${tender.id}`} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                     View Details
                                 </a>
-                                <a href="#" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                     <Download style={{ width: '16px', height: '16px' }} />
                                     Download Document
-                                </a>
-                                <a href="#" className="btn btn-light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                </button>
+                                <button className="btn btn-light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                     <Share style={{ width: '16px', height: '16px' }} />
                                     Share
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

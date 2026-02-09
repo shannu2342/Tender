@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Phone, Mail, Globe, Clock, MapPin, Download, Share } from 'lucide-react';
+import { Phone, Mail, Globe, MapPin, Download, Share } from 'lucide-react';
 
 const TenderDetail = () => {
     const { id } = useParams();
@@ -261,17 +261,17 @@ const TenderDetail = () => {
                             <div style={{ backgroundColor: '#f7fafc', padding: '20px', borderRadius: '5px' }}>
                                 <h3 style={{ fontSize: '1.2rem', marginBottom: '20px', color: '#2d3748' }}>Quick Actions</h3>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <a href="#" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                    <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                         Apply for Tender
-                                    </a>
-                                    <a href="#" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                    </button>
+                                    <button className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                         <Download style={{ width: '16px', height: '16px' }} />
                                         Download All Documents
-                                    </a>
-                                    <a href="#" className="btn btn-light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                    </button>
+                                    <button className="btn btn-light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                         <Share style={{ width: '16px', height: '16px' }} />
                                         Share Tender
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -324,7 +324,7 @@ const TenderDetail = () => {
                                             <span>2023-11-{item * 10}</span>
                                         </div>
                                     </div>
-                                    <a href="#" style={{
+                                    <a href={`/tenders/${item}`} style={{
                                         display: 'inline-block',
                                         backgroundColor: '#3182ce',
                                         color: 'white',
