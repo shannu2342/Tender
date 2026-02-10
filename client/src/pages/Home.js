@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight, Globe, Clock, CheckCircle, Award } from 'lucide-react';
 import { servicesService, tendersService } from '../services/api';
+import { site } from '../config/site';
+import './Home.css';
 
 const Home = () => {
     const [services, setServices] = useState([]);
@@ -31,15 +33,8 @@ const Home = () => {
     if (loading) {
         return (
             <div className="loading">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{
-                        width: '20px',
-                        height: '20px',
-                        border: '2px solid #e0e0e0',
-                        borderTop: '2px solid #007bff',
-                        borderRadius: '50%',
-                        animation: 'spin 1s linear infinite'
-                    }}></div>
+                <div className="btn-loading">
+                    <span className="spinner" />
                     <span>Loading...</span>
                 </div>
             </div>
@@ -47,46 +42,29 @@ const Home = () => {
     }
 
     return (
-        <div style={{ minHeight: '100vh' }}>
+        <div className="home">
             {/* Hero Section */}
-            <section style={{
-                backgroundColor: '#2c3e50',
-                color: 'white',
-                padding: '80px 0 60px',
-                backgroundImage: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)'
-            }}>
+            <section className="home-hero">
                 <div className="container">
-                    <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-                        <h1 style={{
-                            fontSize: '2.5rem',
-                            fontWeight: '700',
-                            marginBottom: '20px',
-                            lineHeight: '1.2'
-                        }}>
-                            Government e-Marketplace Services
-                        </h1>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            lineHeight: '1.6',
-                            marginBottom: '40px',
-                            color: '#bdc3c7'
-                        }}>
-                            Simplify your GeM registration, tender participation, and government procurement processes
-                            with our expert services. Get access to live tenders, GeM portal assistance, and compliance solutions.
+                    <div className="home-hero__inner">
+                        <h1 className="home-hero__title">{site.name}</h1>
+                        <p className="home-hero__subtitle">
+                            Enterprise-grade GeM onboarding, catalogue enablement, bid participation, and tender workflows.
+                            Get support, documentation, and timelines from a team that knows government procurement.
                         </p>
-                        <div style={{
-                            display: 'flex',
-                            gap: '20px',
-                            justifyContent: 'center',
-                            flexWrap: 'wrap'
-                        }}>
+                        <div className="home-hero__actions">
                             <Link to="/services" className="btn btn-primary">
                                 Our Services <ArrowRight style={{ width: '16px', height: '16px' }} />
                             </Link>
                             <Link to="/tenders" className="btn btn-secondary">
                                 View Tenders <Clock style={{ width: '16px', height: '16px' }} />
                             </Link>
-                            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="btn btn-success">
+                            <a
+                                href={`https://wa.me/${site.contact.whatsappNumber}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-success"
+                            >
                                 WhatsApp Us <Globe style={{ width: '16px', height: '16px' }} />
                             </a>
                         </div>
@@ -95,70 +73,29 @@ const Home = () => {
             </section>
 
             {/* Services Section */}
-            <section style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+            <section className="home-section home-section--alt">
                 <div className="container">
-                    <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <h2 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            marginBottom: '15px',
-                            color: '#2c3e50'
-                        }}>
-                            Our Services
-                        </h2>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            color: '#6c757d',
-                            maxWidth: '600px',
-                            margin: '0 auto'
-                        }}>
-                            Comprehensive solutions for your government procurement needs
+                    <div className="home-section__head">
+                        <h2 className="home-section__title">Our Services</h2>
+                        <p className="home-section__desc">
+                            Practical, compliant support designed for real procurement timelines. Pick a service and we will guide you end-to-end.
                         </p>
                     </div>
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: '30px'
-                    }}>
+                    <div className="home-grid">
                         {services.map((service) => (
                             <div key={service._id} className="card">
                                 <div className="card-body">
-                                    <div style={{
-                                        width: '60px',
-                                        height: '60px',
-                                        backgroundColor: '#e3f2fd',
-                                        borderRadius: '12px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginBottom: '20px'
-                                    }}>
-                                        <CheckCircle style={{ width: '30px', height: '30px', color: '#007bff' }} />
+                                    <div className="home-card__icon" aria-hidden="true">
+                                        <CheckCircle style={{ width: '28px', height: '28px' }} />
                                     </div>
-                                    <h3 style={{
-                                        fontSize: '1.3rem',
-                                        fontWeight: '600',
-                                        marginBottom: '15px',
-                                        color: '#2c3e50'
-                                    }}>
+                                    <h3 className="home-card__title">
                                         {service.title}
                                     </h3>
-                                    <p style={{
-                                        color: '#6c757d',
-                                        marginBottom: '20px',
-                                        lineHeight: '1.6'
-                                    }}>
+                                    <p className="home-card__text">
                                         {service.description}
                                     </p>
-                                    <Link to={`/services/${service.slug}`} style={{
-                                        color: '#007bff',
-                                        textDecoration: 'none',
-                                        fontWeight: '500',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '5px'
-                                    }}>
+                                    <Link to={`/services/${service.slug}`} className="home-card__link">
                                         Learn More <ChevronRight style={{ width: '16px', height: '16px' }} />
                                     </Link>
                                 </div>
@@ -166,7 +103,7 @@ const Home = () => {
                         ))}
                     </div>
 
-                    <div style={{ textAlign: 'center', marginTop: '40px' }}>
+                    <div className="home-center">
                         <Link to="/services" className="btn btn-primary">
                             View All Services <ArrowRight style={{ width: '16px', height: '16px' }} />
                         </Link>
@@ -175,95 +112,50 @@ const Home = () => {
             </section>
 
             {/* Tenders Section */}
-            <section style={{ padding: '80px 0', backgroundColor: 'white' }}>
+            <section className="home-section">
                 <div className="container">
-                    <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <h2 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            marginBottom: '15px',
-                            color: '#2c3e50'
-                        }}>
-                            Latest Tenders
-                        </h2>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            color: '#6c757d',
-                            maxWidth: '600px',
-                            margin: '0 auto'
-                        }}>
-                            Get access to live tenders from various government departments
+                    <div className="home-section__head">
+                        <h2 className="home-section__title">Latest Tenders</h2>
+                        <p className="home-section__desc">
+                            Browse current opportunities from government departments. Filter, evaluate, and participate with confidence.
                         </p>
                     </div>
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                        gap: '30px'
-                    }}>
+                    <div className="home-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
                         {tenders.map((tender) => (
                             <div key={tender._id} className="card">
                                 <div className="card-header">
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        marginBottom: '10px'
-                                    }}>
-                                        <span style={{
-                                            backgroundColor: tender.isPaidContent ? '#ffc107' : '#28a745',
-                                            color: tender.isPaidContent ? '#212529' : 'white',
-                                            padding: '4px 12px',
-                                            borderRadius: '4px',
-                                            fontSize: '0.8rem',
-                                            fontWeight: '500'
-                                        }}>
+                                    <div className="home-tender-meta">
+                                        <span
+                                            className={`home-badge ${tender.isPaidContent ? 'home-badge--premium' : 'home-badge--free'}`}
+                                        >
                                             {tender.isPaidContent ? 'Premium' : 'Free'}
                                         </span>
-                                        <span style={{
-                                            fontSize: '0.85rem',
-                                            color: '#6c757d'
-                                        }}>
+                                        <span className="home-date">
                                             {new Date(tender.lastDate).toLocaleDateString()}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="card-body">
-                                    <h3 style={{
-                                        fontSize: '1.1rem',
-                                        fontWeight: '600',
-                                        marginBottom: '10px',
-                                        color: '#2c3e50'
-                                    }}>
+                                    <h3 style={{ fontSize: '1.08rem', fontWeight: 800, marginBottom: 10 }}>
                                         {tender.title}
                                     </h3>
-                                    <p style={{
-                                        color: '#6c757d',
-                                        marginBottom: '15px',
-                                        fontSize: '0.9rem',
-                                        lineHeight: '1.5'
-                                    }}>
+                                    <p style={{ color: 'var(--text-muted)', marginBottom: 14, fontSize: '0.92rem', lineHeight: 1.55 }}>
                                         {tender.department}
                                     </p>
                                     <div style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
-                                        marginBottom: '15px'
+                                        marginBottom: 14
                                     }}>
-                                        <span style={{
-                                            backgroundColor: '#f8f9fa',
-                                            padding: '4px 10px',
-                                            borderRadius: '4px',
-                                            fontSize: '0.85rem',
-                                            color: '#6c757d'
-                                        }}>
+                                        <span className="home-badge">
                                             {tender.governmentType === 'central' ? 'Central Govt' : 'State Govt'}
                                         </span>
                                         {tender.state && (
                                             <span style={{
                                                 fontSize: '0.85rem',
-                                                color: '#6c757d'
+                                                color: 'var(--text-muted)'
                                             }}>
                                                 {tender.state}
                                             </span>
@@ -277,7 +169,7 @@ const Home = () => {
                         ))}
                     </div>
 
-                    <div style={{ textAlign: 'center', marginTop: '40px' }}>
+                    <div className="home-center">
                         <Link to="/tenders" className="btn btn-primary">
                             View All Tenders <ArrowRight style={{ width: '16px', height: '16px' }} />
                         </Link>
@@ -286,79 +178,46 @@ const Home = () => {
             </section>
 
             {/* Features Section */}
-            <section style={{ padding: '80px 0', backgroundColor: '#f8f9fa' }}>
+            <section className="home-section home-section--alt">
                 <div className="container">
-                    <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <h2 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            marginBottom: '15px',
-                            color: '#2c3e50'
-                        }}>
-                            Why Choose Us
-                        </h2>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            color: '#6c757d',
-                            maxWidth: '600px',
-                            margin: '0 auto'
-                        }}>
-                            Your trusted partner for government procurement solutions
+                    <div className="home-section__head">
+                        <h2 className="home-section__title">Why Choose Us</h2>
+                        <p className="home-section__desc">
+                            Clear deliverables, compliant documentation, and responsive support designed for procurement timelines.
                         </p>
                     </div>
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                        gap: '40px'
-                    }}>
+                    <div className="home-features">
                         {[
                             {
-                                icon: <Award style={{ width: '40px', height: '40px', color: '#007bff' }} />,
+                                icon: <Award style={{ width: '36px', height: '36px' }} />,
                                 title: '10+ Years Experience',
                                 description: 'Trusted by thousands of businesses for their government procurement needs'
                             },
                             {
-                                icon: <CheckCircle style={{ width: '40px', height: '40px', color: '#007bff' }} />,
+                                icon: <CheckCircle style={{ width: '36px', height: '36px' }} />,
                                 title: '100% Satisfaction',
                                 description: 'Dedicated support and guidance throughout your procurement journey'
                             },
                             {
-                                icon: <Clock style={{ width: '40px', height: '40px', color: '#007bff' }} />,
+                                icon: <Clock style={{ width: '36px', height: '36px' }} />,
                                 title: 'Timely Updates',
                                 description: 'Real-time tender alerts and notifications for government opportunities'
                             },
                             {
-                                icon: <CheckCircle style={{ width: '40px', height: '40px', color: '#007bff' }} />,
+                                icon: <CheckCircle style={{ width: '36px', height: '36px' }} />,
                                 title: 'Compliance Guaranteed',
                                 description: 'Ensure adherence to government regulations and procurement norms'
                             }
                         ].map((feature, index) => (
-                            <div key={index} style={{ textAlign: 'center' }}>
-                                <div style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    backgroundColor: '#e3f2fd',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    margin: '0 auto 20px'
-                                }}>
+                            <div key={index} className="home-feature">
+                                <div className="home-feature__icon" aria-hidden="true">
                                     {feature.icon}
                                 </div>
-                                <h3 style={{
-                                    fontSize: '1.2rem',
-                                    fontWeight: '600',
-                                    marginBottom: '15px',
-                                    color: '#2c3e50'
-                                }}>
+                                <h3 style={{ fontSize: '1.08rem', fontWeight: 900, marginBottom: 10 }}>
                                     {feature.title}
                                 </h3>
-                                <p style={{
-                                    color: '#6c757d',
-                                    lineHeight: '1.6'
-                                }}>
+                                <p style={{ color: 'var(--text-muted)', lineHeight: 1.65 }}>
                                     {feature.description}
                                 </p>
                             </div>
@@ -368,42 +227,23 @@ const Home = () => {
             </section>
 
             {/* Call to Action */}
-            <section style={{
-                padding: '80px 0',
-                backgroundColor: '#007bff',
-                color: 'white'
-            }}>
+            <section className="home-cta">
                 <div className="container">
-                    <div style={{ textAlign: 'center' }}>
-                        <h2 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            marginBottom: '20px'
-                        }}>
-                            Ready to Get Started?
-                        </h2>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            marginBottom: '40px',
-                            maxWidth: '600px',
-                            marginLeft: 'auto',
-                            marginRight: 'auto'
-                        }}>
+                    <div className="home-cta__inner">
+                        <h2>Ready to get started?</h2>
+                        <p>
                             Join thousands of businesses already benefiting from our Government e-Marketplace services
                         </p>
-                        <div style={{
-                            display: 'flex',
-                            gap: '20px',
-                            justifyContent: 'center',
-                            flexWrap: 'wrap'
-                        }}>
-                            <Link to="/contact" className="btn btn-light" style={{
-                                backgroundColor: 'white',
-                                color: '#007bff'
-                            }}>
+                        <div className="home-cta__actions">
+                            <Link to="/contact" className="btn btn-light">
                                 Get a Free Consultation <ArrowRight style={{ width: '16px', height: '16px' }} />
                             </Link>
-                            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="btn btn-success">
+                            <a
+                                href={`https://wa.me/${site.contact.whatsappNumber}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-success"
+                            >
                                 WhatsApp Us <Globe style={{ width: '16px', height: '16px' }} />
                             </a>
                         </div>
