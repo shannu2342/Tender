@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-    --bg: #f4f7fb;
+    --bg: #f6fbf8;
     --surface: #ffffff;
-    --surface-soft: #ecf3ff;
+    --surface-soft: #eafff4;
     --text: #12233f;
     --text-muted: #5e718f;
-    --border: #d8e4f8;
-    --accent: #0e7490;
-    --accent-strong: #0f5a88;
-    --accent-soft: #d8f1ff;
-    --brand: #1456a0;
-    --brand-strong: #0c3b7f;
+    --border: #d5efe2;
+    --accent: #16a34a;
+    --accent-strong: #15803d;
+    --accent-soft: #dffbe9;
+    --brand: #0f766e;
+    --brand-strong: #0b5a52;
     --danger: #c0392b;
     --radius-lg: 22px;
     --radius-md: 14px;
@@ -39,8 +39,8 @@ body {
     line-height: 1.6;
     color: var(--text);
     background:
-        radial-gradient(circle at 10% 10%, #d3e4ff 0%, rgba(211, 228, 255, 0) 35%),
-        radial-gradient(circle at 80% 0%, #cffaf2 0%, rgba(207, 250, 242, 0) 35%),
+        radial-gradient(circle at 10% 10%, rgba(207, 250, 229, 0.9) 0%, rgba(207, 250, 229, 0) 36%),
+        radial-gradient(circle at 80% 0%, rgba(214, 236, 255, 0.9) 0%, rgba(214, 236, 255, 0) 34%),
         var(--bg);
 }
 
@@ -327,7 +327,11 @@ code {
 
 .brand--footer .brand__text strong,
 .brand--footer .brand__text small {
-    color: #e8f2ff;
+    color: var(--text);
+}
+
+.brand--footer .brand__text small {
+    color: var(--text-muted);
 }
 
 /* Header */
@@ -336,8 +340,8 @@ code {
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(10px);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72));
-    border-bottom: 1px solid rgba(216, 228, 248, 0.85);
+    background: linear-gradient(180deg, rgba(236, 255, 245, 0.92), rgba(255, 255, 255, 0.74));
+    border-bottom: 1px solid rgba(213, 239, 226, 0.9);
     transition: box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
@@ -361,18 +365,18 @@ code {
 
 .site-header--scrolled {
     background: rgba(255, 255, 255, 0.9);
-    border-bottom-color: rgba(216, 228, 248, 0.95);
+    border-bottom-color: rgba(213, 239, 226, 0.95);
     box-shadow: 0 18px 44px rgba(10, 26, 51, 0.14);
 }
 
 .site-header__topbar {
     background:
-        radial-gradient(circle at 20% 40%, rgba(14, 116, 144, 0.35), rgba(14, 116, 144, 0) 46%),
-        radial-gradient(circle at 85% 60%, rgba(20, 86, 160, 0.35), rgba(20, 86, 160, 0) 52%),
-        linear-gradient(110deg, #071627, #0d2a4a 55%, #071627);
-    color: rgba(234, 242, 255, 0.9);
+        radial-gradient(circle at 12% 50%, rgba(22, 163, 74, 0.28), rgba(22, 163, 74, 0) 48%),
+        radial-gradient(circle at 88% 50%, rgba(15, 118, 110, 0.22), rgba(15, 118, 110, 0) 52%),
+        linear-gradient(110deg, rgba(236, 255, 245, 0.9), rgba(255, 255, 255, 0.5));
+    color: rgba(18, 35, 63, 0.92);
     font-size: 13px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(213, 239, 226, 0.9);
 }
 
 .site-header__topbar-inner {
@@ -409,8 +413,8 @@ code {
 .site-header__contact-link--cta {
     padding: 4px 10px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(213, 239, 226, 0.95);
 }
 
 .site-header__top-actions {
@@ -659,11 +663,13 @@ code {
 .site-footer {
     margin-top: 64px;
     background:
-        radial-gradient(circle at 10% 12%, rgba(69, 144, 224, 0.28) 0%, rgba(69, 144, 224, 0) 32%),
-        linear-gradient(120deg, #0d2748, #11345f 45%, #0f2240);
-    color: #e5f0ff;
+        radial-gradient(circle at 15% 0%, rgba(186, 230, 253, 0.9), rgba(186, 230, 253, 0) 42%),
+        radial-gradient(circle at 85% 10%, rgba(209, 250, 229, 0.85), rgba(209, 250, 229, 0) 46%),
+        linear-gradient(180deg, rgba(224, 242, 254, 0.92), rgba(255, 255, 255, 0.95));
+    color: var(--text);
     padding: 58px 0 18px;
     position: relative;
+    border-top: 1px solid rgba(213, 239, 226, 0.9);
 }
 
 .site-footer__grid {
@@ -674,7 +680,7 @@ code {
 
 .site-footer__text {
     margin-top: 16px;
-    color: #bfd3ef;
+    color: var(--text-muted);
     max-width: 30ch;
 }
 
@@ -691,10 +697,11 @@ code {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--brand-strong);
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(213, 239, 226, 0.95);
+    box-shadow: 0 10px 22px rgba(10, 26, 51, 0.08);
 }
 
 .site-footer__title {
@@ -711,7 +718,7 @@ code {
 .site-footer__list li,
 .site-footer__contact-list li {
     margin: 10px 0;
-    color: #bfd3ef;
+    color: var(--text-muted);
 }
 
 .site-footer__list a,
@@ -722,7 +729,7 @@ code {
 
 .site-footer__list a:hover,
 .site-footer__contact-list a:hover {
-    color: #fff;
+    color: var(--brand-strong);
 }
 
 .site-footer__contact-list li {
@@ -733,10 +740,10 @@ code {
 
 .site-footer__bottom {
     margin-top: 28px;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-top: 1px solid rgba(213, 239, 226, 0.95);
     padding-top: 18px;
     text-align: center;
-    color: #b9cce8;
+    color: var(--text-muted);
     font-size: 0.86rem;
 }
 
@@ -749,8 +756,12 @@ code {
 }
 
 .site-footer__legal-links a {
-    color: #d4e6ff;
+    color: rgba(18, 35, 63, 0.86);
     text-decoration: none;
+}
+
+.site-footer__legal-links a:hover {
+    color: var(--brand-strong);
 }
 
 .mobile-action-bar {
