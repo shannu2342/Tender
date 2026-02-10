@@ -51,15 +51,21 @@ const Header = () => {
                             <span>{site.contact.email}</span>
                         </a>
                     </div>
-                    <a
-                        href={`https://wa.me/${site.contact.whatsappNumber}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="site-header__contact-link site-header__contact-link--cta"
-                    >
-                        <Globe size={14} />
-                        <span>WhatsApp Support</span>
-                    </a>
+
+                    <div className="site-header__top-actions">
+                        <a
+                            href={`https://wa.me/${site.contact.whatsappNumber}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="site-header__contact-link site-header__contact-link--cta"
+                        >
+                            <Globe size={14} />
+                            <span>WhatsApp</span>
+                        </a>
+                        <Link to="/contact" className="site-header__top-cta">
+                            Raise Enquiry
+                        </Link>
+                    </div>
                 </div>
             </div>
 
@@ -84,6 +90,25 @@ const Header = () => {
                     ))}
                 </nav>
 
+                <div className="site-header__actions" aria-label="Header actions">
+                    <a className="site-header__action" href={`tel:${site.contact.phoneTel}`}>
+                        <Phone size={16} />
+                        <span>Call</span>
+                    </a>
+                    <a
+                        className="site-header__action"
+                        href={`https://wa.me/${site.contact.whatsappNumber}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Globe size={16} />
+                        <span>WhatsApp</span>
+                    </a>
+                    <Link to="/contact" className="site-header__cta">
+                        Get Proposal
+                    </Link>
+                </div>
+
                 <button
                     type="button"
                     className="site-header__menu-btn"
@@ -97,6 +122,24 @@ const Header = () => {
 
             <div className={`mobile-nav ${isMenuOpen ? 'is-open' : ''}`}>
                 <div className="container mobile-nav__inner">
+                    <div className="mobile-nav__cta-row" aria-label="Quick actions">
+                        <a className="mobile-nav__cta" href={`tel:${site.contact.phoneTel}`}>
+                            <Phone size={18} />
+                            <span>Call</span>
+                        </a>
+                        <a
+                            className="mobile-nav__cta"
+                            href={`https://wa.me/${site.contact.whatsappNumber}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Globe size={18} />
+                            <span>WhatsApp</span>
+                        </a>
+                        <Link className="mobile-nav__cta mobile-nav__cta--primary" to="/contact">
+                            Raise Enquiry
+                        </Link>
+                    </div>
                     {menuItems.map((item) => (
                         <Link
                             key={item.path}
