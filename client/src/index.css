@@ -308,6 +308,7 @@ code {
     gap: 6px;
     text-decoration: none;
     opacity: 0.95;
+    white-space: nowrap;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -327,8 +328,8 @@ code {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
     justify-content: flex-end;
+    white-space: nowrap;
 }
 
 .site-header__top-cta {
@@ -338,6 +339,7 @@ code {
     justify-content: center;
     gap: 8px;
     padding: 7px 12px;
+    height: 34px;
     border-radius: 999px;
     background: linear-gradient(110deg, var(--brand), var(--accent));
     border: 1px solid rgba(255, 255, 255, 0.7);
@@ -355,10 +357,10 @@ code {
 
 .site-header__main {
     min-height: 74px;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    column-gap: 18px;
     background: transparent;
 }
 
@@ -377,6 +379,17 @@ code {
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid rgba(216, 228, 248, 0.95);
     box-shadow: 0 12px 30px rgba(10, 26, 51, 0.12);
+    max-width: min(860px, 100%);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 28px, #000 calc(100% - 28px), transparent 100%);
+}
+
+.site-nav__tray::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 .site-nav__link {
@@ -388,6 +401,7 @@ code {
     letter-spacing: 0.01em;
     padding: 9px 12px;
     border-radius: 999px;
+    white-space: nowrap;
     transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
@@ -406,6 +420,8 @@ code {
     display: none;
     align-items: center;
     gap: 10px;
+    justify-content: flex-end;
+    white-space: nowrap;
 }
 
 .site-header__action {
@@ -414,6 +430,7 @@ code {
     gap: 8px;
     text-decoration: none;
     padding: 9px 12px;
+    height: 40px;
     border-radius: 999px;
     border: 1px solid rgba(216, 228, 248, 0.95);
     background: rgba(255, 255, 255, 0.72);
@@ -436,14 +453,17 @@ code {
     justify-content: center;
     gap: 10px;
     padding: 10px 14px;
+    height: 40px;
     border-radius: 999px;
     background: linear-gradient(110deg, var(--brand), var(--accent));
     border: 1px solid rgba(255, 255, 255, 0.7);
     color: #fff;
     font-weight: 900;
+    font-size: 0.86rem;
     letter-spacing: 0.01em;
     box-shadow: 0 16px 34px rgba(13, 73, 140, 0.25);
     transition: transform 0.2s ease, filter 0.2s ease;
+    white-space: nowrap;
 }
 
 .site-header__cta:hover {
@@ -461,6 +481,34 @@ code {
     border-radius: 11px;
     background: rgba(255, 255, 255, 0.78);
     color: rgba(18, 35, 63, 0.92);
+}
+
+@media (max-width: 1199px) {
+    .site-header__actions .site-header__action span {
+        display: none;
+    }
+
+    .site-header__action {
+        padding: 9px 10px;
+    }
+
+    .site-nav__tray {
+        max-width: min(680px, 100%);
+    }
+}
+
+@media (max-width: 1024px) {
+    .site-header__topbar-inner {
+        gap: 10px;
+    }
+
+    .site-header__contact-group {
+        gap: 12px;
+    }
+
+    .site-header__top-actions {
+        gap: 8px;
+    }
 }
 
 .mobile-nav {
@@ -1107,6 +1155,10 @@ code {
 
     .site-header__actions {
         display: inline-flex;
+    }
+
+    .site-header__main {
+        column-gap: 22px;
     }
 
     .site-header__menu-btn,
