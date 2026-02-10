@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, Globe } from 'lucide-react';
+import { Menu, X, Phone, Mail, Globe, ArrowUpRight } from 'lucide-react';
 import { site } from '../config/site';
 
 const Header = () => {
@@ -63,7 +63,7 @@ const Header = () => {
                             <span>WhatsApp</span>
                         </a>
                         <Link to="/contact" className="site-header__top-cta">
-                            Raise Enquiry
+                            Get a quote <ArrowUpRight size={14} />
                         </Link>
                     </div>
                 </div>
@@ -79,15 +79,17 @@ const Header = () => {
                 </Link>
 
                 <nav className="site-nav" aria-label="Main navigation">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            className={`site-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
-                        >
-                            {item.title}
-                        </Link>
-                    ))}
+                    <div className="site-nav__tray">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`site-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
+                            >
+                                {item.title}
+                            </Link>
+                        ))}
+                    </div>
                 </nav>
 
                 <div className="site-header__actions" aria-label="Header actions">
@@ -105,7 +107,7 @@ const Header = () => {
                         <span>WhatsApp</span>
                     </a>
                     <Link to="/contact" className="site-header__cta">
-                        Get Proposal
+                        Request Proposal <ArrowUpRight size={16} />
                     </Link>
                 </div>
 
@@ -115,20 +117,53 @@ const Header = () => {
                     onClick={() => setIsMenuOpen((open) => !open)}
                     aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                     aria-expanded={isMenuOpen}
+                    aria-controls="mobile-nav"
                 >
                     {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
             </div>
 
-            <div className={`mobile-nav ${isMenuOpen ? 'is-open' : ''}`}>
-                <div className="container mobile-nav__inner">
-                    <div className="mobile-nav__cta-row" aria-label="Quick actions">
-                        <a className="mobile-nav__cta" href={`tel:${site.contact.phoneTel}`}>
+            <div
+                id="mobile-nav"
+                className={`mobile-nav ${isMenuOpen ? 'is-open' : ''}`}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mobile navigation"
+            >
+                <button
+                    type="button"
+                    className="mobile-nav__backdrop"
+                    aria-label="Close navigation"
+                    onClick={() => setIsMenuOpen(false)}
+                />
+
+                <div className="mobile-nav__panel">
+                    <div className="mobile-nav__head">
+                        <Link to="/" className="brand mobile-nav__brand" aria-label="Go to home page">
+                            <span className="brand__badge">G</span>
+                            <span className="brand__text">
+                                <strong>{site.name}</strong>
+                                <small>{site.tagline}</small>
+                            </span>
+                        </Link>
+
+                        <button
+                            type="button"
+                            className="mobile-nav__close"
+                            aria-label="Close menu"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+
+                    <div className="mobile-nav__quick" aria-label="Quick actions">
+                        <a className="mobile-nav__quick-btn" href={`tel:${site.contact.phoneTel}`}>
                             <Phone size={18} />
                             <span>Call</span>
                         </a>
                         <a
-                            className="mobile-nav__cta"
+                            className="mobile-nav__quick-btn"
                             href={`https://wa.me/${site.contact.whatsappNumber}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -136,19 +171,22 @@ const Header = () => {
                             <Globe size={18} />
                             <span>WhatsApp</span>
                         </a>
-                        <Link className="mobile-nav__cta mobile-nav__cta--primary" to="/contact">
-                            Raise Enquiry
+                        <Link className="mobile-nav__quick-btn mobile-nav__quick-btn--primary" to="/contact">
+                            Get Quote <ArrowUpRight size={18} />
                         </Link>
                     </div>
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            className={`mobile-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
-                        >
-                            {item.title}
-                        </Link>
-                    ))}
+
+                    <div className="mobile-nav__links" aria-label="Navigation links">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`mobile-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
+                            >
+                                {item.title}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </div>
         </header>
