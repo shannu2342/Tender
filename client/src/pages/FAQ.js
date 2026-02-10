@@ -43,11 +43,12 @@ const FAQ = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>FAQ</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                Find answers to common questions about GeM and our services.
-            </p>
+        <div className="page">
+            <div className="container">
+                <header className="page__header">
+                    <h1 className="page__title">FAQ</h1>
+                    <p className="page__lead">Find answers to common questions about GeM and our services.</p>
+                </header>
 
             <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                 {faqs.map((faq, index) => (
@@ -91,6 +92,7 @@ const FAQ = () => {
                 <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
                     Contact Us
                 </button>
+            </div>
             </div>
         </div>
     );

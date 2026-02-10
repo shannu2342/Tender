@@ -2,11 +2,14 @@
 
 const WhyChooseUs = () => {
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>Why Choose Us</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                We are your trusted partner for all GeM and government tender related services.
-            </p>
+        <div className="page">
+            <div className="container">
+                <header className="page__header">
+                    <h1 className="page__title">Why Choose Us</h1>
+                    <p className="page__lead">
+                        Reliable execution, compliant documentation, and clear communication across your procurement lifecycle.
+                    </p>
+                </header>
 
             <div className="grid gap-12 md:grid-cols-2">
                 <div style={{ textAlign: 'center' }}>
@@ -98,6 +101,7 @@ const WhyChooseUs = () => {
                 <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
                     Contact Us Today
                 </button>
+            </div>
             </div>
         </div>
     );

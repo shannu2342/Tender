@@ -65,11 +65,14 @@ const Blog = () => {
     ];
 
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>Blog</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                Stay updated with the latest news and insights about GeM and government procurement.
-            </p>
+        <div className="page">
+            <div className="container">
+                <header className="page__header">
+                    <h1 className="page__title">Blog</h1>
+                    <p className="page__lead">
+                        Updates and insights on GeM, tenders, compliance, and procurement operations.
+                    </p>
+                </header>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {blogs.map((blog) => (
@@ -127,6 +130,7 @@ const Blog = () => {
                 <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
                     Load More
                 </button>
+            </div>
             </div>
         </div>
     );

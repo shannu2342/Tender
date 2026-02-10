@@ -57,6 +57,76 @@ code {
     margin-inline: auto;
 }
 
+.page {
+    padding: 64px 0 92px;
+}
+
+.page__header {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.page__title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.page__lead {
+    margin-top: 12px;
+    max-width: 72ch;
+    margin-inline: auto;
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 1.02rem;
+}
+
+.page__narrow {
+    max-width: 900px;
+    margin-inline: auto;
+}
+
+.prose {
+    color: var(--text-muted);
+    line-height: 1.85;
+    font-size: 1rem;
+}
+
+.prose h2,
+.prose h3 {
+    color: var(--text);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.prose h2 {
+    font-size: 1.35rem;
+    margin-top: 28px;
+    margin-bottom: 10px;
+}
+
+.prose h3 {
+    font-size: 1.12rem;
+    margin-top: 22px;
+    margin-bottom: 10px;
+}
+
+.prose p {
+    margin-top: 12px;
+}
+
+.prose ul,
+.prose ol {
+    margin-top: 12px;
+    padding-left: 22px;
+}
+
+.prose li {
+    margin: 8px 0;
+}
+
 .main-shell {
     min-height: 100vh;
     display: flex;

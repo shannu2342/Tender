@@ -2,17 +2,18 @@
 
 const Pricing = () => {
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>Pricing</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                Choose the plan that best fits your business needs.
-            </p>
+        <div className="page">
+            <div className="container">
+                <header className="page__header">
+                    <h1 className="page__title">Pricing</h1>
+                    <p className="page__lead">Choose the plan that best fits your business needs.</p>
+                </header>
 
             <div className="grid gap-8 md:grid-cols-3">
                 <div className="card" style={{ padding: '30px', textAlign: 'center' }}>
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Basic</h3>
                     <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3182ce' }}>₹999</span>
+                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>₹999</span>
                         <span style={{ color: '#718096' }}>/month</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
@@ -30,7 +31,7 @@ const Pricing = () => {
                     </div>
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Pro</h3>
                     <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3182ce' }}>₹2,999</span>
+                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>₹2,999</span>
                         <span style={{ color: '#718096' }}>/month</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
@@ -46,7 +47,7 @@ const Pricing = () => {
                 <div className="card" style={{ padding: '30px', textAlign: 'center' }}>
                     <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Enterprise</h3>
                     <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3182ce' }}>Custom</span>
+                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>Custom</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
                         <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>All Pro Features</li>
@@ -66,6 +67,7 @@ const Pricing = () => {
                 <button className="btn btn-secondary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
                     Contact Us for Custom Pricing
                 </button>
+            </div>
             </div>
         </div>
     );
