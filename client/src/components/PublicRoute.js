@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from './Header';
 import Footer from './Footer';
+import WhatsAppFloat from './WhatsAppFloat';
 
 const PublicRoute = ({ element, isAdminRoute = false }) => {
     const { admin, loading } = useAuth();
@@ -31,6 +32,7 @@ const PublicRoute = ({ element, isAdminRoute = false }) => {
             <Header />
             <main style={{ flex: 1 }}>{element}</main>
             <Footer />
+            <WhatsAppFloat />
         </div>
     );
 };

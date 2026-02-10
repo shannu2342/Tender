@@ -53,15 +53,6 @@ const Header = () => {
                     </div>
 
                     <div className="site-header__top-actions">
-                        <a
-                            href={`https://wa.me/${site.contact.whatsappNumber}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="site-header__contact-link site-header__contact-link--cta"
-                        >
-                            <Globe size={14} />
-                            <span>WhatsApp</span>
-                        </a>
                         <Link to="/contact" className="site-header__top-cta">
                             Get a quote <ArrowUpRight size={14} />
                         </Link>
@@ -91,25 +82,6 @@ const Header = () => {
                         ))}
                     </div>
                 </nav>
-
-                <div className="site-header__actions" aria-label="Header actions">
-                    <a className="site-header__action" href={`tel:${site.contact.phoneTel}`}>
-                        <Phone size={16} />
-                        <span>Call</span>
-                    </a>
-                    <a
-                        className="site-header__action"
-                        href={`https://wa.me/${site.contact.whatsappNumber}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Globe size={16} />
-                        <span>WhatsApp</span>
-                    </a>
-                    <Link to="/contact" className="site-header__cta">
-                        Request Proposal <ArrowUpRight size={16} />
-                    </Link>
-                </div>
 
                 <button
                     type="button"
