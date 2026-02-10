@@ -70,17 +70,15 @@ const Header = () => {
                 </Link>
 
                 <nav className="site-nav" aria-label="Main navigation">
-                    <div className="site-nav__tray">
-                        {menuItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`site-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
-                            >
-                                {item.title}
-                            </Link>
-                        ))}
-                    </div>
+                    {menuItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`site-nav__link ${isActive(item.path) ? 'is-active' : ''}`}
+                        >
+                            {item.title}
+                        </Link>
+                    ))}
                 </nav>
 
                 <button
