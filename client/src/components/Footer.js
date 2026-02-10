@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { Phone, Mail, Globe, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { site } from '../config/site';
 
 const quickLinks = [
     { name: 'Home', path: '/' },
@@ -40,13 +41,13 @@ const Footer = () => {
                     <div className="brand brand--footer">
                         <span className="brand__badge">G</span>
                         <span className="brand__text">
-                            <strong>Government e-Marketplace</strong>
-                            <small>Services & Tender Management</small>
+                            <strong>{site.name}</strong>
+                            <small>{site.tagline}</small>
                         </span>
                     </div>
 
                     <p className="site-footer__text">
-                        Your trusted partner for Government e-Marketplace services and tender management solutions.
+                        Your trusted partner for GeM services and tender management solutions.
                     </p>
 
                     <div className="site-footer__socials">
@@ -84,19 +85,25 @@ const Footer = () => {
                     <ul className="site-footer__contact-list">
                         <li>
                             <MapPin size={18} />
-                            <span>123 Government Plaza, Sector 17, New Delhi - 110001, India</span>
+                            <span>{site.contact.addressLine}</span>
                         </li>
                         <li>
                             <Phone size={18} />
-                            <a href="tel:+919876543210">+91 98765 43210</a>
+                            <a href={`tel:${site.contact.phoneTel}`}>{site.contact.phoneDisplay}</a>
                         </li>
                         <li>
                             <Mail size={18} />
-                            <a href="mailto:info@example.com">info@example.com</a>
+                            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
                         </li>
                         <li>
                             <Globe size={18} />
-                            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">WhatsApp: +91 98765 43210</a>
+                            <a
+                                href={`https://wa.me/${site.contact.whatsappNumber}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                WhatsApp Support
+                            </a>
                         </li>
                     </ul>
                 </section>
@@ -108,16 +115,16 @@ const Footer = () => {
                         <Link key={link.path} to={link.path}>{link.name}</Link>
                     ))}
                 </div>
-                <p>© 2024 Government e-Marketplace Services. All rights reserved.</p>
+                <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
                 <p>This website is not affiliated with or endorsed by the Government of India.</p>
             </div>
 
             <div className="mobile-action-bar">
-                <a href="tel:+919876543210">
+                <a href={`tel:${site.contact.phoneTel}`}>
                     <Phone size={18} />
                     <span>Call</span>
                 </a>
-                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
                     <Globe size={18} />
                     <span>WhatsApp</span>
                 </a>

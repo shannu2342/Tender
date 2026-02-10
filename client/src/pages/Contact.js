@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Globe } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Mail, MapPin, Phone, Clock, Globe, MessageSquareText } from 'lucide-react';
+import { enquiriesService } from '../services/api';
+import { site } from '../config/site';
+import './Contact.css';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -7,378 +10,317 @@ const Contact = () => {
         email: '',
         phone: '',
         serviceType: '',
-        tenderId: '',
-        serviceId: '',
         subject: '',
         message: ''
     });
-    const [status, setStatus] = useState(null);
+    const [status, setStatus] = useState({ kind: 'idle', message: '' });
+
+    const serviceOptions = useMemo(
+        () => [
+            { value: '', label: 'Select a service (optional)' },
+            { value: 'GeM Registration', label: 'GeM Registration' },
+            { value: 'Brand Approval', label: 'Brand Approval' },
+            { value: 'Catalogue Upload', label: 'Catalogue Upload' },
+            { value: 'Bid Participation', label: 'Bid Participation' },
+            { value: 'Tender Participation', label: 'Tender Participation' },
+            { value: 'Compliance & Documentation', label: 'Compliance & Documentation' },
+            { value: 'Enterprise Support', label: 'Enterprise Support' },
+            { value: 'Other', label: 'Other' }
+        ],
+        []
+    );
 
     const handleChange = (e) => {
+        if (status.kind !== 'idle') setStatus({ kind: 'idle', message: '' });
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setStatus('submitting');
 
-        // Simulate API call
-        setTimeout(() => {
-            setStatus('success');
+        try {
+            setStatus({ kind: 'loading', message: '' });
+
+            await enquiriesService.createEnquiry({
+                name: formData.name.trim(),
+                email: formData.email.trim(),
+                mobile: formData.phone.trim(),
+                service: formData.serviceType || 'General enquiry',
+                subject: formData.subject.trim(),
+                message: formData.message.trim(),
+                source: 'contact_form',
+                website: site.domain
+            });
+
+            setStatus({
+                kind: 'success',
+                message: 'Thanks. Your enquiry has been received. We will reach out shortly.'
+            });
             setFormData({
                 name: '',
                 email: '',
                 phone: '',
                 serviceType: '',
-                tenderId: '',
-                serviceId: '',
                 subject: '',
                 message: ''
             });
-        }, 1500);
+        } catch (error) {
+            setStatus({
+                kind: 'error',
+                message:
+                    error?.response?.data?.message ||
+                    'Something went wrong while sending your message. Please try again or reach us via phone/email.'
+            });
+        }
     };
 
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>Contact Us</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                Get in touch with us for any questions or assistance.
-            </p>
-
-            <div className="grid gap-12 md:grid-cols-2">
-                <div>
-                    <h2 style={{ fontSize: '1.5rem', marginBottom: '30px', color: '#2d3748' }}>Contact Information</h2>
-
-                    <div style={{ marginBottom: '30px' }}>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '15px',
-                            color: '#718096'
-                        }}>
-                            <MapPin style={{ width: '20px', height: '20px', marginRight: '15px', color: '#3182ce' }} />
-                            <span>123 Business Park, Sector 18, Noida, Uttar Pradesh 201301</span>
-                        </div>
-
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '15px',
-                            color: '#718096'
-                        }}>
-                            <Phone style={{ width: '20px', height: '20px', marginRight: '15px', color: '#3182ce' }} />
-                            <a href="tel:+919876543210" style={{ color: '#718096', textDecoration: 'none' }}>
-                                +91 9876543210
-                            </a>
-                        </div>
-
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '15px',
-                            color: '#718096'
-                        }}>
-                            <Mail style={{ width: '20px', height: '20px', marginRight: '15px', color: '#3182ce' }} />
-                            <a href="mailto:info@example.com" style={{ color: '#718096', textDecoration: 'none' }}>
-                                info@example.com
-                            </a>
-                        </div>
-
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '15px',
-                            color: '#718096'
-                        }}>
-                            <Globe style={{ width: '20px', height: '20px', marginRight: '15px', color: '#3182ce' }} />
-                            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" style={{ color: '#718096', textDecoration: 'none' }}>
-                                WhatsApp: +91 9876543210
-                            </a>
-                        </div>
-
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            color: '#718096'
-                        }}>
-                            <Clock style={{ width: '20px', height: '20px', marginRight: '15px', color: '#3182ce' }} />
-                            <span>Monday - Friday: 9:00 AM - 6:00 PM</span>
+        <div className="contact-page">
+            <div className="container contact-hero">
+                <section className="contact-hero__inner" aria-label="Contact hero">
+                    <div className="contact-hero__content">
+                        <span className="contact-kicker">
+                            <MessageSquareText size={16} />
+                            Contact {site.domain}
+                        </span>
+                        <h1 className="contact-title">Talk to our team</h1>
+                        <p className="contact-subtitle">
+                            Enterprise-ready support for GeM onboarding, catalogue enablement, bid participation, and tender workflows.
+                            Send an enquiry and we will respond with next steps.
+                        </p>
+                        <div className="contact-hero__meta">
+                            <span className="contact-pill">
+                                <Clock size={16} />
+                                Response within business hours
+                            </span>
+                            <span className="contact-pill">
+                                <Globe size={16} />
+                                Pan-India support
+                            </span>
                         </div>
                     </div>
+                </section>
+            </div>
 
-                    <div style={{ marginTop: '40px' }}>
-                        <h3 style={{ fontSize: '1.2rem', marginBottom: '20px', color: '#2d3748' }}>Follow Us</h3>
-                        <div style={{ display: 'flex', gap: '15px' }}>
-                            <button style={{
-                                width: '40px',
-                                height: '40px',
-                                backgroundColor: '#f7fafc',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#3182ce',
-                                textDecoration: 'none',
-                                transition: 'background-color 0.3s ease',
-                                border: 'none',
-                                cursor: 'pointer'
-                            }}>
-                                F
-                            </button>
-                            <button style={{
-                                width: '40px',
-                                height: '40px',
-                                backgroundColor: '#f7fafc',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#3182ce',
-                                textDecoration: 'none',
-                                transition: 'background-color 0.3s ease',
-                                border: 'none',
-                                cursor: 'pointer'
-                            }}>
-                                T
-                            </button>
-                            <button style={{
-                                width: '40px',
-                                height: '40px',
-                                backgroundColor: '#f7fafc',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#3182ce',
-                                textDecoration: 'none',
-                                transition: 'background-color 0.3s ease',
-                                border: 'none',
-                                cursor: 'pointer'
-                            }}>
-                                L
-                            </button>
-                            <button style={{
-                                width: '40px',
-                                height: '40px',
-                                backgroundColor: '#f7fafc',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#3182ce',
-                                textDecoration: 'none',
-                                transition: 'background-color 0.3s ease',
-                                border: 'none',
-                                cursor: 'pointer'
-                            }}>
-                                I
-                            </button>
+            <div className="container contact-grid">
+                <aside className="contact-stack" aria-label="Contact details">
+                    <section className="card">
+                        <div className="card-body">
+                            <h2 className="contact-card__title">Contact details</h2>
+                            <ul className="contact-list">
+                                <li className="contact-list__item">
+                                    <span className="contact-list__icon" aria-hidden="true">
+                                        <Phone size={18} />
+                                    </span>
+                                    <span className="contact-list__lines">
+                                        <strong>Call</strong>
+                                        <span>
+                                            <a href={`tel:${site.contact.phoneTel}`}>{site.contact.phoneDisplay}</a>
+                                        </span>
+                                    </span>
+                                </li>
+                                <li className="contact-list__item">
+                                    <span className="contact-list__icon" aria-hidden="true">
+                                        <Mail size={18} />
+                                    </span>
+                                    <span className="contact-list__lines">
+                                        <strong>Email</strong>
+                                        <span>
+                                            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+                                        </span>
+                                    </span>
+                                </li>
+                                <li className="contact-list__item">
+                                    <span className="contact-list__icon" aria-hidden="true">
+                                        <Globe size={18} />
+                                    </span>
+                                    <span className="contact-list__lines">
+                                        <strong>WhatsApp</strong>
+                                        <span>
+                                            <a
+                                                href={`https://wa.me/${site.contact.whatsappNumber}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Chat on WhatsApp
+                                            </a>
+                                        </span>
+                                    </span>
+                                </li>
+                                <li className="contact-list__item">
+                                    <span className="contact-list__icon" aria-hidden="true">
+                                        <MapPin size={18} />
+                                    </span>
+                                    <span className="contact-list__lines">
+                                        <strong>Office</strong>
+                                        <span>{site.contact.addressLine}</span>
+                                    </span>
+                                </li>
+                                <li className="contact-list__item">
+                                    <span className="contact-list__icon" aria-hidden="true">
+                                        <Clock size={18} />
+                                    </span>
+                                    <span className="contact-list__lines">
+                                        <strong>Hours</strong>
+                                        <span>{site.contact.hours}</span>
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
+                    </section>
+
+                    <section className="card">
+                        <div className="card-body">
+                            <h3 className="contact-card__title">For enterprises</h3>
+                            <p className="text-secondary" style={{ marginTop: 10 }}>
+                                For multi-location onboarding, SLA support, or custom procurement workflows, mention "Enterprise Support" in the form.
+                            </p>
+                            <div className="contact-actions">
+                                <a className="btn btn-secondary" href={`mailto:${site.contact.email}`}>
+                                    Email sales
+                                </a>
+                                <a
+                                    className="btn btn-quiet"
+                                    href={`https://wa.me/${site.contact.whatsappNumber}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+
+                <section className="card" aria-label="Contact form">
+                    <div className="card-body">
+                        <h2 className="contact-card__title">Send an enquiry</h2>
+                        <p className="text-secondary" style={{ marginTop: 10 }}>
+                            Share your requirement and our team will get back with a clear plan, timeline, and documentation checklist.
+                        </p>
+
+                        {status.kind === 'success' ? (
+                            <div className="contact-alert contact-alert--success" role="status" aria-live="polite">
+                                {status.message}
+                            </div>
+                        ) : null}
+
+                        {status.kind === 'error' ? (
+                            <div className="contact-alert contact-alert--error" role="alert">
+                                {status.message}
+                            </div>
+                        ) : null}
+
+                        <form onSubmit={handleSubmit} style={{ marginTop: 18 }}>
+                            <div className="form-group">
+                                <label htmlFor="contact-name">Name *</label>
+                                <input
+                                    id="contact-name"
+                                    className="form-control"
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="name"
+                                    placeholder="Your full name"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact-email">Email *</label>
+                                <input
+                                    id="contact-email"
+                                    className="form-control"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="email"
+                                    placeholder="you@company.com"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact-phone">Phone *</label>
+                                <input
+                                    id="contact-phone"
+                                    className="form-control"
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="tel"
+                                    placeholder="+91 9XXXXXXXXX"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact-service">Service</label>
+                                <select
+                                    id="contact-service"
+                                    className="form-control"
+                                    name="serviceType"
+                                    value={formData.serviceType}
+                                    onChange={handleChange}
+                                >
+                                    {serviceOptions.map((opt) => (
+                                        <option key={opt.value || 'blank'} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact-subject">Subject</label>
+                                <input
+                                    id="contact-subject"
+                                    className="form-control"
+                                    type="text"
+                                    name="subject"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    placeholder="Short summary (optional)"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact-message">Message *</label>
+                                <textarea
+                                    id="contact-message"
+                                    className="form-control"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    required
+                                    rows={6}
+                                    placeholder="Tell us what you are trying to achieve, current status, and any deadlines."
+                                    style={{ resize: 'vertical' }}
+                                />
+                                <p className="contact-note">
+                                    By submitting, you agree that we may contact you back regarding your enquiry. We do not sell personal data.
+                                </p>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary btn-block" disabled={status.kind === 'loading'}>
+                                {status.kind === 'loading' ? (
+                                    <span className="btn-loading">
+                                        <span className="spinner" />
+                                        Sending...
+                                    </span>
+                                ) : (
+                                    'Send enquiry'
+                                )}
+                            </button>
+                        </form>
                     </div>
-                </div>
-
-                <div>
-                    <h2 style={{ fontSize: '1.5rem', marginBottom: '30px', color: '#2d3748' }}>Send Us a Message</h2>
-
-                    {status === 'success' && (
-                        <div style={{
-                            backgroundColor: '#d4edda',
-                            border: '1px solid #c3e6cb',
-                            color: '#155724',
-                            padding: '15px',
-                            borderRadius: '5px',
-                            marginBottom: '20px'
-                        }}>
-                            Thank you for your message! We will get back to you soon.
-                        </div>
-                    )}
-
-                    <form onSubmit={handleSubmit} style={{ maxWidth: '100%' }}>
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Name *
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Email *
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Phone *
-                            </label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                required
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Service Type
-                            </label>
-                            <select
-                                name="serviceType"
-                                value={formData.serviceType}
-                                onChange={handleChange}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem'
-                                }}
-                            >
-                                <option value="">Select service type</option>
-                                <option value="gem-registration">GeM Registration</option>
-                                <option value="catalog-management">Catalog Management</option>
-                                <option value="tender-participation">Tender Participation</option>
-                                <option value="bid-preparation">Bid Preparation</option>
-                                <option value="consulting">Consulting</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Subject
-                            </label>
-                            <input
-                                type="text"
-                                name="subject"
-                                value={formData.subject}
-                                onChange={handleChange}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{
-                                display: 'block',
-                                marginBottom: '5px',
-                                fontSize: '0.9rem',
-                                fontWeight: 'bold',
-                                color: '#2d3748'
-                            }}>
-                                Message *
-                            </label>
-                            <textarea
-                                name="message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                required
-                                rows="5"
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '5px',
-                                    fontSize: '1rem',
-                                    resize: 'vertical'
-                                }}
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={status === 'submitting'}
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                backgroundColor: status === 'submitting' ? '#cbd5e0' : '#3182ce',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                fontSize: '1rem',
-                                fontWeight: 'bold',
-                                cursor: status === 'submitting' ? 'not-allowed' : 'pointer',
-                                transition: 'background-color 0.3s ease'
-                            }}
-                        >
-                            {status === 'submitting' ? 'Sending...' : 'Send Message'}
-                        </button>
-                    </form>
-                </div>
+                </section>
             </div>
         </div>
     );

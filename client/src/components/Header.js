@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail, Globe } from 'lucide-react';
+import { site } from '../config/site';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,16 +42,21 @@ const Header = () => {
             <div className="site-header__topbar">
                 <div className="container site-header__topbar-inner">
                     <div className="site-header__contact-group">
-                        <a href="tel:+919876543210" className="site-header__contact-link">
+                        <a href={`tel:${site.contact.phoneTel}`} className="site-header__contact-link">
                             <Phone size={14} />
-                            <span>+91 98765 43210</span>
+                            <span>{site.contact.phoneDisplay}</span>
                         </a>
-                        <a href="mailto:info@example.com" className="site-header__contact-link">
+                        <a href={`mailto:${site.contact.email}`} className="site-header__contact-link">
                             <Mail size={14} />
-                            <span>info@example.com</span>
+                            <span>{site.contact.email}</span>
                         </a>
                     </div>
-                    <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="site-header__contact-link site-header__contact-link--cta">
+                    <a
+                        href={`https://wa.me/${site.contact.whatsappNumber}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="site-header__contact-link site-header__contact-link--cta"
+                    >
                         <Globe size={14} />
                         <span>WhatsApp Support</span>
                     </a>
@@ -61,8 +67,8 @@ const Header = () => {
                 <Link to="/" className="brand" aria-label="Go to home page">
                     <span className="brand__badge">G</span>
                     <span className="brand__text">
-                        <strong>Government e-Marketplace</strong>
-                        <small>Services & Tender Management</small>
+                        <strong>{site.name}</strong>
+                        <small>{site.tagline}</small>
                     </span>
                 </Link>
 
