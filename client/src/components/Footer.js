@@ -1,15 +1,14 @@
-
 import { Link } from 'react-router-dom';
-import { Phone, Mail, Globe, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Facebook, Linkedin, Instagram } from 'lucide-react';
 import { site } from '../config/site';
 
 const quickLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About Us', path: '/about' },
+    { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
     { name: 'Tenders', path: '/tenders' },
-    { name: 'Blog', path: '/blog' },
     { name: 'Pricing', path: '/pricing' },
+    { name: 'Blog', path: '/blog' },
+    { name: 'FAQ', path: '/faq' },
     { name: 'Contact', path: '/contact' }
 ];
 
@@ -22,15 +21,13 @@ const legalLinks = [
     { name: 'Sitemap', path: '/sitemap' }
 ];
 
-const services = [
+const enterpriseServices = [
     'GeM Registration',
-    'GeM Brand Approval',
-    'GeM Catalogue Upload',
-    'GeM Bid Participation',
-    'Tender Registration',
-    'MSME / Udyam',
-    'Startup India',
-    'ISO Certifications'
+    'Catalogue Enablement',
+    'Bid Participation',
+    'Tender Tracking',
+    'Compliance Support',
+    'Enterprise SLA Desk'
 ];
 
 const Footer = () => {
@@ -45,21 +42,24 @@ const Footer = () => {
                             <small>{site.tagline}</small>
                         </span>
                     </div>
-
                     <p className="site-footer__text">
-                        Your trusted partner for GeM services and tender management solutions.
+                        Enterprise procurement execution for teams that need compliance, speed, and clear ownership from onboarding to award.
                     </p>
-
                     <div className="site-footer__socials">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Facebook size={16} /></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Twitter size={16} /></a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={16} /></a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={16} /></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <Facebook size={16} />
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <Linkedin size={16} />
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <Instagram size={16} />
+                        </a>
                     </div>
                 </section>
 
                 <section>
-                    <h3 className="site-footer__title">Quick Links</h3>
+                    <h3 className="site-footer__title">Navigation</h3>
                     <ul className="site-footer__list">
                         {quickLinks.map((link) => (
                             <li key={link.path}>
@@ -70,38 +70,32 @@ const Footer = () => {
                 </section>
 
                 <section>
-                    <h3 className="site-footer__title">Our Services</h3>
+                    <h3 className="site-footer__title">Core Solutions</h3>
                     <ul className="site-footer__list">
-                        {services.map((service) => (
-                            <li key={service}>
-                                <span>{service}</span>
-                            </li>
+                        {enterpriseServices.map((item) => (
+                            <li key={item}>{item}</li>
                         ))}
                     </ul>
                 </section>
 
                 <section>
-                    <h3 className="site-footer__title">Contact Us</h3>
+                    <h3 className="site-footer__title">Contact</h3>
                     <ul className="site-footer__contact-list">
                         <li>
-                            <MapPin size={18} />
+                            <MapPin size={16} />
                             <span>{site.contact.addressLine}</span>
                         </li>
                         <li>
-                            <Phone size={18} />
+                            <Phone size={16} />
                             <a href={`tel:${site.contact.phoneTel}`}>{site.contact.phoneDisplay}</a>
                         </li>
                         <li>
-                            <Mail size={18} />
+                            <Mail size={16} />
                             <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
                         </li>
                         <li>
-                            <Globe size={18} />
-                            <a
-                                href={`https://wa.me/${site.contact.whatsappNumber}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <MessageCircle size={16} />
+                            <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
                                 WhatsApp Support
                             </a>
                         </li>
@@ -111,8 +105,10 @@ const Footer = () => {
 
             <div className="container site-footer__bottom">
                 <div className="site-footer__legal-links">
-                    {legalLinks.map((link) => (
-                        <Link key={link.path} to={link.path}>{link.name}</Link>
+                    {legalLinks.map((item) => (
+                        <Link key={item.path} to={item.path}>
+                            {item.name}
+                        </Link>
                     ))}
                 </div>
                 <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
@@ -121,16 +117,16 @@ const Footer = () => {
 
             <div className="mobile-action-bar">
                 <a href={`tel:${site.contact.phoneTel}`}>
-                    <Phone size={18} />
-                    <span>Call</span>
+                    <Phone size={16} />
+                    Call
                 </a>
                 <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
-                    <Globe size={18} />
-                    <span>WhatsApp</span>
+                    <MessageCircle size={16} />
+                    WhatsApp
                 </a>
                 <Link to="/contact">
-                    <Mail size={18} />
-                    <span>Enquiry</span>
+                    <Mail size={16} />
+                    Enquiry
                 </Link>
             </div>
         </footer>

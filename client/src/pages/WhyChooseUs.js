@@ -1,107 +1,53 @@
+import { ShieldCheck, Gauge, Users, Handshake } from 'lucide-react';
 
+const reasons = [
+    {
+        title: 'Specialized Procurement Team',
+        text: 'Dedicated resources for GeM, bid preparation, and documentation quality control.',
+        icon: Users
+    },
+    {
+        title: 'Compliance-Led Execution',
+        text: 'We design each step to reduce non-compliance risk and avoid last-minute submission failures.',
+        icon: ShieldCheck
+    },
+    {
+        title: 'Faster Decision Cycles',
+        text: 'Structured data and clear handoffs help your team decide faster on bid participation.',
+        icon: Gauge
+    },
+    {
+        title: 'Long-Term Partnership Model',
+        text: 'Our workflows are built for sustained operations, not one-time transactions.',
+        icon: Handshake
+    }
+];
 
 const WhyChooseUs = () => {
     return (
         <div className="page">
             <div className="container">
-                <header className="page__header">
+                <header className="page__header page__narrow">
                     <h1 className="page__title">Why Choose Us</h1>
                     <p className="page__lead">
-                        Reliable execution, compliant documentation, and clear communication across your procurement lifecycle.
+                        Enterprise teams trust us because we deliver procurement support with operational rigor and consistent communication.
                     </p>
                 </header>
 
-            <div className="grid gap-12 md:grid-cols-2">
-                <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                        width: '100px',
-                        height: '100px',
-                        backgroundColor: '#3182ce',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        color: 'white',
-                        fontSize: '2.5rem'
-                    }}>
-                        ⭐
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: '#2d3748' }}>Expert Team</h3>
-                    <p style={{ color: '#718096', lineHeight: '1.6' }}>
-                        Our team of experts has extensive experience in government procurement and compliance, ensuring you get the best guidance.
-                    </p>
+                <div className="grid gap-8 md:grid-cols-2">
+                    {reasons.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                            <article key={item.title} className="card">
+                                <div className="card-body">
+                                    <span className="chip chip--sky"><Icon size={14} /> Enterprise Standard</span>
+                                    <h2 className="section-title mt-12">{item.title}</h2>
+                                    <p className="section-subtitle">{item.text}</p>
+                                </div>
+                            </article>
+                        );
+                    })}
                 </div>
-
-                <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                        width: '100px',
-                        height: '100px',
-                        backgroundColor: '#38a169',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        color: 'white',
-                        fontSize: '2.5rem'
-                    }}>
-                        📈
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: '#2d3748' }}>Proven Track Record</h3>
-                    <p style={{ color: '#718096', lineHeight: '1.6' }}>
-                        We have helped numerous businesses successfully register on GeM and win government tenders.
-                    </p>
-                </div>
-
-                <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                        width: '100px',
-                        height: '100px',
-                        backgroundColor: '#ed8936',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        color: 'white',
-                        fontSize: '2.5rem'
-                    }}>
-                        🔒
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: '#2d3748' }}>Secure & Compliant</h3>
-                    <p style={{ color: '#718096', lineHeight: '1.6' }}>
-                        We ensure all your data is secure and all processes are compliant with government regulations.
-                    </p>
-                </div>
-
-                <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                        width: '100px',
-                        height: '100px',
-                        backgroundColor: '#e53e3e',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        color: 'white',
-                        fontSize: '2.5rem'
-                    }}>
-                        🚀
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: '#2d3748' }}>Fast & Efficient</h3>
-                    <p style={{ color: '#718096', lineHeight: '1.6' }}>
-                        Our streamlined processes ensure quick registration and tender participation.
-                    </p>
-                </div>
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
-                    Contact Us Today
-                </button>
-            </div>
             </div>
         </div>
     );

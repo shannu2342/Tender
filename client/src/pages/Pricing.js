@@ -1,73 +1,49 @@
-
+import { Link } from 'react-router-dom';
+import { pricingPlans } from '../data/siteContent';
 
 const Pricing = () => {
     return (
         <div className="page">
             <div className="container">
-                <header className="page__header">
+                <header className="page__header page__narrow">
                     <h1 className="page__title">Pricing</h1>
-                    <p className="page__lead">Choose the plan that best fits your business needs.</p>
+                    <p className="page__lead">
+                        Choose a plan that matches your procurement volume, response timelines, and internal team capacity.
+                    </p>
                 </header>
 
-            <div className="grid gap-8 md:grid-cols-3">
-                <div className="card" style={{ padding: '30px', textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Basic</h3>
-                    <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>₹999</span>
-                        <span style={{ color: '#718096' }}>/month</span>
-                    </div>
-                    <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>GeM Registration</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Catalog Management</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>10 Tenders/Month</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Basic Support</li>
-                    </ul>
-                    <button className="btn btn-primary" style={{ width: '100%' }}>Get Started</button>
+                <div className="grid gap-8 md:grid-cols-3">
+                    {pricingPlans.map((plan) => (
+                        <article key={plan.name} className="card">
+                            <div className="card-body">
+                                {plan.featured ? <span className="chip chip--premium">Most Popular</span> : null}
+                                <h2 className="section-title mt-10">{plan.name}</h2>
+                                <p className="plan-price">
+                                    {plan.price}
+                                    <span className="plan-price__freq">{plan.frequency}</span>
+                                </p>
+                                <ul className="list-clean list-check mt-14">
+                                    {plan.points.map((point) => (
+                                        <li key={point}>{point}</li>
+                                    ))}
+                                </ul>
+                                <div className="cta-row">
+                                    <Link to="/contact" className={`btn ${plan.featured ? 'btn-primary' : 'btn-secondary'}`}>
+                                        {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
+                                    </Link>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
                 </div>
 
-                <div className="card" style={{ padding: '30px', textAlign: 'center', backgroundColor: '#f7fafc', border: '2px solid #3182ce' }}>
-                    <div style={{ backgroundColor: '#3182ce', color: 'white', padding: '5px 15px', borderRadius: '20px', display: 'inline-block', marginBottom: '20px' }}>
-                        Most Popular
+                <div className="hero-panel mt-30">
+                    <h2 className="section-title">Need a Custom Commercial Model?</h2>
+                    <p className="section-subtitle">For high-volume teams, we support retainer and SLA-backed pricing structures.</p>
+                    <div className="cta-row">
+                        <Link to="/contact" className="btn btn-primary">Book Pricing Discussion</Link>
                     </div>
-                    <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Pro</h3>
-                    <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>₹2,999</span>
-                        <span style={{ color: '#718096' }}>/month</span>
-                    </div>
-                    <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>GeM Registration</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Catalog Management</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Unlimited Tenders</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Priority Support</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Bid Preparation</li>
-                    </ul>
-                    <button className="btn btn-primary" style={{ width: '100%' }}>Get Started</button>
                 </div>
-
-                <div className="card" style={{ padding: '30px', textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#2d3748' }}>Enterprise</h3>
-                    <div style={{ marginBottom: '20px' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--brand)' }}>Custom</span>
-                    </div>
-                    <ul style={{ listStyle: 'none', padding: '0', marginBottom: '30px' }}>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>All Pro Features</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Dedicated Account Manager</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Custom Catalog Solutions</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>24/7 Premium Support</li>
-                        <li style={{ color: '#718096', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>Custom Integration</li>
-                    </ul>
-                    <button className="btn btn-primary" style={{ width: '100%' }}>Contact Sales</button>
-                </div>
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                <p style={{ color: '#718096', marginBottom: '20px' }}>
-                    All plans include a 14-day free trial. No credit card required.
-                </p>
-                <button className="btn btn-secondary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
-                    Contact Us for Custom Pricing
-                </button>
-            </div>
             </div>
         </div>
     );

@@ -30,7 +30,7 @@ const PublicRoute = ({ element, isAdminRoute = false }) => {
     return (
         <div className="main-shell">
             <Header />
-            <main style={{ flex: 1 }}>{element}</main>
+            <main>{element}</main>
             <Footer />
             <WhatsAppFloat />
         </div>

@@ -1,112 +1,38 @@
-
+import { Link } from 'react-router-dom';
+import { testimonials } from '../data/siteContent';
 
 const Testimonials = () => {
     return (
-        <div className="container" style={{ padding: '60px 0' }}>
-            <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', color: '#1a202c', textAlign: 'center' }}>Testimonials</h1>
-            <p style={{ color: '#718096', lineHeight: '1.8', textAlign: 'center', marginBottom: '60px' }}>
-                See what our clients are saying about us.
-            </p>
-
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div className="card" style={{ padding: '30px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            backgroundColor: '#3182ce',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            marginRight: '16px'
-                        }}>
-                            A
-                        </div>
-                        <div>
-                            <h4 style={{ fontSize: '1.1rem', marginBottom: '5px', color: '#2d3748' }}>Arun Kumar</h4>
-                            <p style={{ fontSize: '0.9rem', color: '#718096' }}>CEO, Tech Solutions Inc.</p>
-                        </div>
-                    </div>
-                    <p style={{ color: '#718096', lineHeight: '1.6', marginBottom: '16px' }}>
-                        "The team helped us register on GeM in just 2 days. Their expert guidance made the entire process smooth and hassle-free.
-                        We have already won 3 tenders through their assistance."
+        <div className="page">
+            <div className="container">
+                <header className="page__header page__narrow">
+                    <h1 className="page__title">Client Testimonials</h1>
+                    <p className="page__lead">
+                        Feedback from businesses that use our team as their procurement execution partner.
                     </p>
-                    <div style={{ color: '#ed8936' }}>
-                        ⭐⭐⭐⭐⭐
-                    </div>
+                </header>
+
+                <div className="grid gap-8 md:grid-cols-3">
+                    {testimonials.map((item) => (
+                        <article className="card" key={item.name}>
+                            <div className="card-body">
+                                <p className="section-subtitle">"{item.text}"</p>
+                                <div className="notice mt-14">
+                                    <strong>{item.name}</strong>
+                                    <p>{item.role}</p>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
                 </div>
 
-                <div className="card" style={{ padding: '30px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            backgroundColor: '#38a169',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            marginRight: '16px'
-                        }}>
-                            P
-                        </div>
-                        <div>
-                            <h4 style={{ fontSize: '1.1rem', marginBottom: '5px', color: '#2d3748' }}>Priya Sharma</h4>
-                            <p style={{ fontSize: '0.9rem', color: '#718096' }}>Founder, Creative Designs</p>
-                        </div>
-                    </div>
-                    <p style={{ color: '#718096', lineHeight: '1.6', marginBottom: '16px' }}>
-                        "Their catalog management service is excellent. They helped us create a professional product catalog that complies
-                        with all government specifications. We have seen a significant increase in our tender participation."
-                    </p>
-                    <div style={{ color: '#ed8936' }}>
-                        ⭐⭐⭐⭐⭐
+                <div className="hero-panel mt-30">
+                    <h2 className="section-title">Let’s Build Your Procurement Engine</h2>
+                    <p className="section-subtitle">Discuss your process gaps and we will recommend an execution model tailored to your team.</p>
+                    <div className="cta-row">
+                        <Link to="/contact" className="btn btn-primary">Speak With Us</Link>
                     </div>
                 </div>
-
-                <div className="card" style={{ padding: '30px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            backgroundColor: '#ed8936',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            marginRight: '16px'
-                        }}>
-                            R
-                        </div>
-                        <div>
-                            <h4 style={{ fontSize: '1.1rem', marginBottom: '5px', color: '#2d3748' }}>Rajesh Singh</h4>
-                            <p style={{ fontSize: '0.9rem', color: '#718096' }}>MD, Manufacturing Co.</p>
-                        </div>
-                    </div>
-                    <p style={{ color: '#718096', lineHeight: '1.6', marginBottom: '16px' }}>
-                        "The bid preparation support is outstanding. They helped us prepare a winning bid for a government tender, and we
-                        successfully won the contract. Their attention to detail and compliance knowledge is impressive."
-                    </p>
-                    <div style={{ color: '#ed8936' }}>
-                        ⭐⭐⭐⭐⭐
-                    </div>
-                </div>
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '12px 24px' }}>
-                    Become Our Client
-                </button>
             </div>
         </div>
     );

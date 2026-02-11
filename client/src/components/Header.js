@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, Globe, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Phone, Mail, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { site } from '../config/site';
+
+const menuItems = [
+    { title: 'Home', path: '/' },
+    { title: 'About', path: '/about' },
+    { title: 'Services', path: '/services' },
+    { title: 'Tenders', path: '/tenders' },
+    { title: 'Pricing', path: '/pricing' },
+    { title: 'Blog', path: '/blog' },
+    { title: 'Contact', path: '/contact' }
+];
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,31 +19,14 @@ const Header = () => {
     const location = useLocation();
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 32);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     useEffect(() => {
         setIsMenuOpen(false);
     }, [location.pathname]);
-
-    const menuItems = [
-        { title: 'Home', path: '/' },
-        { title: 'About Us', path: '/about' },
-        { title: 'Why Choose Us', path: '/why-choose-us' },
-        { title: 'How It Works', path: '/how-it-works' },
-        { title: 'Services', path: '/services' },
-        { title: 'Tenders', path: '/tenders' },
-        { title: 'Blog', path: '/blog' },
-        { title: 'Pricing', path: '/pricing' },
-        { title: 'Testimonials', path: '/testimonials' },
-        { title: 'FAQ', path: '/faq' },
-        { title: 'Contact', path: '/contact' }
-    ];
 
     const isActive = (path) => location.pathname === path;
 
@@ -44,19 +37,16 @@ const Header = () => {
                     <div className="site-header__contact-group">
                         <a href={`tel:${site.contact.phoneTel}`} className="site-header__contact-link">
                             <Phone size={14} />
-                            <span>{site.contact.phoneDisplay}</span>
+                            {site.contact.phoneDisplay}
                         </a>
                         <a href={`mailto:${site.contact.email}`} className="site-header__contact-link">
                             <Mail size={14} />
-                            <span>{site.contact.email}</span>
+                            {site.contact.email}
                         </a>
                     </div>
-
-                    <div className="site-header__top-actions">
-                        <Link to="/contact" className="site-header__top-cta">
-                            Get a quote <ArrowUpRight size={14} />
-                        </Link>
-                    </div>
+                    <Link to="/contact" className="site-header__top-cta">
+                        Enterprise Consultation <ArrowUpRight size={14} />
+                    </Link>
                 </div>
             </div>
 
@@ -84,7 +74,7 @@ const Header = () => {
                 <button
                     type="button"
                     className="site-header__menu-btn"
-                    onClick={() => setIsMenuOpen((open) => !open)}
+                    onClick={() => setIsMenuOpen((v) => !v)}
                     aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                     aria-expanded={isMenuOpen}
                     aria-controls="mobile-nav"
@@ -109,7 +99,7 @@ const Header = () => {
 
                 <div className="mobile-nav__panel">
                     <div className="mobile-nav__head">
-                        <Link to="/" className="brand mobile-nav__brand" aria-label="Go to home page">
+                        <Link to="/" className="brand" aria-label="Go to home page">
                             <span className="brand__badge">G</span>
                             <span className="brand__text">
                                 <strong>{site.name}</strong>
@@ -129,8 +119,8 @@ const Header = () => {
 
                     <div className="mobile-nav__quick" aria-label="Quick actions">
                         <a className="mobile-nav__quick-btn" href={`tel:${site.contact.phoneTel}`}>
-                            <Phone size={18} />
-                            <span>Call</span>
+                            <Phone size={16} />
+                            Call
                         </a>
                         <a
                             className="mobile-nav__quick-btn"
@@ -138,15 +128,15 @@ const Header = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Globe size={18} />
-                            <span>WhatsApp</span>
+                            <MessageCircle size={16} />
+                            WhatsApp
                         </a>
                         <Link className="mobile-nav__quick-btn mobile-nav__quick-btn--primary" to="/contact">
-                            Get Quote <ArrowUpRight size={18} />
+                            Get Proposal <ArrowUpRight size={16} />
                         </Link>
                     </div>
 
-                    <div className="mobile-nav__links" aria-label="Navigation links">
+                    <div className="mobile-nav__links">
                         {menuItems.map((item) => (
                             <Link
                                 key={item.path}
