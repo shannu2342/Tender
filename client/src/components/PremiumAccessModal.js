@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { CheckCircle2, Crown, ShieldCheck, Smartphone } from 'lucide-react';
 import { paymentsService } from '../services/api';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
@@ -167,7 +168,7 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
         }
     };
 
-    return (
+    const modalContent = (
         <div className="premium-modal" role="dialog" aria-modal="true" aria-label="Premium access">
             <button type="button" className="premium-modal__backdrop" aria-label="Close premium access" onClick={closeAndReset} />
             <div className="premium-modal__panel">
@@ -241,6 +242,8 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 };
 
 export default PremiumAccessModal;
