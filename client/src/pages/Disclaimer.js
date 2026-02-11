@@ -21,6 +21,7 @@ const sections = [
 
 const Disclaimer = () => (
     <PolicyPage
+        pageName="disclaimer"
         title="Disclaimer"
         lead="Important limitations regarding information published on this website."
         sections={sections}

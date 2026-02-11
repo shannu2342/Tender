@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useManagedPage } from '../hooks/useManagedPage';
 
 const groups = [
     {
@@ -43,12 +44,17 @@ const groups = [
 ];
 
 const Sitemap = () => {
+    const managed = useManagedPage('sitemap', {
+        title: 'Sitemap',
+        lead: 'Quick access to all major sections of the website.'
+    });
+
     return (
         <div className="page">
             <div className="container page__narrow">
                 <header className="page__header">
-                    <h1 className="page__title">Sitemap</h1>
-                    <p className="page__lead">Quick access to all major sections of the website.</p>
+                    <h1 className="page__title">{managed.title}</h1>
+                    <p className="page__lead">{managed.lead}</p>
                 </header>
 
                 <div className="grid gap-8 md:grid-cols-3">

@@ -1,39 +1,85 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
-import { site } from '../config/site';
 import { serviceCatalog } from '../data/siteContent';
+import { servicesService } from '../services/api';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const ServiceDetail = () => {
     const { slug } = useParams();
-    const service = serviceCatalog.find((item) => item.slug === slug) || serviceCatalog[0];
+    const site = useSiteSettings();
+    const [remoteServices, setRemoteServices] = useState([]);
+
+    useEffect(() => {
+        const loadServices = async () => {
+            try {
+                const response = await servicesService.getServices();
+                if (Array.isArray(response.data)) {
+                    setRemoteServices(response.data);
+                }
+            } catch (error) {
+                // Keep fallback data.
+            }
+        };
+
+        loadServices();
+    }, []);
+
+    const source = remoteServices.length ? remoteServices : serviceCatalog;
+
+    const service = useMemo(() => {
+        return (
+            source.find((item) => String(item.slug || item.id || item._id) === String(slug)) ||
+            source[0]
+        );
+    }, [source, slug]);
+
+    const features = service.features || [
+        'Business requirement assessment',
+        'Compliance-first workflow',
+        'Dedicated implementation support'
+    ];
+
+    const benefits = service.benefits || [
+        'Faster execution timelines',
+        'Lower compliance risk',
+        'Clear process ownership'
+    ];
+
+    const process = service.process || [
+        { step: '01', title: 'Discovery', description: 'Scope and readiness evaluation.' },
+        { step: '02', title: 'Planning', description: 'Execution plan with milestones.' },
+        { step: '03', title: 'Implementation', description: 'Hands-on delivery and QA.' },
+        { step: '04', title: 'Support', description: 'Continuous optimization and support.' }
+    ];
 
     return (
         <div className="page">
             <div className="container">
                 <div className="split-layout">
                     <article className="legal-card prose">
-                        <span className="chip chip--sky">{service.price}</span>
+                        <span className="chip chip--sky">{service.price || 'Custom Engagement'}</span>
                         <h1 className="page__title mt-14">{service.title}</h1>
-                        <p className="page__lead mt-12">{service.longDescription}</p>
+                        <p className="page__lead mt-12">{service.longDescription || service.description}</p>
 
                         <h2>Key Features</h2>
                         <ul>
-                            {service.features.map((feature) => (
+                            {features.map((feature) => (
                                 <li key={feature}>{feature}</li>
                             ))}
                         </ul>
 
                         <h2>Business Benefits</h2>
                         <ul>
-                            {service.benefits.map((benefit) => (
+                            {benefits.map((benefit) => (
                                 <li key={benefit}>{benefit}</li>
                             ))}
                         </ul>
 
                         <h2>Delivery Workflow</h2>
-                        {service.process.map((step) => (
-                            <div key={step.step} className="notice">
-                                <strong>{step.step} - {step.title}</strong>
+                        {process.map((step, index) => (
+                            <div key={`${step.step || index}-${step.title}`} className="notice">
+                                <strong>{step.step || String(index + 1).padStart(2, '0')} - {step.title}</strong>
                                 <p>{step.description}</p>
                             </div>
                         ))}

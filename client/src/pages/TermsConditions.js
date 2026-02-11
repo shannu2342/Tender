@@ -25,6 +25,7 @@ const sections = [
 
 const TermsConditions = () => (
     <PolicyPage
+        pageName="terms_conditions"
         title="Terms and Conditions"
         lead="Governing terms for using our website and procurement support services."
         sections={sections}

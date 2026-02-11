@@ -1,7 +1,9 @@
 import { Globe } from 'lucide-react';
-import { site } from '../config/site';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const WhatsAppFloat = () => {
+    const site = useSiteSettings();
+
     return (
         <a
             className="wa-float"
@@ -18,4 +20,3 @@ const WhatsAppFloat = () => {
 };
 
 export default WhatsAppFloat;
-

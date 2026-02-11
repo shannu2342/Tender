@@ -21,6 +21,7 @@ const sections = [
 
 const TenderDisclaimer = () => (
     <PolicyPage
+        pageName="tender_disclaimer"
         title="Tender Disclaimer"
         lead="Specific terms governing tender-related information and participation guidance."
         sections={sections}

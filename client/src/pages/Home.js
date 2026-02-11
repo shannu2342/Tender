@@ -2,10 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle, Clock3, ShieldCheck, BriefcaseBusiness } from 'lucide-react';
 import { servicesService, tendersService } from '../services/api';
-import { site } from '../config/site';
 import { serviceCatalog, tenderRecords } from '../data/siteContent';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const Home = () => {
+    const site = useSiteSettings();
+    const managed = useManagedPage('home', {
+        kicker: 'Enterprise Procurement Enablement',
+        title: site.name,
+        lead: 'Built for serious teams that need predictable support for GeM onboarding, catalogue execution, bid participation, and tender delivery timelines.'
+    });
     const [services, setServices] = useState([]);
     const [tenders, setTenders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -45,12 +52,9 @@ const Home = () => {
         <div className="page page--tight-top">
             <div className="container">
                 <section className="hero-panel hero-panel--dark">
-                    <span className="kicker">Enterprise Procurement Enablement</span>
-                    <h1 className="page__title mt-14">{site.name}</h1>
-                    <p className="page__lead">
-                        Built for serious teams that need predictable support for GeM onboarding, catalogue execution,
-                        bid participation, and tender delivery timelines.
-                    </p>
+                    <span className="kicker">{managed.kicker}</span>
+                    <h1 className="page__title mt-14">{managed.title || site.name}</h1>
+                    <p className="page__lead">{managed.lead}</p>
                     <div className="cta-row">
                         <Link to="/services" className="btn btn-primary">
                             Explore Services <ArrowRight size={16} />

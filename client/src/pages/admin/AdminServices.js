@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import api from '../../services/api';
-import { Link } from 'react-router-dom';
+
+const emptyForm = {
+    title: '',
+    slug: '',
+    description: '',
+    enabled: true
+};
 
 const AdminServices = () => {
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetchServices();
-    }, []);
+    const [form, setForm] = useState(emptyForm);
+    const [editingId, setEditingId] = useState(null);
 
     const fetchServices = async () => {
         try {
-            const response = await api.get('/api/services');
-            setServices(response.data);
+            const response = await api.get('/services');
+            setServices(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching services:', error);
         } finally {
@@ -21,148 +25,126 @@ const AdminServices = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this service?')) {
-            try {
-                await api.delete(`/api/services/${id}`);
-                fetchServices();
-            } catch (error) {
-                console.error('Error deleting service:', error);
+    useEffect(() => {
+        fetchServices();
+    }, []);
+
+    const resetForm = () => {
+        setForm(emptyForm);
+        setEditingId(null);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+            ...form,
+            slug: (form.slug || form.title).toLowerCase().trim().replace(/\s+/g, '-')
+        };
+
+        try {
+            if (editingId) {
+                await api.put(`/services/${editingId}`, payload);
+            } else {
+                await api.post('/services', payload);
             }
+            resetForm();
+            fetchServices();
+        } catch (error) {
+            console.error('Error saving service:', error);
         }
     };
 
-    const handleToggleStatus = async (id, currentStatus) => {
+    const handleEdit = (service) => {
+        setEditingId(service._id);
+        setForm({
+            title: service.title || '',
+            slug: service.slug || '',
+            description: service.description || '',
+            enabled: Boolean(service.enabled ?? true)
+        });
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Delete this service?')) return;
         try {
-            await api.put(`/api/services/${id}`, {
-                enabled: !currentStatus
+            await api.delete(`/services/${id}`);
+            fetchServices();
+        } catch (error) {
+            console.error('Error deleting service:', error);
+        }
+    };
+
+    const handleToggleStatus = async (service) => {
+        try {
+            await api.put(`/services/${service._id}`, {
+                enabled: !Boolean(service.enabled)
             });
             fetchServices();
         } catch (error) {
-            console.error('Error updating service status:', error);
+            console.error('Error updating status:', error);
         }
     };
 
     if (loading) {
-        return (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-                <div className="loading"></div>
-                <p style={{ marginTop: '20px', color: '#718096' }}>Loading services...</p>
-            </div>
-        );
+        return <div className="loading">Loading services...</div>;
     }
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h1 style={{ fontSize: '1.5rem', marginBottom: '30px', color: '#2d3748' }}>Manage Services</h1>
+        <div style={{ padding: 20 }}>
+            <h1 style={{ fontSize: '1.5rem', marginBottom: 20 }}>Manage Services</h1>
 
-            <div style={{ marginBottom: '20px' }}>
-                <Link
-                    to="/admin/services/new"
-                    style={{
-                        display: 'inline-block',
-                        padding: '10px 20px',
-                        backgroundColor: '#2563eb',
-                        color: 'white',
-                        borderRadius: '5px',
-                        textDecoration: 'none',
-                        fontWeight: '500',
-                        fontSize: '1rem',
-                        transition: 'background-color 0.3s'
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
-                >
-                    + Add New Service
-                </Link>
+            <form onSubmit={handleSubmit} className="card" style={{ marginBottom: 20 }}>
+                <div className="card-body">
+                    <h2 className="section-title title-sm">{editingId ? 'Edit Service' : 'Add Service'}</h2>
+                    <div className="grid gap-8 md:grid-cols-2">
+                        <div className="form-group">
+                            <label>Title</label>
+                            <input className="form-control" value={form.title} onChange={(e) => setForm((v) => ({ ...v, title: e.target.value }))} required />
+                        </div>
+                        <div className="form-group">
+                            <label>Slug</label>
+                            <input className="form-control" value={form.slug} onChange={(e) => setForm((v) => ({ ...v, slug: e.target.value }))} placeholder="auto from title" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>Description</label>
+                        <textarea className="form-control" rows={3} value={form.description} onChange={(e) => setForm((v) => ({ ...v, description: e.target.value }))} />
+                    </div>
+                    <div className="cta-row">
+                        <button type="submit" className="btn btn-primary">{editingId ? 'Update Service' : 'Create Service'}</button>
+                        {editingId ? <button type="button" className="btn btn-secondary" onClick={resetForm}>Cancel Edit</button> : null}
+                    </div>
+                </div>
+            </form>
+
+            <div className="card">
+                <div className="card-body" style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Slug</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Title</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Status</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {services.map((service) => (
+                                <tr key={service._id} style={{ borderTop: '1px solid #e2e8f0' }}>
+                                    <td style={{ padding: '10px' }}>{service.slug || '-'}</td>
+                                    <td style={{ padding: '10px' }}>{service.title}</td>
+                                    <td style={{ padding: '10px' }}>{service.enabled ? 'Enabled' : 'Disabled'}</td>
+                                    <td style={{ padding: '10px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                        <button type="button" className="btn btn-secondary" onClick={() => handleEdit(service)}>Edit</button>
+                                        <button type="button" className="btn btn-light" onClick={() => handleToggleStatus(service)}>{service.enabled ? 'Disable' : 'Enable'}</button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => handleDelete(service._id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '30px' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#f3f4f6' }}>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Service</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Title</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Status</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {services.map(service => (
-                        <tr key={service._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{service.slug}</td>
-                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{service.title}</td>
-                            <td style={{ padding: '12px' }}>
-                                <span
-                                    style={{
-                                        padding: '4px 12px',
-                                        borderRadius: '20px',
-                                        fontSize: '0.8rem',
-                                        fontWeight: '500',
-                                        backgroundColor: service.enabled ? '#d1fae5' : '#fee2e2',
-                                        color: service.enabled ? '#065f46' : '#991b1b'
-                                    }}
-                                >
-                                    {service.enabled ? 'Enabled' : 'Disabled'}
-                                </span>
-                            </td>
-                            <td style={{ padding: '12px' }}>
-                                <Link
-                                    to={`/admin/services/${service._id}`}
-                                    style={{
-                                        marginRight: '10px',
-                                        padding: '6px 12px',
-                                        backgroundColor: '#3b82f6',
-                                        color: 'white',
-                                        borderRadius: '5px',
-                                        textDecoration: 'none',
-                                        fontSize: '0.8rem',
-                                        transition: 'background-color 0.3s'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    onClick={() => handleToggleStatus(service._id, service.enabled)}
-                                    style={{
-                                        padding: '6px 12px',
-                                        backgroundColor: service.enabled ? '#ef4444' : '#10b981',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        fontSize: '0.8rem',
-                                        cursor: 'pointer',
-                                        transition: 'background-color 0.3s',
-                                        marginRight: '10px'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = service.enabled ? '#dc2626' : '#059669'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = service.enabled ? '#ef4444' : '#10b981'}
-                                >
-                                    {service.enabled ? 'Disable' : 'Enable'}
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(service._id)}
-                                    style={{
-                                        padding: '6px 12px',
-                                        backgroundColor: '#ef4444',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        fontSize: '0.8rem',
-                                        cursor: 'pointer',
-                                        transition: 'background-color 0.3s'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#dc2626'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#ef4444'}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 };

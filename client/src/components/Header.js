@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail, ArrowUpRight, MessageCircle } from 'lucide-react';
-import { site } from '../config/site';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const menuItems = [
     { title: 'Home', path: '/' },
-    { title: 'About', path: '/about' },
-    { title: 'Services', path: '/services' },
     { title: 'Tenders', path: '/tenders' },
     { title: 'Pricing', path: '/pricing' },
+    { title: 'Services', path: '/services' },
+    { title: 'About', path: '/about' },
+    { title: 'Why Choose Us', path: '/why-choose-us' },
     { title: 'Blog', path: '/blog' },
     { title: 'Contact', path: '/contact' }
 ];
@@ -17,6 +18,7 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const site = useSiteSettings();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 8);
@@ -28,6 +30,12 @@ const Header = () => {
         setIsMenuOpen(false);
     }, [location.pathname]);
 
+    useEffect(() => {
+        const className = 'mobile-nav-open';
+        document.body.classList.toggle(className, isMenuOpen);
+        return () => document.body.classList.remove(className);
+    }, [isMenuOpen]);
+
     const isActive = (path) => location.pathname === path;
 
     return (
@@ -35,10 +43,6 @@ const Header = () => {
             <div className="site-header__topbar">
                 <div className="container site-header__topbar-inner">
                     <div className="site-header__contact-group">
-                        <a href={`tel:${site.contact.phoneTel}`} className="site-header__contact-link">
-                            <Phone size={14} />
-                            {site.contact.phoneDisplay}
-                        </a>
                         <a href={`mailto:${site.contact.email}`} className="site-header__contact-link">
                             <Mail size={14} />
                             {site.contact.email}

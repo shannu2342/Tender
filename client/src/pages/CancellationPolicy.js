@@ -21,6 +21,7 @@ const sections = [
 
 const CancellationPolicy = () => (
     <PolicyPage
+        pageName="cancellation_policy"
         title="Cancellation Policy"
         lead="Rules and process for cancellation of active service engagements."
         sections={sections}

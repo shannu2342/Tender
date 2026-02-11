@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, MessageCircle, Facebook, Linkedin, Instagram } from 'lucide-react';
-import { site } from '../config/site';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const quickLinks = [
     { name: 'About', path: '/about' },
@@ -31,6 +31,8 @@ const enterpriseServices = [
 ];
 
 const Footer = () => {
+    const site = useSiteSettings();
+
     return (
         <footer className="site-footer">
             <div className="container site-footer__grid">

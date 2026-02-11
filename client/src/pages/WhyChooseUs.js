@@ -1,42 +1,23 @@
 import { ShieldCheck, Gauge, Users, Handshake } from 'lucide-react';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { pageTemplates } from '../config/pageTemplates';
 
-const reasons = [
-    {
-        title: 'Specialized Procurement Team',
-        text: 'Dedicated resources for GeM, bid preparation, and documentation quality control.',
-        icon: Users
-    },
-    {
-        title: 'Compliance-Led Execution',
-        text: 'We design each step to reduce non-compliance risk and avoid last-minute submission failures.',
-        icon: ShieldCheck
-    },
-    {
-        title: 'Faster Decision Cycles',
-        text: 'Structured data and clear handoffs help your team decide faster on bid participation.',
-        icon: Gauge
-    },
-    {
-        title: 'Long-Term Partnership Model',
-        text: 'Our workflows are built for sustained operations, not one-time transactions.',
-        icon: Handshake
-    }
-];
+const icons = [Users, ShieldCheck, Gauge, Handshake];
 
 const WhyChooseUs = () => {
+    const content = useManagedPage('why_choose_us', pageTemplates.why_choose_us);
+
     return (
         <div className="page">
             <div className="container">
                 <header className="page__header page__narrow">
-                    <h1 className="page__title">Why Choose Us</h1>
-                    <p className="page__lead">
-                        Enterprise teams trust us because we deliver procurement support with operational rigor and consistent communication.
-                    </p>
+                    <h1 className="page__title">{content.title}</h1>
+                    <p className="page__lead">{content.lead}</p>
                 </header>
 
                 <div className="grid gap-8 md:grid-cols-2">
-                    {reasons.map((item) => {
-                        const Icon = item.icon;
+                    {(content.items || []).map((item, index) => {
+                        const Icon = icons[index % icons.length];
                         return (
                             <article key={item.title} className="card">
                                 <div className="card-body">

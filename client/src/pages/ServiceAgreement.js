@@ -25,6 +25,7 @@ const sections = [
 
 const ServiceAgreement = () => (
     <PolicyPage
+        pageName="service_agreement"
         title="Service Agreement"
         lead="General principles and obligations governing delivery of services."
         sections={sections}

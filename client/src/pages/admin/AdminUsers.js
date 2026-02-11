@@ -11,7 +11,7 @@ const AdminUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await api.get('/api/users');
+            const response = await api.get('/users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -23,7 +23,7 @@ const AdminUsers = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
             try {
-                await api.delete(`/api/users/${id}`);
+                await api.delete(`/users/${id}`);
                 fetchUsers();
             } catch (error) {
                 console.error('Error deleting user:', error);

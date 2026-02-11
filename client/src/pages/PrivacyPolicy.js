@@ -23,6 +23,7 @@ const sections = [
 
 const PrivacyPolicy = () => (
     <PolicyPage
+        pageName="privacy_policy"
         title="Privacy Policy"
         lead="How we collect, use, and safeguard your information while delivering procurement support services."
         sections={sections}

@@ -1,23 +1,23 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { faqs } from '../data/siteContent';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { pageTemplates } from '../config/pageTemplates';
 
 const FAQ = () => {
+    const content = useManagedPage('faq', pageTemplates.faq);
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
         <div className="page">
             <div className="container page__narrow">
                 <header className="page__header">
-                    <h1 className="page__title">Frequently Asked Questions</h1>
-                    <p className="page__lead">
-                        Common questions about our services, onboarding model, and enterprise support.
-                    </p>
+                    <h1 className="page__title">{content.title}</h1>
+                    <p className="page__lead">{content.lead}</p>
                 </header>
 
                 <div className="grid gap-8">
-                    {faqs.map((item, index) => {
+                    {(content.items || []).map((item, index) => {
                         const isOpen = index === activeIndex;
                         return (
                             <article className="card" key={item.q}>

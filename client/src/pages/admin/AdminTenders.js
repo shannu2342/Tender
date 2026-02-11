@@ -1,19 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import api from '../../services/api';
-import { Link } from 'react-router-dom';
+
+const emptyForm = {
+    title: '',
+    department: '',
+    tenderNumber: '',
+    governmentType: 'state',
+    state: '',
+    district: '',
+    category: '',
+    description: '',
+    lastDate: '',
+    openingDate: '',
+    estimatedValue: '',
+    currency: 'INR',
+    enabled: true
+};
 
 const AdminTenders = () => {
     const [tenders, setTenders] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetchTenders();
-    }, []);
+    const [form, setForm] = useState(emptyForm);
+    const [editingId, setEditingId] = useState(null);
 
     const fetchTenders = async () => {
         try {
-            const response = await api.get('/api/tenders');
-            setTenders(response.data);
+            const response = await api.get('/tenders');
+            setTenders(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching tenders:', error);
         } finally {
@@ -21,150 +34,123 @@ const AdminTenders = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this tender?')) {
-            try {
-                await api.delete(`/api/tenders/${id}`);
-                fetchTenders();
-            } catch (error) {
-                console.error('Error deleting tender:', error);
+    useEffect(() => {
+        fetchTenders();
+    }, []);
+
+    const resetForm = () => {
+        setForm(emptyForm);
+        setEditingId(null);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+            ...form,
+            estimatedValue: Number(form.estimatedValue || 0)
+        };
+
+        try {
+            if (editingId) {
+                await api.put(`/tenders/${editingId}`, payload);
+            } else {
+                await api.post('/tenders', payload);
             }
+            resetForm();
+            fetchTenders();
+        } catch (error) {
+            console.error('Error saving tender:', error);
         }
     };
 
-    const handleToggleStatus = async (id, currentStatus) => {
+    const handleEdit = (tender) => {
+        setEditingId(tender._id);
+        setForm({
+            ...emptyForm,
+            ...tender,
+            lastDate: tender.lastDate ? String(tender.lastDate).slice(0, 10) : '',
+            openingDate: tender.openingDate ? String(tender.openingDate).slice(0, 10) : ''
+        });
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Delete this tender?')) return;
         try {
-            await api.put(`/api/tenders/${id}`, {
-                enabled: !currentStatus
+            await api.delete(`/tenders/${id}`);
+            fetchTenders();
+        } catch (error) {
+            console.error('Error deleting tender:', error);
+        }
+    };
+
+    const handleToggleStatus = async (tender) => {
+        try {
+            await api.put(`/tenders/${tender._id}`, {
+                enabled: !Boolean(tender.enabled)
             });
             fetchTenders();
         } catch (error) {
-            console.error('Error updating tender status:', error);
+            console.error('Error updating status:', error);
         }
     };
 
-    if (loading) {
-        return (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-                <div className="loading"></div>
-                <p style={{ marginTop: '20px', color: '#718096' }}>Loading tenders...</p>
-            </div>
-        );
-    }
+    if (loading) return <div className="loading">Loading tenders...</div>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h1 style={{ fontSize: '1.5rem', marginBottom: '30px', color: '#2d3748' }}>Manage Tenders</h1>
+        <div style={{ padding: 20 }}>
+            <h1 style={{ fontSize: '1.5rem', marginBottom: 20 }}>Manage Tenders</h1>
 
-            <div style={{ marginBottom: '20px' }}>
-                <Link
-                    to="/admin/tenders/new"
-                    style={{
-                        display: 'inline-block',
-                        padding: '10px 20px',
-                        backgroundColor: '#2563eb',
-                        color: 'white',
-                        borderRadius: '5px',
-                        textDecoration: 'none',
-                        fontWeight: '500',
-                        fontSize: '1rem',
-                        transition: 'background-color 0.3s'
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
-                >
-                    + Add New Tender
-                </Link>
+            <form onSubmit={handleSubmit} className="card" style={{ marginBottom: 20 }}>
+                <div className="card-body">
+                    <h2 className="section-title title-sm">{editingId ? 'Edit Tender' : 'Add Tender'}</h2>
+                    <div className="grid gap-8 md:grid-cols-2">
+                        <div className="form-group"><label>Title</label><input className="form-control" value={form.title} onChange={(e) => setForm((v) => ({ ...v, title: e.target.value }))} required /></div>
+                        <div className="form-group"><label>Department</label><input className="form-control" value={form.department} onChange={(e) => setForm((v) => ({ ...v, department: e.target.value }))} required /></div>
+                        <div className="form-group"><label>Tender Number</label><input className="form-control" value={form.tenderNumber} onChange={(e) => setForm((v) => ({ ...v, tenderNumber: e.target.value }))} /></div>
+                        <div className="form-group"><label>Category</label><input className="form-control" value={form.category} onChange={(e) => setForm((v) => ({ ...v, category: e.target.value }))} /></div>
+                        <div className="form-group"><label>State</label><input className="form-control" value={form.state} onChange={(e) => setForm((v) => ({ ...v, state: e.target.value }))} /></div>
+                        <div className="form-group"><label>District</label><input className="form-control" value={form.district} onChange={(e) => setForm((v) => ({ ...v, district: e.target.value }))} /></div>
+                        <div className="form-group"><label>Last Date</label><input type="date" className="form-control" value={form.lastDate} onChange={(e) => setForm((v) => ({ ...v, lastDate: e.target.value }))} /></div>
+                        <div className="form-group"><label>Estimated Value</label><input type="number" className="form-control" value={form.estimatedValue} onChange={(e) => setForm((v) => ({ ...v, estimatedValue: e.target.value }))} /></div>
+                    </div>
+                    <div className="form-group"><label>Description</label><textarea rows={3} className="form-control" value={form.description} onChange={(e) => setForm((v) => ({ ...v, description: e.target.value }))} /></div>
+                    <div className="cta-row">
+                        <button className="btn btn-primary" type="submit">{editingId ? 'Update Tender' : 'Create Tender'}</button>
+                        {editingId ? <button className="btn btn-secondary" type="button" onClick={resetForm}>Cancel Edit</button> : null}
+                    </div>
+                </div>
+            </form>
+
+            <div className="card">
+                <div className="card-body" style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Title</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Department</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Last Date</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Status</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tenders.map((tender) => (
+                                <tr key={tender._id} style={{ borderTop: '1px solid #e2e8f0' }}>
+                                    <td style={{ padding: '10px' }}>{tender.title}</td>
+                                    <td style={{ padding: '10px' }}>{tender.department}</td>
+                                    <td style={{ padding: '10px' }}>{tender.lastDate ? new Date(tender.lastDate).toLocaleDateString() : '-'}</td>
+                                    <td style={{ padding: '10px' }}>{tender.enabled ? 'Enabled' : 'Disabled'}</td>
+                                    <td style={{ padding: '10px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                        <button className="btn btn-secondary" type="button" onClick={() => handleEdit(tender)}>Edit</button>
+                                        <button className="btn btn-light" type="button" onClick={() => handleToggleStatus(tender)}>{tender.enabled ? 'Disable' : 'Enable'}</button>
+                                        <button className="btn btn-secondary" type="button" onClick={() => handleDelete(tender._id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '30px' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#f3f4f6' }}>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Title</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Department</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Last Date</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Status</th>
-                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tenders.map(tender => (
-                        <tr key={tender._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{tender.title}</td>
-                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{tender.department}</td>
-                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{new Date(tender.lastDate).toLocaleDateString()}</td>
-                            <td style={{ padding: '12px' }}>
-                                <span
-                                    style={{
-                                        padding: '4px 12px',
-                                        borderRadius: '20px',
-                                        fontSize: '0.8rem',
-                                        fontWeight: '500',
-                                        backgroundColor: tender.enabled ? '#d1fae5' : '#fee2e2',
-                                        color: tender.enabled ? '#065f46' : '#991b1b'
-                                    }}
-                                >
-                                    {tender.enabled ? 'Enabled' : 'Disabled'}
-                                </span>
-                            </td>
-                            <td style={{ padding: '12px' }}>
-                                <Link
-                                    to={`/admin/tenders/${tender._id}`}
-                                    style={{
-                                        marginRight: '10px',
-                                        padding: '6px 12px',
-                                        backgroundColor: '#3b82f6',
-                                        color: 'white',
-                                        borderRadius: '5px',
-                                        textDecoration: 'none',
-                                        fontSize: '0.8rem',
-                                        transition: 'background-color 0.3s'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    onClick={() => handleToggleStatus(tender._id, tender.enabled)}
-                                    style={{
-                                        padding: '6px 12px',
-                                        backgroundColor: tender.enabled ? '#ef4444' : '#10b981',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        fontSize: '0.8rem',
-                                        cursor: 'pointer',
-                                        transition: 'background-color 0.3s',
-                                        marginRight: '10px'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = tender.enabled ? '#dc2626' : '#059669'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = tender.enabled ? '#ef4444' : '#10b981'}
-                                >
-                                    {tender.enabled ? 'Disable' : 'Enable'}
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(tender._id)}
-                                    style={{
-                                        padding: '6px 12px',
-                                        backgroundColor: '#ef4444',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        fontSize: '0.8rem',
-                                        cursor: 'pointer',
-                                        transition: 'background-color 0.3s'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#dc2626'}
-                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#ef4444'}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 };

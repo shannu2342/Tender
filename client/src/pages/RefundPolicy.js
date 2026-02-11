@@ -21,6 +21,7 @@ const sections = [
 
 const RefundPolicy = () => (
     <PolicyPage
+        pageName="refund_policy"
         title="Refund Policy"
         lead="Policy for assessing and processing refund requests for service engagements."
         sections={sections}

@@ -18,7 +18,7 @@ const AdminSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await api.get('/api/settings');
+            const response = await api.get('/settings');
             setSettings(response.data);
         } catch (error) {
             console.error('Error fetching settings:', error);
@@ -31,7 +31,7 @@ const AdminSettings = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.put('/api/settings', settings);
+            const response = await api.put('/settings', settings);
             setSettings(response.data);
             setSuccessMessage('Settings updated successfully');
             setTimeout(() => setSuccessMessage(''), 3000);

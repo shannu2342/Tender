@@ -1,9 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Mail, MapPin, Phone, Clock3, MessageCircle } from 'lucide-react';
 import { enquiriesService } from '../services/api';
-import { site } from '../config/site';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const Contact = () => {
+    const location = useLocation();
+    const siteData = useSiteSettings();
+    const managed = useManagedPage('contact', {
+        title: 'Talk to Our Team',
+        lead: 'Share your requirement and we will respond with scope, timeline, documentation needs, and the best support model.'
+    });
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -13,6 +22,13 @@ const Contact = () => {
         message: ''
     });
     const [status, setStatus] = useState({ kind: 'idle', message: '' });
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const subject = params.get('subject');
+        if (!subject) return;
+        setFormData((prev) => ({ ...prev, subject }));
+    }, [location.search]);
 
     const serviceOptions = useMemo(
         () => [
@@ -44,7 +60,7 @@ const Contact = () => {
                 subject: formData.subject.trim(),
                 message: formData.message.trim(),
                 source: 'contact_form',
-                website: site.domain
+                website: siteData.domain
             });
             setStatus({ kind: 'success', message: 'Thanks. Your enquiry is received. Our team will contact you shortly.' });
             setFormData({ name: '', email: '', phone: '', serviceType: '', subject: '', message: '' });
@@ -63,10 +79,8 @@ const Contact = () => {
             <div className="container">
                 <section className="hero-panel">
                     <span className="kicker"><MessageCircle size={14} /> Contact Us</span>
-                    <h1 className="page__title mt-12">Talk to Our Team</h1>
-                    <p className="page__lead">
-                        Share your requirement and we will respond with scope, timeline, documentation needs, and the best support model.
-                    </p>
+                    <h1 className="page__title mt-12">{managed.title}</h1>
+                    <p className="page__lead">{managed.lead}</p>
                 </section>
 
                 <div className="split-layout mt-24">
@@ -74,13 +88,13 @@ const Contact = () => {
                         <div className="card-body">
                             <h2 className="section-title title-sm">Contact Details</h2>
                             <ul className="list-clean mt-12">
-                                <li><Phone size={15} /> <a href={`tel:${site.contact.phoneTel}`}>{site.contact.phoneDisplay}</a></li>
-                                <li><Mail size={15} /> <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>
-                                <li><MapPin size={15} /> {site.contact.addressLine}</li>
-                                <li><Clock3 size={15} /> {site.contact.hours}</li>
+                                <li><Phone size={15} /> <a href={`tel:${siteData.contact.phoneTel}`}>{siteData.contact.phoneDisplay}</a></li>
+                                <li><Mail size={15} /> <a href={`mailto:${siteData.contact.email}`}>{siteData.contact.email}</a></li>
+                                <li><MapPin size={15} /> {siteData.contact.addressLine}</li>
+                                <li><Clock3 size={15} /> {siteData.contact.hours}</li>
                             </ul>
                             <div className="cta-row mt-14">
-                                <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="btn btn-success">
+                                <a href={`https://wa.me/${siteData.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="btn btn-success">
                                     <MessageCircle size={16} /> WhatsApp Support
                                 </a>
                             </div>

@@ -1,20 +1,37 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { tenderRecords } from '../data/siteContent';
+import { tendersService } from '../services/api';
 
 const Tenders = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [governmentType, setGovernmentType] = useState('all');
     const [category, setCategory] = useState('all');
+    const [tenders, setTenders] = useState(tenderRecords);
 
-    const categories = useMemo(() => ['all', ...new Set(tenderRecords.map((item) => item.category))], []);
+    useEffect(() => {
+        const loadTenders = async () => {
+            try {
+                const response = await tendersService.getTenders();
+                if (Array.isArray(response.data) && response.data.length) {
+                    setTenders(response.data);
+                }
+            } catch (error) {
+                // Keep fallback data.
+            }
+        };
 
-    const filtered = tenderRecords.filter((tender) => {
+        loadTenders();
+    }, []);
+
+    const categories = useMemo(() => ['all', ...new Set(tenders.map((item) => item.category).filter(Boolean))], [tenders]);
+
+    const filtered = tenders.filter((tender) => {
         const matchesSearch =
-            tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            tender.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            tender.department.toLowerCase().includes(searchTerm.toLowerCase());
+            (tender.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (tender.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (tender.department || '').toLowerCase().includes(searchTerm.toLowerCase());
         const matchesGov = governmentType === 'all' || tender.governmentType === governmentType;
         const matchesCategory = category === 'all' || tender.category === category;
         return matchesSearch && matchesGov && matchesCategory;
@@ -73,36 +90,36 @@ const Tenders = () => {
 
                 <div className="table-like">
                     {filtered.map((tender) => (
-                        <article key={tender.id} className="table-like__row">
+                        <article key={tender.id || tender._id} className="table-like__row">
                             <div className="chip-row">
                                 <span className={`chip ${tender.isPaidContent ? 'chip--premium' : 'chip--sky'}`}>
                                     {tender.isPaidContent ? 'Premium' : 'Open'}
                                 </span>
-                                <span className="chip">{tender.governmentType}</span>
-                                <span className="chip">{tender.category}</span>
+                                <span className="chip">{tender.governmentType || 'general'}</span>
+                                <span className="chip">{tender.category || 'misc'}</span>
                             </div>
                             <h2 className="section-title title-md">{tender.title}</h2>
                             <p className="section-subtitle">{tender.description}</p>
                             <div className="table-like__meta">
                                 <div>
                                     <strong>Department</strong>
-                                    <span>{tender.department}</span>
+                                    <span>{tender.department || 'Not specified'}</span>
                                 </div>
                                 <div>
                                     <strong>Tender No.</strong>
-                                    <span>{tender.tenderNumber}</span>
+                                    <span>{tender.tenderNumber || '-'}</span>
                                 </div>
                                 <div>
                                     <strong>Location</strong>
-                                    <span>{tender.state}, {tender.district}</span>
+                                    <span>{[tender.state, tender.district].filter(Boolean).join(', ') || 'India'}</span>
                                 </div>
                                 <div>
                                     <strong>Last Date</strong>
-                                    <span>{new Date(tender.lastDate).toLocaleDateString()}</span>
+                                    <span>{tender.lastDate ? new Date(tender.lastDate).toLocaleDateString() : '-'}</span>
                                 </div>
                             </div>
                             <div className="cta-row">
-                                <Link to={`/tenders/${tender.id}`} className="btn btn-primary">View Details</Link>
+                                <Link to={`/tenders/${tender.id || tender._id}`} className="btn btn-primary">View Details</Link>
                             </div>
                         </article>
                     ))}

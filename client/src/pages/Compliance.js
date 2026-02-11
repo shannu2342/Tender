@@ -21,6 +21,7 @@ const sections = [
 
 const Compliance = () => (
     <PolicyPage
+        pageName="compliance"
         title="Compliance"
         lead="Our approach to governance, documentation discipline, and ethical procurement operations."
         sections={sections}

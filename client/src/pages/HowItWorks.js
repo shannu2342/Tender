@@ -1,42 +1,23 @@
 import { SearchCheck, FileCheck2, Send, BarChart3 } from 'lucide-react';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { pageTemplates } from '../config/pageTemplates';
 
-const steps = [
-    {
-        title: 'Discovery and Scope',
-        text: 'We map your business goals, current readiness, and target procurement segments.',
-        icon: SearchCheck
-    },
-    {
-        title: 'Documentation and Setup',
-        text: 'All required files, templates, and compliance checkpoints are organized in a clear workflow.',
-        icon: FileCheck2
-    },
-    {
-        title: 'Execution and Submission',
-        text: 'Our team supports listings, bid drafting, and submission activities against strict timelines.',
-        icon: Send
-    },
-    {
-        title: 'Reporting and Optimization',
-        text: 'Performance insights and process feedback loops are used to improve future outcomes.',
-        icon: BarChart3
-    }
-];
+const icons = [SearchCheck, FileCheck2, Send, BarChart3];
 
 const HowItWorks = () => {
+    const content = useManagedPage('how_it_works', pageTemplates.how_it_works);
+
     return (
         <div className="page">
             <div className="container">
                 <header className="page__header page__narrow">
-                    <h1 className="page__title">How It Works</h1>
-                    <p className="page__lead">
-                        A delivery model designed for reliability, transparency, and repeatable execution quality.
-                    </p>
+                    <h1 className="page__title">{content.title}</h1>
+                    <p className="page__lead">{content.lead}</p>
                 </header>
 
                 <div className="grid gap-8 md:grid-cols-2">
-                    {steps.map((step, index) => {
-                        const Icon = step.icon;
+                    {(content.items || []).map((step, index) => {
+                        const Icon = icons[index % icons.length];
                         return (
                             <article className="card" key={step.title}>
                                 <div className="card-body">

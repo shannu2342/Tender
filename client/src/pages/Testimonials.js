@@ -1,15 +1,18 @@
 import { Link } from 'react-router-dom';
-import { testimonials } from '../data/siteContent';
+import { testimonials as fallbackTestimonials } from '../data/siteContent';
+import { useManagedPage } from '../hooks/useManagedPage';
+import { pageTemplates } from '../config/pageTemplates';
 
 const Testimonials = () => {
+    const content = useManagedPage('testimonials', pageTemplates.testimonials);
+    const testimonials = content.items || fallbackTestimonials;
+
     return (
         <div className="page">
             <div className="container">
                 <header className="page__header page__narrow">
-                    <h1 className="page__title">Client Testimonials</h1>
-                    <p className="page__lead">
-                        Feedback from businesses that use our team as their procurement execution partner.
-                    </p>
+                    <h1 className="page__title">{content.title}</h1>
+                    <p className="page__lead">{content.lead}</p>
                 </header>
 
                 <div className="grid gap-8 md:grid-cols-3">

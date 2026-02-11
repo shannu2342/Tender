@@ -1,7 +1,26 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { serviceCatalog } from '../data/siteContent';
+import { servicesService } from '../services/api';
 
 const Services = () => {
+    const [services, setServices] = useState(serviceCatalog);
+
+    useEffect(() => {
+        const loadServices = async () => {
+            try {
+                const response = await servicesService.getServices();
+                if (Array.isArray(response.data) && response.data.length) {
+                    setServices(response.data);
+                }
+            } catch (error) {
+                // Keep fallback data for UI continuity.
+            }
+        };
+
+        loadServices();
+    }, []);
+
     return (
         <div className="page">
             <div className="container">
@@ -13,23 +32,30 @@ const Services = () => {
                 </header>
 
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    {serviceCatalog.map((service) => (
-                        <article key={service.slug} className="card">
-                            <div className="card-body">
-                                <span className="chip chip--sky">{service.price}</span>
-                                <h2 className="section-title title-md mt-12">{service.title}</h2>
-                                <p className="section-subtitle">{service.shortDescription}</p>
-                                <ul className="list-clean list-check mt-14">
-                                    {service.features.slice(0, 3).map((feature) => (
-                                        <li key={feature}>{feature}</li>
-                                    ))}
-                                </ul>
-                                <div className="cta-row">
-                                    <Link to={`/services/${service.slug}`} className="btn btn-primary">Explore Service</Link>
+                    {services.map((service) => {
+                        const slug = service.slug || service.id || service._id;
+                        return (
+                            <article key={service._id || slug} className="card">
+                                <div className="card-body">
+                                    <span className="chip chip--sky">{service.price || 'Enterprise Support'}</span>
+                                    <h2 className="section-title title-md mt-12">{service.title}</h2>
+                                    <p className="section-subtitle">{service.shortDescription || service.description}</p>
+                                    <ul className="list-clean list-check mt-14">
+                                        {(service.features || [
+                                            'Documentation and compliance checks',
+                                            'Structured execution workflow',
+                                            'Dedicated support and guidance'
+                                        ]).slice(0, 3).map((feature) => (
+                                            <li key={feature}>{feature}</li>
+                                        ))}
+                                    </ul>
+                                    <div className="cta-row">
+                                        <Link to={`/services/${slug}`} className="btn btn-primary">Explore Service</Link>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
-                    ))}
+                            </article>
+                        );
+                    })}
                 </div>
 
                 <div className="hero-panel mt-30">

@@ -1,14 +1,18 @@
-const PolicyPage = ({ title, lead, sections, footerNote }) => {
+import { useManagedPage } from '../../hooks/useManagedPage';
+
+const PolicyPage = ({ pageName, title, lead, sections, footerNote }) => {
+    const content = useManagedPage(pageName, { title, lead, sections, footerNote });
+
     return (
         <div className="page">
             <div className="container page__narrow">
                 <header className="page__header">
-                    <h1 className="page__title">{title}</h1>
-                    <p className="page__lead">{lead}</p>
+                    <h1 className="page__title">{content.title}</h1>
+                    <p className="page__lead">{content.lead}</p>
                 </header>
 
                 <article className="legal-card prose">
-                    {sections.map((section, index) => (
+                    {(content.sections || []).map((section, index) => (
                         <section key={section.heading || index}>
                             <h2>{section.heading}</h2>
                             {section.paragraphs?.map((text) => (
@@ -30,7 +34,8 @@ const PolicyPage = ({ title, lead, sections, footerNote }) => {
                             ) : null}
                         </section>
                     ))}
-                    {footerNote ? <p className="notice">{footerNote}</p> : null}
+                    {content.footerNote ? <p className="notice">{content.footerNote}</p> : null}
+                    {content.body ? <p>{content.body}</p> : null}
                 </article>
             </div>
         </div>
