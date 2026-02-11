@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, Crown, ShieldCheck, Smartphone } from 'lucide-react';
 import { paymentsService } from '../services/api';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
@@ -29,11 +29,32 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
     const [devOtp, setDevOtp] = useState('');
     const [busy, setBusy] = useState(false);
     const [message, setMessage] = useState('');
+    const bodyRef = useRef(null);
 
     const amountText = useMemo(() => {
         const price = Number(site.premium.price || 0);
         return `${site.premium.currency} ${price.toLocaleString('en-IN')}`;
     }, [site.premium.currency, site.premium.price]);
+
+    useEffect(() => {
+        if (!open) return undefined;
+        const prevOverflow = document.body.style.overflow;
+        const prevPaddingRight = document.body.style.paddingRight;
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = 'hidden';
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
+        }
+        return () => {
+            document.body.style.overflow = prevOverflow;
+            document.body.style.paddingRight = prevPaddingRight;
+        };
+    }, [open]);
+
+    useEffect(() => {
+        if (!open || !bodyRef.current) return;
+        bodyRef.current.scrollTop = 0;
+    }, [open]);
 
     if (!open) return null;
 
@@ -158,7 +179,7 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
                     <button type="button" className="mobile-nav__close" onClick={closeAndReset} aria-label="Close premium access">X</button>
                 </div>
 
-                <div className="premium-modal__body">
+                <div className="premium-modal__body" ref={bodyRef}>
                     <h3 className="section-title title-sm">{site.premium.planName}</h3>
                     <p className="section-subtitle">Unlock all premium tenders, complete details, and fast-track opportunity discovery.</p>
 

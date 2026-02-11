@@ -845,12 +845,16 @@ body.mobile-nav-open .wa-float {
 }
 
 .premium-modal {
+    --premium-modal-gap: clamp(12px, 3vh, 28px);
     position: fixed;
     inset: 0;
     z-index: 90;
-    display: grid;
-    place-items: center;
-    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--premium-modal-gap) 16px;
 }
 
 .premium-modal__backdrop {
@@ -863,12 +867,14 @@ body.mobile-nav-open .wa-float {
 .premium-modal__panel {
     position: relative;
     width: min(100%, 540px);
-    max-height: min(94vh, 760px);
-    overflow: auto;
+    max-height: calc(100dvh - (var(--premium-modal-gap) * 2));
+    overflow: hidden;
     border-radius: 16px;
     border: 1px solid rgba(148, 163, 184, 0.3);
     background: #fff;
     box-shadow: 0 22px 54px rgba(2, 6, 23, 0.44);
+    display: flex;
+    flex-direction: column;
 }
 
 .premium-modal__head {
@@ -881,6 +887,8 @@ body.mobile-nav-open .wa-float {
 
 .premium-modal__body {
     padding: 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .premium-price {
@@ -1402,6 +1410,16 @@ body.mobile-nav-open .wa-float {
 
     .premium-banner {
         grid-template-columns: 1fr;
+    }
+
+    .premium-modal {
+        --premium-modal-gap: 8px;
+        padding-inline: 8px;
+    }
+
+    .premium-modal__panel {
+        width: 100%;
+        border-radius: 14px;
     }
 
     .brand__badge {
