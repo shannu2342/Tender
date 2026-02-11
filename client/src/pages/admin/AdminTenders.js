@@ -14,6 +14,7 @@ const emptyForm = {
     openingDate: '',
     estimatedValue: '',
     currency: 'INR',
+    isPaidContent: false,
     enabled: true
 };
 
@@ -113,6 +114,16 @@ const AdminTenders = () => {
                         <div className="form-group"><label>Last Date</label><input type="date" className="form-control" value={form.lastDate} onChange={(e) => setForm((v) => ({ ...v, lastDate: e.target.value }))} /></div>
                         <div className="form-group"><label>Estimated Value</label><input type="number" className="form-control" value={form.estimatedValue} onChange={(e) => setForm((v) => ({ ...v, estimatedValue: e.target.value }))} /></div>
                     </div>
+                    <div className="form-group">
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <input
+                                type="checkbox"
+                                checked={Boolean(form.isPaidContent)}
+                                onChange={(e) => setForm((v) => ({ ...v, isPaidContent: e.target.checked }))}
+                            />
+                            Mark as Premium Tender
+                        </label>
+                    </div>
                     <div className="form-group"><label>Description</label><textarea rows={3} className="form-control" value={form.description} onChange={(e) => setForm((v) => ({ ...v, description: e.target.value }))} /></div>
                     <div className="cta-row">
                         <button className="btn btn-primary" type="submit">{editingId ? 'Update Tender' : 'Create Tender'}</button>
@@ -128,6 +139,7 @@ const AdminTenders = () => {
                             <tr>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Title</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Department</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Access</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Last Date</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Status</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Actions</th>
@@ -138,6 +150,7 @@ const AdminTenders = () => {
                                 <tr key={tender._id} style={{ borderTop: '1px solid #e2e8f0' }}>
                                     <td style={{ padding: '10px' }}>{tender.title}</td>
                                     <td style={{ padding: '10px' }}>{tender.department}</td>
+                                    <td style={{ padding: '10px' }}>{tender.isPaidContent ? 'Premium' : 'Open'}</td>
                                     <td style={{ padding: '10px' }}>{tender.lastDate ? new Date(tender.lastDate).toLocaleDateString() : '-'}</td>
                                     <td style={{ padding: '10px' }}>{tender.enabled ? 'Enabled' : 'Disabled'}</td>
                                     <td style={{ padding: '10px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>

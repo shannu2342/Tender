@@ -1,14 +1,20 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Crown, Lock } from 'lucide-react';
 import { tenderRecords } from '../data/siteContent';
 import { tendersService } from '../services/api';
+import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useCustomerAuth } from '../context/CustomerAuthContext';
+import PremiumAccessModal from '../components/PremiumAccessModal';
 
 const Tenders = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [governmentType, setGovernmentType] = useState('all');
     const [category, setCategory] = useState('all');
     const [tenders, setTenders] = useState(tenderRecords);
+    const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+    const site = useSiteSettings();
+    const { isPremium } = useCustomerAuth();
 
     useEffect(() => {
         const loadTenders = async () => {
@@ -37,6 +43,19 @@ const Tenders = () => {
         return matchesSearch && matchesGov && matchesCategory;
     });
 
+    const visibleTenders = useMemo(() => {
+        if (isPremium || !site.premium.enabled) return filtered;
+
+        const openTenders = filtered
+            .filter((item) => !item.isPaidContent)
+            .slice(0, Number(site.premium.freeVisibleTenders || 5));
+        const premiumPreview = filtered
+            .filter((item) => item.isPaidContent)
+            .slice(0, Number(site.premium.premiumPreviewTenders || 2));
+
+        return [...openTenders, ...premiumPreview];
+    }, [filtered, isPremium, site.premium.enabled, site.premium.freeVisibleTenders, site.premium.premiumPreviewTenders]);
+
     return (
         <div className="page">
             <div className="container">
@@ -47,7 +66,25 @@ const Tenders = () => {
                     </p>
                 </header>
 
+                {!isPremium && site.premium.enabled ? (
+                    <section className="premium-banner mb-24">
+                        <div>
+                            <span className="chip chip--premium"><Crown size={14} /> Premium Access</span>
+                            <h2 className="section-title title-sm mt-12">Unlock all premium tenders</h2>
+                            <p className="section-subtitle">Login with OTP and complete Razorpay payment to access all paid opportunities.</p>
+                        </div>
+                        <button type="button" className="btn btn-success" onClick={() => setPremiumModalOpen(true)}>
+                            <Crown size={16} /> Activate Premium
+                        </button>
+                    </section>
+                ) : null}
+
                 <section className="hero-panel mb-24">
+                    {!isPremium && site.premium.enabled ? (
+                        <p className="section-subtitle mb-12">
+                            Showing {site.premium.freeVisibleTenders} open tenders and {site.premium.premiumPreviewTenders} premium previews.
+                        </p>
+                    ) : null}
                     <div className="grid gap-8 md:grid-cols-3">
                         <div className="form-group">
                             <label htmlFor="tender-search">Search</label>
@@ -89,7 +126,7 @@ const Tenders = () => {
                 </section>
 
                 <div className="table-like">
-                    {filtered.map((tender) => (
+                    {visibleTenders.map((tender) => (
                         <article key={tender.id || tender._id} className="table-like__row">
                             <div className="chip-row">
                                 <span className={`chip ${tender.isPaidContent ? 'chip--premium' : 'chip--sky'}`}>
@@ -99,7 +136,11 @@ const Tenders = () => {
                                 <span className="chip">{tender.category || 'misc'}</span>
                             </div>
                             <h2 className="section-title title-md">{tender.title}</h2>
-                            <p className="section-subtitle">{tender.description}</p>
+                            <p className="section-subtitle">
+                                {tender.isPaidContent && !isPremium
+                                    ? 'Premium tender preview. Activate premium for complete details and full scope.'
+                                    : tender.description}
+                            </p>
                             <div className="table-like__meta">
                                 <div>
                                     <strong>Department</strong>
@@ -119,11 +160,19 @@ const Tenders = () => {
                                 </div>
                             </div>
                             <div className="cta-row">
-                                <Link to={`/tenders/${tender.id || tender._id}`} className="btn btn-primary">View Details</Link>
+                                <Link to={`/tenders/${tender.id || tender._id}`} className="btn btn-primary">
+                                    {tender.isPaidContent && !isPremium ? <><Lock size={16} /> Preview</> : 'View Details'}
+                                </Link>
+                                {tender.isPaidContent && !isPremium ? (
+                                    <button type="button" className="btn btn-secondary" onClick={() => setPremiumModalOpen(true)}>
+                                        <Crown size={16} /> Premium Access
+                                    </button>
+                                ) : null}
                             </div>
                         </article>
                     ))}
                 </div>
+                <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} />
             </div>
         </div>
     );

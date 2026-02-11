@@ -14,6 +14,8 @@ const blogsRoutes = require('./routes/blogsRoute')
 const enquiriesRoutes = require('./routes/enquiriesRoute')
 const usersRoutes = require('./routes/usersRoute')
 const settingsRoutes = require('./routes/settingsRoute')
+const customerAuthRoutes = require('./routes/customerAuthRoute')
+const paymentsRoutes = require('./routes/paymentsRoute')
 
 const app = express()
 
@@ -67,14 +69,129 @@ const mockData = {
     tenders: [
         {
             _id: '1',
-            title: 'Office Supplies Tender',
-            department: 'Ministry of Finance',
+            title: 'Office Supplies Procurement - Delhi Secretariat',
+            department: 'Department of Administrative Reforms',
+            tenderNumber: 'DAR/DEL/2026/001',
+            governmentType: 'state',
             state: 'Delhi',
+            district: 'New Delhi',
+            category: 'Office Supplies',
             lastDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-            description: 'Tender for office supplies in Delhi',
-            whatsappNumber: '+91 9876543210',
-            phoneNumber: '+91 9876543210',
-            email: 'tender@example.com',
+            description: 'Rate contract for office supplies and stationery.',
+            details: 'Supply, delivery, and inventory support for government departments.',
+            estimatedValue: 1800000,
+            currency: 'INR',
+            isPaidContent: false,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '2',
+            title: 'IT Infrastructure AMC - State Data Center',
+            department: 'IT & Electronics Department',
+            tenderNumber: 'ITED/2026/024',
+            governmentType: 'state',
+            state: 'Karnataka',
+            district: 'Bengaluru',
+            category: 'IT Services',
+            lastDate: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
+            description: 'Comprehensive annual maintenance contract for server and network infra.',
+            details: 'Preventive and corrective maintenance for 24x7 operations.',
+            estimatedValue: 5600000,
+            currency: 'INR',
+            isPaidContent: true,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '3',
+            title: 'Hospital Biomedical Equipment Supply',
+            department: 'Health Department',
+            tenderNumber: 'HD/TN/2026/114',
+            governmentType: 'state',
+            state: 'Tamil Nadu',
+            district: 'Chennai',
+            category: 'Medical Equipment',
+            lastDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000),
+            description: 'Supply and commissioning of biomedical equipment.',
+            estimatedValue: 12500000,
+            currency: 'INR',
+            isPaidContent: false,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '4',
+            title: 'Solar Street Lighting Project - Phase 2',
+            department: 'Urban Development Authority',
+            tenderNumber: 'UDA/GJ/2026/087',
+            governmentType: 'state',
+            state: 'Gujarat',
+            district: 'Ahmedabad',
+            category: 'Electrical',
+            lastDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+            description: 'Design, supply, installation, and maintenance of solar street lights.',
+            estimatedValue: 8200000,
+            currency: 'INR',
+            isPaidContent: false,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '5',
+            title: 'School Smart Classroom Upgrade Program',
+            department: 'School Education Department',
+            tenderNumber: 'SED/AP/2026/311',
+            governmentType: 'state',
+            state: 'Andhra Pradesh',
+            district: 'Vijayawada',
+            category: 'Education Tech',
+            lastDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+            description: 'Procurement and setup of smart classroom kits in government schools.',
+            estimatedValue: 6900000,
+            currency: 'INR',
+            isPaidContent: false,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '6',
+            title: 'Road Rehabilitation and Drainage Works',
+            department: 'Public Works Department',
+            tenderNumber: 'PWD/MH/2026/552',
+            governmentType: 'state',
+            state: 'Maharashtra',
+            district: 'Pune',
+            category: 'Civil Works',
+            lastDate: new Date(Date.now() + 11 * 24 * 60 * 60 * 1000),
+            description: 'Road strengthening and stormwater drainage rehabilitation.',
+            estimatedValue: 17400000,
+            currency: 'INR',
+            isPaidContent: false,
+            enabled: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            _id: '7',
+            title: 'National Cyber Security Monitoring Platform',
+            department: 'Ministry of Electronics & IT',
+            tenderNumber: 'MEITY/CYB/2026/901',
+            governmentType: 'central',
+            state: 'Delhi',
+            district: 'New Delhi',
+            category: 'Cyber Security',
+            lastDate: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000),
+            description: 'SIEM and SOC implementation with 24x7 monitoring.',
+            details: 'Scope includes SOC setup, threat intelligence integration, and response playbooks.',
+            estimatedValue: 24500000,
+            currency: 'INR',
+            isPaidContent: true,
             enabled: true,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -112,15 +229,28 @@ const mockData = {
             name: 'John Doe',
             email: 'john@example.com',
             mobile: '9876543210',
+            role: 'user',
+            isPremium: false,
+            premiumActiveUntil: null,
+            isActive: true,
             createdAt: new Date()
         }
     ],
+    otpRequests: {},
     payments: [],
     settings: {
         whatsappNumber: '+91 9876543210',
         phoneNumber: '+91 9876543210',
         email: 'info@example.com',
-        tenderAccessEnabled: true
+        tenderAccessEnabled: true,
+        premiumEnabled: true,
+        premiumPlanName: 'Premium Tender Access',
+        premiumPrice: 1999,
+        premiumCurrency: 'INR',
+        premiumDurationDays: 30,
+        freeVisibleTenders: 5,
+        premiumPreviewTenders: 2,
+        razorpayKeyId: 'rzp_test_mock_enterprise'
     }
 }
 
@@ -136,6 +266,8 @@ app.use('/api/blogs', blogsRoutes)
 app.use('/api/enquiries', enquiriesRoutes)
 app.use('/api/users', usersRoutes)
 app.use('/api/settings', settingsRoutes)
+app.use('/api/customer-auth', customerAuthRoutes)
+app.use('/api/payments', paymentsRoutes)
 
 // Serve static files from React build
 const path = require('path')

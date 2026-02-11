@@ -1,14 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Download, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { Download, Mail, MapPin, MessageCircle, Phone, Crown, Lock } from 'lucide-react';
 import { tenderRecords } from '../data/siteContent';
 import { tendersService } from '../services/api';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useCustomerAuth } from '../context/CustomerAuthContext';
+import PremiumAccessModal from '../components/PremiumAccessModal';
 
 const TenderDetail = () => {
     const { id } = useParams();
     const site = useSiteSettings();
+    const { isPremium } = useCustomerAuth();
     const [remoteTender, setRemoteTender] = useState(null);
+    const [premiumModalOpen, setPremiumModalOpen] = useState(false);
 
     useEffect(() => {
         const loadTender = async () => {
@@ -28,6 +32,7 @@ const TenderDetail = () => {
     const tender = useMemo(() => {
         return remoteTender || tenderRecords.find((item) => item.id === id || item._id === id) || tenderRecords[0];
     }, [id, remoteTender]);
+    const isLocked = Boolean(tender.isPaidContent && site.premium.enabled && !isPremium);
 
     const firstDoc = tender.documents?.find((doc) => doc.url && doc.url !== '#');
     const related = tenderRecords.filter((item) => (item.id || item._id) !== (tender.id || tender._id)).slice(0, 3);
@@ -46,7 +51,11 @@ const TenderDetail = () => {
                         </div>
 
                         <h1 className="page__title mt-12">{tender.title}</h1>
-                        <p className="page__lead">{tender.details || tender.description}</p>
+                        <p className="page__lead">
+                            {isLocked
+                                ? 'This is a premium tender. Activate premium access to view full details, documents, and complete eligibility requirements.'
+                                : (tender.details || tender.description)}
+                        </p>
 
                         <div className="table-like__meta mt-12">
                             <div>
@@ -68,11 +77,14 @@ const TenderDetail = () => {
                         </div>
 
                         <h2>Eligibility</h2>
-                        <p>{tender.eligibilityCriteria || 'Eligibility details available in tender documents.'}</p>
+                        <p>{isLocked ? 'Premium members can view full eligibility and compliance checkpoints.' : (tender.eligibilityCriteria || 'Eligibility details available in tender documents.')}</p>
 
                         <h2>Required Documents</h2>
                         <ul>
-                            {(tender.documentsRequired || ['Valid business registration', 'Tax and statutory documents']).map((doc) => (
+                            {(isLocked
+                                ? ['Premium access required to view full checklist']
+                                : (tender.documentsRequired || ['Valid business registration', 'Tax and statutory documents'])
+                            ).map((doc) => (
                                 <li key={doc}>{doc}</li>
                             ))}
                         </ul>
@@ -93,20 +105,32 @@ const TenderDetail = () => {
                     <aside className="card">
                         <div className="card-body">
                             <h2 className="section-title title-sm">Quick Actions</h2>
+                            {isLocked ? (
+                                <div className="notice">
+                                    <strong><Lock size={14} /> Premium tender content</strong>
+                                    <p>Login with OTP and activate premium to unlock this tender.</p>
+                                </div>
+                            ) : null}
                             <div className="cta-row">
-                                <Link
-                                    to={`/contact?subject=${encodeURIComponent(`Tender enquiry: ${tender.title}`)}`}
-                                    className="btn btn-primary"
-                                >
-                                    Apply for Tender
-                                </Link>
-                                {firstDoc ? (
+                                {isLocked ? (
+                                    <button type="button" className="btn btn-success" onClick={() => setPremiumModalOpen(true)}>
+                                        <Crown size={16} /> Premium Access
+                                    </button>
+                                ) : (
+                                    <Link
+                                        to={`/contact?subject=${encodeURIComponent(`Tender enquiry: ${tender.title}`)}`}
+                                        className="btn btn-primary"
+                                    >
+                                        Apply for Tender
+                                    </Link>
+                                )}
+                                {!isLocked && firstDoc ? (
                                     <a href={firstDoc.url} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">
                                         <Download size={16} /> Download Documents
                                     </a>
                                 ) : (
-                                    <button type="button" className="btn btn-secondary" disabled title="No document available">
-                                        <Download size={16} /> Documents Unavailable
+                                    <button type="button" className="btn btn-secondary" disabled title={isLocked ? 'Premium required' : 'No document available'}>
+                                        <Download size={16} /> {isLocked ? 'Premium Required' : 'Documents Unavailable'}
                                     </button>
                                 )}
                             </div>
@@ -151,6 +175,7 @@ const TenderDetail = () => {
                         ))}
                     </div>
                 </section>
+                <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} />
             </div>
         </div>
     );

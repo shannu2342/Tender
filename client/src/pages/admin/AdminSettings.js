@@ -6,7 +6,15 @@ const AdminSettings = () => {
         whatsappNumber: '',
         phoneNumber: '',
         email: '',
-        tenderAccessEnabled: true
+        tenderAccessEnabled: true,
+        premiumEnabled: true,
+        premiumPlanName: 'Premium Tender Access',
+        premiumPrice: 1999,
+        premiumCurrency: 'INR',
+        premiumDurationDays: 30,
+        freeVisibleTenders: 5,
+        premiumPreviewTenders: 2,
+        razorpayKeyId: ''
     });
     const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
@@ -19,7 +27,10 @@ const AdminSettings = () => {
     const fetchSettings = async () => {
         try {
             const response = await api.get('/settings');
-            setSettings(response.data);
+            setSettings((prev) => ({
+                ...prev,
+                ...(response.data || {})
+            }));
         } catch (error) {
             console.error('Error fetching settings:', error);
             setErrorMessage('Failed to fetch settings');
@@ -173,6 +184,119 @@ const AdminSettings = () => {
                         />
                         Enable paid tender access
                     </label>
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        <input
+                            type="checkbox"
+                            name="premiumEnabled"
+                            checked={settings.premiumEnabled}
+                            onChange={handleChange}
+                            style={{
+                                marginRight: '10px',
+                                width: '16px',
+                                height: '16px',
+                                cursor: 'pointer'
+                            }}
+                        />
+                        Enable premium purchase flow
+                    </label>
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Premium Plan Name:
+                    </label>
+                    <input
+                        type="text"
+                        name="premiumPlanName"
+                        value={settings.premiumPlanName}
+                        onChange={handleChange}
+                        className="form-control"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Premium Price:
+                    </label>
+                    <input
+                        type="number"
+                        name="premiumPrice"
+                        value={settings.premiumPrice}
+                        onChange={handleChange}
+                        className="form-control"
+                        min="0"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Premium Currency:
+                    </label>
+                    <input
+                        type="text"
+                        name="premiumCurrency"
+                        value={settings.premiumCurrency}
+                        onChange={handleChange}
+                        className="form-control"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Premium Duration (days):
+                    </label>
+                    <input
+                        type="number"
+                        name="premiumDurationDays"
+                        value={settings.premiumDurationDays}
+                        onChange={handleChange}
+                        className="form-control"
+                        min="1"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Free Tenders Visible to Normal User:
+                    </label>
+                    <input
+                        type="number"
+                        name="freeVisibleTenders"
+                        value={settings.freeVisibleTenders}
+                        onChange={handleChange}
+                        className="form-control"
+                        min="0"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Premium Tender Preview Count:
+                    </label>
+                    <input
+                        type="number"
+                        name="premiumPreviewTenders"
+                        value={settings.premiumPreviewTenders}
+                        onChange={handleChange}
+                        className="form-control"
+                        min="0"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', color: '#374151', fontSize: '0.9rem', fontWeight: '500' }}>
+                        Razorpay Key ID:
+                    </label>
+                    <input
+                        type="text"
+                        name="razorpayKeyId"
+                        value={settings.razorpayKeyId}
+                        onChange={handleChange}
+                        className="form-control"
+                    />
                 </div>
 
                 <div style={{ textAlign: 'center', marginTop: '30px' }}>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { Menu, X, Phone, Mail, ArrowUpRight, MessageCircle, Crown, LogOut } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useCustomerAuth } from '../context/CustomerAuthContext';
+import PremiumAccessModal from './PremiumAccessModal';
 
 const menuItems = [
     { title: 'Home', path: '/' },
@@ -17,8 +19,10 @@ const menuItems = [
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [premiumModalOpen, setPremiumModalOpen] = useState(false);
     const location = useLocation();
     const site = useSiteSettings();
+    const { user, isPremium, isLoggedIn, logout } = useCustomerAuth();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 8);
@@ -74,6 +78,25 @@ const Header = () => {
                         </Link>
                     ))}
                 </nav>
+
+                <div className="site-header__actions">
+                    {site.premium.enabled ? (
+                        <button
+                            type="button"
+                            className={`site-header__premium-btn ${isPremium ? 'is-active' : ''}`}
+                            onClick={() => setPremiumModalOpen(true)}
+                        >
+                            <Crown size={16} />
+                            {isPremium ? 'Premium Active' : 'Premium Access'}
+                        </button>
+                    ) : null}
+                    {isLoggedIn ? (
+                        <button type="button" className="site-header__logout-btn" onClick={logout} aria-label="Logout">
+                            <LogOut size={16} />
+                            <span>{user?.name?.split(' ')[0] || 'Logout'}</span>
+                        </button>
+                    ) : null}
+                </div>
 
                 <button
                     type="button"
@@ -138,6 +161,16 @@ const Header = () => {
                         <Link className="mobile-nav__quick-btn mobile-nav__quick-btn--primary" to="/contact">
                             Get Proposal <ArrowUpRight size={16} />
                         </Link>
+                        {site.premium.enabled ? (
+                            <button
+                                type="button"
+                                className="mobile-nav__quick-btn mobile-nav__quick-btn--primary"
+                                onClick={() => setPremiumModalOpen(true)}
+                            >
+                                <Crown size={16} />
+                                {isPremium ? 'Premium Active' : 'Premium Access'}
+                            </button>
+                        ) : null}
                     </div>
 
                     <div className="mobile-nav__links">
@@ -153,6 +186,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
+            {site.premium.enabled ? <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} /> : null}
         </header>
     );
 };

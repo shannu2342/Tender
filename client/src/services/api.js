@@ -10,6 +10,13 @@ const api = axios.create({
     }
 });
 
+const customerApi = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
 // Request interceptor for adding token
 api.interceptors.request.use(
     (config) => {
@@ -36,6 +43,17 @@ api.interceptors.response.use(
         }
         return Promise.reject(error);
     }
+);
+
+customerApi.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('customerToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
 );
 
 // Auth Services
@@ -130,6 +148,20 @@ export const usersService = {
     getActivityReport: (params) => api.get('/users/activity/report', { params }),
     getPayments: (id) => api.get(`/users/${id}/payments`),
     verifyUser: (id) => api.put(`/users/${id}/verify`)
+};
+
+export const customerAuthService = {
+    requestOtp: (mobile) => api.post('/customer-auth/request-otp', { mobile }),
+    verifyOtp: (payload) => api.post('/customer-auth/verify-otp', payload),
+    getProfile: () => customerApi.get('/customer-auth/me'),
+    logout: () => customerApi.post('/customer-auth/logout')
+};
+
+export const paymentsService = {
+    getPlans: () => api.get('/payments/plans'),
+    createOrder: (payload = {}) => customerApi.post('/payments/create-order', payload),
+    verifyOrder: (payload) => customerApi.post('/payments/verify', payload),
+    getMyPayments: () => customerApi.get('/payments/my')
 };
 
 export default api;

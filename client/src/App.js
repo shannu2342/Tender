@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CustomerAuthProvider } from './context/CustomerAuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 
@@ -43,8 +44,9 @@ import AdminSettings from './pages/admin/AdminSettings';
 function App() {
     return (
         <AuthProvider>
-            <Router>
-                <Routes>
+            <CustomerAuthProvider>
+                <Router>
+                    <Routes>
                     {/* Public Routes */}
                     <Route path="/" element={<PublicRoute element={<Home />} />} />
                     <Route path="/about" element={<PublicRoute element={<About />} />} />
@@ -87,8 +89,9 @@ function App() {
 
                     {/* Catch-all for 404 */}
                     <Route path="*" element={<PublicRoute element={<NotFound />} />} />
-                </Routes>
-            </Router>
+                    </Routes>
+                </Router>
+            </CustomerAuthProvider>
         </AuthProvider>
     );
 }

@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const tenders = req.app.locals.mockData.tenders;
+    const includeDisabled = String(req.query.includeDisabled || '') === 'true';
+    const tenders = req.app.locals.mockData.tenders
+        .filter((item) => (includeDisabled ? true : item.enabled !== false))
+        .sort((a, b) => new Date(a.lastDate || 0) - new Date(b.lastDate || 0));
     res.json(tenders);
 });
 

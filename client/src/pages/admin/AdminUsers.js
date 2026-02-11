@@ -31,6 +31,22 @@ const AdminUsers = () => {
         }
     };
 
+    const handleTogglePremium = async (user) => {
+        try {
+            const premiumActiveUntil = user.role === 'premium'
+                ? null
+                : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            await api.put(`/users/${user._id}`, {
+                role: user.role === 'premium' ? 'user' : 'premium',
+                isPremium: user.role !== 'premium',
+                premiumActiveUntil
+            });
+            fetchUsers();
+        } catch (error) {
+            console.error('Error updating premium status:', error);
+        }
+    };
+
     if (loading) {
         return (
             <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -50,6 +66,8 @@ const AdminUsers = () => {
                         <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Name</th>
                         <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Email</th>
                         <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Mobile</th>
+                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Plan</th>
+                        <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Premium Until</th>
                         <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Created At</th>
                         <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #e5e7eb', color: '#374151', fontSize: '0.9rem', fontWeight: '600' }}>Actions</th>
                     </tr>
@@ -60,8 +78,27 @@ const AdminUsers = () => {
                             <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{user.name}</td>
                             <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{user.email}</td>
                             <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{user.mobile}</td>
+                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{user.role === 'premium' ? 'Premium' : 'Normal'}</td>
+                            <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>
+                                {user.premiumActiveUntil ? new Date(user.premiumActiveUntil).toLocaleDateString() : '-'}
+                            </td>
                             <td style={{ padding: '12px', color: '#1f2937', fontSize: '0.9rem' }}>{new Date(user.createdAt).toLocaleString()}</td>
                             <td style={{ padding: '12px' }}>
+                                <button
+                                    onClick={() => handleTogglePremium(user)}
+                                    style={{
+                                        padding: '6px 12px',
+                                        backgroundColor: user.role === 'premium' ? '#475569' : '#15803d',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        fontSize: '0.8rem',
+                                        cursor: 'pointer',
+                                        marginRight: '8px'
+                                    }}
+                                >
+                                    {user.role === 'premium' ? 'Set Normal' : 'Set Premium'}
+                                </button>
                                 <button
                                     onClick={() => handleDelete(user._id)}
                                     style={{
