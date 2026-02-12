@@ -56,9 +56,10 @@ const Home = () => {
                     style={
                         site.home.heroImageUrl
                             ? {
-                                backgroundImage: `linear-gradient(120deg, rgba(15,23,42,0.78), rgba(15,23,42,0.58)), url("${site.home.heroImageUrl}")`,
+                                backgroundImage: `url("${site.home.heroImageUrl}")`,
                                 backgroundSize: 'cover',
-                                backgroundPosition: 'center'
+                                backgroundPosition: 'center',
+                                backgroundColor: '#0b1220'
                             }
                             : undefined
                     }

@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap');
 
 :root {
-    --color-primary: #0b6e99;
-    --color-primary-dark: #0a4f73;
-    --color-primary-soft: #d8f0ff;
-    --color-secondary: #ffffff;
-    --color-tertiary: #1ca37d;
-    --color-tertiary-soft: #dcfce7;
-    --color-ink: #0b1a2d;
-    --color-muted: #475569;
-    --color-border: #cde8f7;
-    --color-surface: #f8fafc;
+    --color-primary: #22d3ee;
+    --color-primary-dark: #0891b2;
+    --color-primary-soft: #1e293b;
+    --color-secondary: #0b1220;
+    --color-tertiary: #334155;
+    --color-tertiary-soft: #1f2937;
+    --color-ink: #e2e8f0;
+    --color-muted: #9aa8bd;
+    --color-border: #25324a;
+    --color-surface: #0f172a;
     --radius-sm: 10px;
     --radius-md: 16px;
     --radius-lg: 24px;
@@ -35,14 +35,11 @@ body,
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Manrope', sans-serif;
     color: var(--color-ink);
     line-height: 1.6;
     overflow-x: hidden;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(216, 240, 255, 0.95), rgba(216, 240, 255, 0) 38%),
-        radial-gradient(circle at 100% 0%, rgba(220, 252, 231, 0.8), rgba(220, 252, 231, 0) 36%),
-        #f8fbff;
+    background: #050b17;
 }
 
 a {
@@ -127,7 +124,7 @@ main {
 }
 
 .page__title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Sora', sans-serif;
     font-size: clamp(1.9rem, 3.3vw, 3rem);
     line-height: 1.08;
     letter-spacing: -0.03em;
@@ -145,7 +142,7 @@ main {
 }
 
 .section-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Sora', sans-serif;
     letter-spacing: -0.02em;
     font-size: clamp(1.3rem, 2vw, 2rem);
     margin-bottom: 12px;
@@ -220,7 +217,7 @@ main {
 
 .prose h2,
 .prose h3 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Sora', sans-serif;
     color: var(--color-ink);
     letter-spacing: -0.02em;
 }
@@ -1262,6 +1259,231 @@ body.mobile-nav-open .wa-float {
     margin-left: 4px;
 }
 
+/* Dark Premium Theme Overrides */
+.card,
+.legal-card,
+.table-like__row,
+.hero-panel,
+.notice,
+.premium-modal__panel {
+    background: #0b1220;
+    border-color: var(--color-border);
+}
+
+.card:hover,
+.table-like__row:hover {
+    border-color: #334155;
+    box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+}
+
+.site-header,
+.site-header--scrolled {
+    background: #050b17;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__topbar {
+    background: #0b1220;
+    color: #cbd5e1;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__contact-link,
+.site-nav__link {
+    color: #cbd5e1;
+}
+
+.site-nav__link:hover,
+.site-nav__link.is-active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.site-header__top-cta,
+.btn-primary,
+.btn-success {
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    box-shadow: 0 12px 26px rgba(2, 6, 23, 0.45);
+}
+
+.site-header__top-cta:hover,
+.btn-primary:hover,
+.btn-success:hover {
+    background: #111827;
+    border-color: #475569;
+}
+
+.btn-secondary,
+.btn-light,
+.btn-quiet {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+.site-header__menu-btn,
+.site-header__premium-btn,
+.site-header__logout-btn,
+.mobile-nav__close,
+.mobile-nav__quick-btn {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+.site-header__premium-btn.is-active {
+    background: #111827;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.mobile-nav__panel,
+.mobile-nav__links {
+    background: #050b17;
+    border-left-color: var(--color-border);
+}
+
+.mobile-nav__link {
+    color: #cbd5e1;
+}
+
+.mobile-nav__link.is-active {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+.site-footer {
+    color: #cbd5e1;
+    background: #050b17;
+    border-top: 1px solid var(--color-border);
+}
+
+.site-footer__text,
+.site-footer__contact-list li,
+.site-footer__bottom {
+    color: #94a3b8;
+}
+
+.site-footer__list a,
+.site-footer__contact-list a,
+.site-footer__legal-links a {
+    color: #cbd5e1;
+}
+
+.site-footer__socials a {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+.hero-panel,
+.hero-panel--dark {
+    background: #0b1220;
+    color: #e2e8f0;
+}
+
+.hero-panel::before {
+    display: none;
+}
+
+.hero-panel--image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.55);
+    pointer-events: none;
+}
+
+.kicker,
+.hero-panel--dark .kicker {
+    background: #0f172a;
+    border-color: #334155;
+    color: var(--color-primary);
+}
+
+.stat-box,
+.hero-panel--dark .stat-box {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.stat-box strong,
+.hero-panel--dark .stat-box strong {
+    color: #e2e8f0;
+}
+
+.stat-box span,
+.hero-panel--dark .stat-box span {
+    color: #94a3b8;
+}
+
+.form-control {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+.form-control::placeholder {
+    color: #64748b;
+}
+
+.form-control:focus {
+    border-color: #475569;
+    box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.2);
+}
+
+.chip,
+.chip--premium,
+.chip--sky {
+    background: #0f172a;
+    color: #cbd5e1;
+    border-color: #334155;
+}
+
+.wa-float {
+    background: #0f172a;
+    border: 1px solid #334155;
+}
+
+.wa-float:hover {
+    background: #111827;
+    border-color: #475569;
+}
+
+.premium-banner {
+    background: #0b1220;
+    border-color: #334155;
+}
+
+.notice--success {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+.notice--error {
+    background: #0f172a;
+    border-color: #475569;
+    color: #fda4af;
+}
+
+.brand__badge {
+    background: #1e293b;
+    font-family: 'Sora', sans-serif;
+}
+
+.brand__text strong {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
 @media (min-width: 720px) {
     .md\:grid-cols-2 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1314,8 +1536,8 @@ body.mobile-nav-open .wa-float {
     }
 
     .site-header {
-        background: rgba(255, 255, 255, 0.95);
-        border-color: rgba(148, 163, 184, 0.3);
+        background: #050b17;
+        border-color: #25324a;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
     }
 
