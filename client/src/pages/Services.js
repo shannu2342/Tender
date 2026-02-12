@@ -38,6 +38,7 @@ const Services = () => {
                             <article key={service._id || slug} className="card">
                                 <div className="card-body">
                                     <div className="service-price-box">
+                                        <span className="service-price__label">Starting Price</span>
                                         <p className="service-price">{service.price || 'Enterprise Support'}</p>
                                     </div>
                                     <h2 className="section-title title-md mt-12">{service.title}</h2>
