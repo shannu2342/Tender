@@ -20,9 +20,9 @@ const Pricing = () => {
 
                 <div className="grid gap-8 md:grid-cols-3">
                     {plans.map((plan) => (
-                        <article key={plan.name} className={`card pricing-card ${plan.featured ? 'pricing-card--featured' : ''}`}>
+                        <article key={plan.name} className="card pricing-card pricing-card--featured">
                             <div className="card-body">
-                                <div className={`pricing-card__head ${plan.featured ? 'pricing-card__head--featured' : ''}`}>
+                                <div className="pricing-card__head pricing-card__head--featured">
                                     {plan.featured ? <span className="chip chip--premium">Most Popular</span> : null}
                                     <h2 className="section-title mt-10">{plan.name}</h2>
                                     <p className="section-subtitle">{plan.description || 'Enterprise-ready procurement support.'}</p>
@@ -48,7 +48,7 @@ const Pricing = () => {
                                     <p className="section-subtitle mt-10">Timeline: {plan.sampleTimeline || 'As per scope'}</p>
                                 </div>
                                 <div className="cta-row">
-                                    <button type="button" onClick={() => setActivePlan(plan)} className={`btn ${plan.featured ? 'btn-primary' : 'btn-secondary'}`}>
+                                    <button type="button" onClick={() => setActivePlan(plan)} className="btn btn-primary pricing-card__select-btn">
                                         Select Plan
                                     </button>
                                 </div>
