@@ -67,7 +67,7 @@ const Home = () => {
                 >
                     <span className="kicker">{managed.kicker}</span>
                     <h1 className="page__title mt-14">{managed.title || site.name}</h1>
-                    <p className="page__lead">{managed.lead}</p>
+                    <p className={`page__lead ${site.home.heroImageUrl ? 'home-hero__lead--light' : 'home-hero__lead--dark'}`}>{managed.lead}</p>
                     <div className="cta-row">
                         <Link to="/services" className="btn btn-primary">
                             Explore Services <ArrowRight size={16} />
