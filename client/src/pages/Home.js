@@ -52,7 +52,7 @@ const Home = () => {
         <div className="page page--tight-top">
             <div className="container">
                 <section
-                    className={`hero-panel hero-panel--dark ${site.home.heroImageUrl ? 'hero-panel--image' : ''}`}
+                    className={`hero-panel ${site.home.heroImageUrl ? 'hero-panel--dark hero-panel--image' : ''}`}
                     style={
                         site.home.heroImageUrl
                             ? {

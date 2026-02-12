@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Download, Mail, MapPin, MessageCircle, Phone, Crown, Lock } from 'lucide-react';
 import { tenderRecords } from '../data/siteContent';
 import { tendersService } from '../services/api';
@@ -10,7 +10,8 @@ import PremiumAccessModal from '../components/PremiumAccessModal';
 const TenderDetail = () => {
     const { id } = useParams();
     const site = useSiteSettings();
-    const { isPremium } = useCustomerAuth();
+    const navigate = useNavigate();
+    const { isPremium, isLoggedIn } = useCustomerAuth();
     const [remoteTender, setRemoteTender] = useState(null);
     const [premiumModalOpen, setPremiumModalOpen] = useState(false);
 
@@ -33,6 +34,14 @@ const TenderDetail = () => {
         return remoteTender || tenderRecords.find((item) => item.id === id || item._id === id) || tenderRecords[0];
     }, [id, remoteTender]);
     const isLocked = Boolean(tender.isPaidContent && site.premium.enabled && !isPremium);
+    const maskedTenderNumber = isPremium ? (tender.tenderNumber || '-') : 'XXXXX';
+    const handlePremiumAction = () => {
+        if (isLoggedIn) {
+            navigate('/pricing?upgrade=premium');
+            return;
+        }
+        setPremiumModalOpen(true);
+    };
 
     const firstDoc = tender.documents?.find((doc) => doc.url && doc.url !== '#');
     const related = tenderRecords.filter((item) => (item.id || item._id) !== (tender.id || tender._id)).slice(0, 3);
@@ -64,7 +73,7 @@ const TenderDetail = () => {
                             </div>
                             <div>
                                 <strong>Tender Number</strong>
-                                <span>{tender.tenderNumber || '-'}</span>
+                                <span>{maskedTenderNumber}</span>
                             </div>
                             <div>
                                 <strong>Estimated Value</strong>
@@ -113,7 +122,7 @@ const TenderDetail = () => {
                             ) : null}
                             <div className="cta-row">
                                 {isLocked ? (
-                                    <button type="button" className="btn btn-success" onClick={() => setPremiumModalOpen(true)}>
+                                    <button type="button" className="btn btn-success" onClick={handlePremiumAction}>
                                         <Crown size={16} /> Premium Access
                                     </button>
                                 ) : (
@@ -129,9 +138,13 @@ const TenderDetail = () => {
                                         <Download size={16} /> Download Documents
                                     </a>
                                 ) : (
-                                    <button type="button" className="btn btn-secondary" disabled title={isLocked ? 'Premium required' : 'No document available'}>
-                                        <Download size={16} /> {isLocked ? 'Premium Required' : 'Documents Unavailable'}
-                                    </button>
+                                    <Link
+                                        to={`/contact?subject=${encodeURIComponent(`Document request: ${tender.title}`)}`}
+                                        className="btn btn-secondary"
+                                        title={isLocked ? 'Premium required' : 'Request documents'}
+                                    >
+                                        <Download size={16} /> {isLocked ? 'Premium Required' : 'Request Documents'}
+                                    </Link>
                                 )}
                             </div>
 
@@ -175,7 +188,12 @@ const TenderDetail = () => {
                         ))}
                     </div>
                 </section>
-                <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} />
+                <PremiumAccessModal
+                    open={premiumModalOpen}
+                    onClose={() => setPremiumModalOpen(false)}
+                    authOnly
+                    onAuthenticated={() => navigate('/pricing?upgrade=premium')}
+                />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Crown, Lock } from 'lucide-react';
 import { tenderRecords } from '../data/siteContent';
 import { tendersService } from '../services/api';
@@ -31,6 +31,7 @@ const getGovernmentCategory = (tender) => {
 };
 
 const getTenderCity = (tender) => tender.district || tender.city || tender.location?.city || '';
+const maskTenderNumber = (value, isPremium) => (isPremium ? (value || '-') : 'XXXXX');
 
 const Tenders = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,7 +40,16 @@ const Tenders = () => {
     const [tenders, setTenders] = useState(tenderRecords);
     const [premiumModalOpen, setPremiumModalOpen] = useState(false);
     const site = useSiteSettings();
-    const { isPremium } = useCustomerAuth();
+    const navigate = useNavigate();
+    const { isPremium, isLoggedIn } = useCustomerAuth();
+    const handlePremiumAction = () => {
+        if (isPremium) return;
+        if (isLoggedIn) {
+            navigate('/pricing?upgrade=premium');
+            return;
+        }
+        setPremiumModalOpen(true);
+    };
 
     useEffect(() => {
         const loadTenders = async () => {
@@ -96,7 +106,7 @@ const Tenders = () => {
                             <h2 className="section-title title-sm mt-12">Unlock all premium tenders</h2>
                             <p className="section-subtitle">Login with OTP and complete Razorpay payment to access all paid opportunities.</p>
                         </div>
-                        <button type="button" className="btn btn-success" onClick={() => setPremiumModalOpen(true)}>
+                        <button type="button" className="btn btn-success" onClick={handlePremiumAction}>
                             <Crown size={16} /> Activate Premium
                         </button>
                     </section>
@@ -131,7 +141,7 @@ const Tenders = () => {
                                 onChange={(e) => setGovernmentCategory(e.target.value)}
                             >
                                 <option value="all">All Categories</option>
-                                <option value="india">India</option>
+                                <option value="india">Central</option>
                                 <option value="uttarpradesh">Uttar Pradesh</option>
                             </select>
                         </div>
@@ -156,7 +166,7 @@ const Tenders = () => {
                                 <span className={`chip ${tender.isPaidContent ? 'chip--premium' : 'chip--sky'}`}>
                                     {tender.isPaidContent ? 'Premium' : 'Open'}
                                 </span>
-                                <span className="chip">{getGovernmentCategory(tender) === 'uttarpradesh' ? 'Uttar Pradesh' : 'India'}</span>
+                                <span className="chip">{getGovernmentCategory(tender) === 'uttarpradesh' ? 'Uttar Pradesh' : 'Central'}</span>
                                 <span className="chip">{getTenderCity(tender) || 'City Not Specified'}</span>
                             </div>
                             <h2 className="section-title title-md">{tender.title}</h2>
@@ -172,7 +182,7 @@ const Tenders = () => {
                                 </div>
                                 <div>
                                     <strong>Tender No.</strong>
-                                    <span>{tender.tenderNumber || '-'}</span>
+                                    <span>{maskTenderNumber(tender.tenderNumber, isPremium)}</span>
                                 </div>
                                 <div>
                                     <strong>Location</strong>
@@ -188,7 +198,7 @@ const Tenders = () => {
                                     {tender.isPaidContent && !isPremium ? <><Lock size={16} /> Preview</> : 'View Details'}
                                 </Link>
                                 {tender.isPaidContent && !isPremium ? (
-                                    <button type="button" className="btn btn-secondary" onClick={() => setPremiumModalOpen(true)}>
+                                    <button type="button" className="btn btn-secondary" onClick={handlePremiumAction}>
                                         <Crown size={16} /> Premium Access
                                     </button>
                                 ) : null}
@@ -196,7 +206,12 @@ const Tenders = () => {
                         </article>
                     ))}
                 </div>
-                <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} />
+                <PremiumAccessModal
+                    open={premiumModalOpen}
+                    onClose={() => setPremiumModalOpen(false)}
+                    authOnly
+                    onAuthenticated={() => navigate('/pricing?upgrade=premium')}
+                />
             </div>
         </div>
     );

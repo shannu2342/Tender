@@ -1,14 +1,19 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Crown } from 'lucide-react';
 import { pricingPlans } from '../data/siteContent';
 import { useManagedPage } from '../hooks/useManagedPage';
 import { pageTemplates } from '../config/pageTemplates';
 import PlanPurchaseModal from '../components/PlanPurchaseModal';
+import PremiumAccessModal from '../components/PremiumAccessModal';
 
 const Pricing = () => {
+    const location = useLocation();
     const content = useManagedPage('pricing', pageTemplates.pricing);
     const plans = content.plans || pricingPlans;
     const [activePlan, setActivePlan] = useState(null);
+    const [premiumPaymentOpen, setPremiumPaymentOpen] = useState(false);
+    const shouldShowUpgrade = useMemo(() => new URLSearchParams(location.search).get('upgrade') === 'premium', [location.search]);
 
     return (
         <div className="page">
@@ -17,6 +22,19 @@ const Pricing = () => {
                     <h1 className="page__title">{content.title}</h1>
                     <p className="page__lead">{content.lead}</p>
                 </header>
+
+                {shouldShowUpgrade ? (
+                    <section className="premium-banner mb-24">
+                        <div>
+                            <span className="chip chip--premium"><Crown size={14} /> Premium Upgrade</span>
+                            <h2 className="section-title title-sm mt-12">Complete Premium Access Payment</h2>
+                            <p className="section-subtitle">You are logged in. Continue to payment to unlock premium tenders.</p>
+                        </div>
+                        <button type="button" className="btn btn-success" onClick={() => setPremiumPaymentOpen(true)}>
+                            <Crown size={16} /> Continue Payment
+                        </button>
+                    </section>
+                ) : null}
 
                 <div className="grid gap-8 md:grid-cols-3">
                     {plans.map((plan) => (
@@ -66,6 +84,7 @@ const Pricing = () => {
                 </div>
             </div>
             <PlanPurchaseModal open={Boolean(activePlan)} plan={activePlan} onClose={() => setActivePlan(null)} />
+            <PremiumAccessModal open={premiumPaymentOpen} onClose={() => setPremiumPaymentOpen(false)} />
         </div>
     );
 };

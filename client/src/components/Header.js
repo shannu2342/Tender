@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Mail, Phone, ArrowUpRight, Crown, LogOut } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
@@ -21,6 +21,7 @@ const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const [premiumModalOpen, setPremiumModalOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
     const site = useSiteSettings();
     const { user, isPremium, isLoggedIn, logout } = useCustomerAuth();
 
@@ -41,6 +42,13 @@ const Header = () => {
     }, [isMenuOpen]);
 
     const isActive = (path) => location.pathname === path;
+    const handlePremiumClick = () => {
+        if (!isLoggedIn) {
+            setPremiumModalOpen(true);
+            return;
+        }
+        navigate('/pricing?upgrade=premium');
+    };
 
     return (
         <header className={`site-header ${scrolled ? 'site-header--scrolled' : ''}`}>
@@ -92,7 +100,7 @@ const Header = () => {
                         <button
                             type="button"
                             className={`site-header__premium-btn ${isPremium ? 'is-active' : ''}`}
-                            onClick={() => setPremiumModalOpen(true)}
+                            onClick={handlePremiumClick}
                         >
                             <Crown size={16} />
                             {isPremium ? 'Premium Active' : 'Premium Access'}
@@ -161,7 +169,7 @@ const Header = () => {
                             <button
                                 type="button"
                                 className="mobile-nav__quick-btn mobile-nav__quick-btn--primary"
-                                onClick={() => setPremiumModalOpen(true)}
+                                onClick={handlePremiumClick}
                             >
                                 <Crown size={16} />
                                 {isPremium ? 'Premium Active' : 'Premium Access'}
@@ -182,7 +190,14 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            {site.premium.enabled ? <PremiumAccessModal open={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} /> : null}
+            {site.premium.enabled ? (
+                <PremiumAccessModal
+                    open={premiumModalOpen}
+                    onClose={() => setPremiumModalOpen(false)}
+                    authOnly
+                    onAuthenticated={() => navigate('/pricing?upgrade=premium')}
+                />
+            ) : null}
         </header>
     );
 };

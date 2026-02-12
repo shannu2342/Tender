@@ -19,7 +19,7 @@ const loadRazorpayScript = () => {
     });
 };
 
-const PremiumAccessModal = ({ open, onClose, onActivated }) => {
+const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAuthenticated }) => {
     const site = useSiteSettings();
     const { user, isPremium, isLoggedIn, requestOtp, verifyOtp, setUser, refreshProfile } = useCustomerAuth();
     const [step, setStep] = useState(isLoggedIn ? 2 : 0);
@@ -101,6 +101,12 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
                 name
             });
             setUser(payload.user);
+            if (authOnly) {
+                setMessage('Login successful.');
+                onAuthenticated?.(payload.user);
+                closeAndReset();
+                return;
+            }
             setStep(2);
             setMessage('Login successful.');
         } catch (error) {
@@ -181,16 +187,25 @@ const PremiumAccessModal = ({ open, onClose, onActivated }) => {
                 </div>
 
                 <div className="premium-modal__body" ref={bodyRef}>
-                    <h3 className="section-title title-sm">{site.premium.planName}</h3>
-                    <p className="section-subtitle">Unlock all premium tenders, complete details, and fast-track opportunity discovery.</p>
+                    {authOnly ? (
+                        <>
+                            <h3 className="section-title title-sm">Login to Continue</h3>
+                            <p className="section-subtitle">Verify with OTP. After login you will be redirected to Pricing for payment.</p>
+                        </>
+                    ) : (
+                        <>
+                            <h3 className="section-title title-sm">{site.premium.planName}</h3>
+                            <p className="section-subtitle">Unlock all premium tenders, complete details, and fast-track opportunity discovery.</p>
 
-                    <div className="premium-price">{amountText} <span>/ {site.premium.durationDays} days</span></div>
+                            <div className="premium-price">{amountText} <span>/ {site.premium.durationDays} days</span></div>
 
-                    <div className="list-clean mt-12">
-                        <div><ShieldCheck size={16} /> Unlimited premium tender visibility</div>
-                        <div><Crown size={16} /> Priority opportunity access</div>
-                        <div><Smartphone size={16} /> OTP-secured account login</div>
-                    </div>
+                            <div className="list-clean mt-12">
+                                <div><ShieldCheck size={16} /> Unlimited premium tender visibility</div>
+                                <div><Crown size={16} /> Priority opportunity access</div>
+                                <div><Smartphone size={16} /> OTP-secured account login</div>
+                            </div>
+                        </>
+                    )}
 
                     {message ? <div className="notice mt-14">{message}</div> : null}
                     {devOtp ? <div className="notice mt-12"><strong>Dev OTP:</strong> {devOtp}</div> : null}
