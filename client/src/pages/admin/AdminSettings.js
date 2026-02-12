@@ -43,7 +43,7 @@ const defaultSettings = {
     tenderAccessEnabled: true,
     premiumEnabled: true,
     premiumPlanName: 'Premium Tender Access',
-    premiumPrice: 1999,
+    premiumPrice: 2999,
     premiumCurrency: 'INR',
     premiumDurationDays: 30,
     freeVisibleTenders: 5,

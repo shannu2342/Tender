@@ -22,13 +22,17 @@ const Pricing = () => {
                     {plans.map((plan) => (
                         <article key={plan.name} className={`card pricing-card ${plan.featured ? 'pricing-card--featured' : ''}`}>
                             <div className="card-body">
-                                {plan.featured ? <span className="chip chip--premium">Most Popular</span> : null}
-                                <h2 className="section-title mt-10">{plan.name}</h2>
-                                <p className="section-subtitle">{plan.description || 'Enterprise-ready procurement support.'}</p>
-                                <p className="plan-price">
-                                    {plan.price}
-                                    <span className="plan-price__freq">{plan.frequency || ''}</span>
-                                </p>
+                                <div className={`pricing-card__head ${plan.featured ? 'pricing-card__head--featured' : ''}`}>
+                                    {plan.featured ? <span className="chip chip--premium">Most Popular</span> : null}
+                                    <h2 className="section-title mt-10">{plan.name}</h2>
+                                    <p className="section-subtitle">{plan.description || 'Enterprise-ready procurement support.'}</p>
+                                </div>
+                                <div className="pricing-card__price-box">
+                                    <p className="plan-price">
+                                        {plan.price}
+                                        <span className="plan-price__freq">{plan.frequency || ''}</span>
+                                    </p>
+                                </div>
                                 <ul className="list-clean list-check mt-14">
                                     {(plan.points || []).map((point) => (
                                         <li key={point}>{point}</li>

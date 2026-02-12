@@ -5,7 +5,7 @@ const router = express.Router();
 
 const getPremiumConfig = (settings = {}) => ({
     enabled: settings.premiumEnabled ?? settings.tenderAccessEnabled ?? true,
-    price: Number(settings.premiumPrice ?? 1999),
+    price: Number(settings.premiumPrice ?? 2999),
     durationDays: Number(settings.premiumDurationDays ?? 30),
     planName: settings.premiumPlanName || 'Premium Tender Access',
     currency: settings.premiumCurrency || 'INR',

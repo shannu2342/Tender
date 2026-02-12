@@ -68,7 +68,7 @@ export const useSiteSettings = () => {
     return useMemo(() => {
         const phoneRaw = settings?.phoneNumber || site.contact.phoneDisplay;
         const whatsappRaw = settings?.whatsappNumber || site.contact.whatsappNumber;
-        const premiumPrice = Number(settings?.premiumPrice ?? 1999);
+        const premiumPrice = Number(settings?.premiumPrice ?? 2999);
         const freeVisibleTenders = Number(settings?.freeVisibleTenders ?? 5);
         const premiumPreviewTenders = Number(settings?.premiumPreviewTenders ?? 2);
         const premiumDurationDays = Number(settings?.premiumDurationDays ?? 30);
@@ -113,7 +113,7 @@ export const useSiteSettings = () => {
             premium: {
                 enabled: settings?.premiumEnabled ?? settings?.tenderAccessEnabled ?? true,
                 planName: settings?.premiumPlanName || 'Premium Tender Access',
-                price: Number.isFinite(premiumPrice) ? premiumPrice : 1999,
+                price: Number.isFinite(premiumPrice) && premiumPrice > 0 ? premiumPrice : 2999,
                 currency: settings?.premiumCurrency || 'INR',
                 durationDays: Number.isFinite(premiumDurationDays) ? premiumDurationDays : 30,
                 freeVisibleTenders: Number.isFinite(freeVisibleTenders) ? freeVisibleTenders : 5,
