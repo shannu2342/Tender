@@ -7,10 +7,35 @@ import { useSiteSettings } from '../hooks/useSiteSettings';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
 import PremiumAccessModal from '../components/PremiumAccessModal';
 
+const upCities = [
+    'Agra', 'Aligarh', 'PrayagRaj', 'Ambedkar Nagar', 'Amroha', 'Auraiya', 'Azamgarh', 'Badaun', 'Bahraich',
+    'Ballia', 'Balrampur', 'Banda District', 'Barabanki', 'Bareilly', 'Basti', 'Bijnor', 'Bulandshahr',
+    'Chandauli(Varanasi Dehat)', 'Chitrakoot', 'Deoria', 'Etah', 'Etawah', 'Faizabad', 'Farrukhabad', 'Fatehpur',
+    'Firozabad', 'Gautam Buddha Nagar', 'Ghaziabad', 'Ghazipur', 'Gonda', 'Gorakhpur', 'Hamirpur',
+    'Hapur District', 'Hardoi', 'Hathras', 'Jaunpur District', 'Jhansi', 'Kannauj', 'Kanpur Dehat', 'Kanpur Nagar',
+    'Kasganj', 'Kaushambi', 'Kushinagar', 'Lakhimpur Kheri', 'Lalitpur', 'Lucknow', 'Maharajganj', 'Mahoba',
+    'Mainpuri', 'Mathura', 'Mau', 'Meerut', 'Mirzapur', 'Moradabad', 'Muzaffarnagar', 'Pilibhit', 'Pratapgarh',
+    'Rae Bareli', 'Rampur', 'Saharanpur', 'Sant Kabir Nagar', 'Sant Ravidas Nagar', 'Sambhal', 'Shahjahanpur',
+    'Shamli', 'Shravasti', 'Siddharthnagar', 'Sitapur', 'Sonbhadra', 'Sultanpur', 'Unnao', 'Varanasi (Kashi)',
+    'Allahabad', 'Amethi', 'Bagpat'
+];
+
+const normalize = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+const getGovernmentCategory = (tender) => {
+    const state = normalize(tender.state);
+    if (state === 'uttarpradesh' || state === 'up') {
+        return 'uttarpradesh';
+    }
+    return 'india';
+};
+
+const getTenderCity = (tender) => tender.district || tender.city || tender.location?.city || '';
+
 const Tenders = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [governmentType, setGovernmentType] = useState('all');
-    const [category, setCategory] = useState('all');
+    const [governmentCategory, setGovernmentCategory] = useState('all');
+    const [city, setCity] = useState('all');
     const [tenders, setTenders] = useState(tenderRecords);
     const [premiumModalOpen, setPremiumModalOpen] = useState(false);
     const site = useSiteSettings();
@@ -31,16 +56,14 @@ const Tenders = () => {
         loadTenders();
     }, []);
 
-    const categories = useMemo(() => ['all', ...new Set(tenders.map((item) => item.category).filter(Boolean))], [tenders]);
-
     const filtered = tenders.filter((tender) => {
         const matchesSearch =
             (tender.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             (tender.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             (tender.department || '').toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesGov = governmentType === 'all' || tender.governmentType === governmentType;
-        const matchesCategory = category === 'all' || tender.category === category;
-        return matchesSearch && matchesGov && matchesCategory;
+        const matchesGov = governmentCategory === 'all' || getGovernmentCategory(tender) === governmentCategory;
+        const matchesCity = city === 'all' || normalize(getTenderCity(tender)) === normalize(city);
+        return matchesSearch && matchesGov && matchesCity;
     });
 
     const visibleTenders = useMemo(() => {
@@ -100,24 +123,25 @@ const Tenders = () => {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="gov-type">Government Type</label>
+                            <label htmlFor="gov-type">Government Category</label>
                             <select
                                 id="gov-type"
                                 className="form-control"
-                                value={governmentType}
-                                onChange={(e) => setGovernmentType(e.target.value)}
+                                value={governmentCategory}
+                                onChange={(e) => setGovernmentCategory(e.target.value)}
                             >
-                                <option value="all">All Types</option>
-                                <option value="central">Central</option>
-                                <option value="state">State</option>
+                                <option value="all">All Categories</option>
+                                <option value="india">India</option>
+                                <option value="uttarpradesh">Uttar Pradesh</option>
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="category">Category</label>
-                            <select id="category" className="form-control" value={category} onChange={(e) => setCategory(e.target.value)}>
-                                {categories.map((item) => (
-                                    <option key={item} value={item}>
-                                        {item === 'all' ? 'All Categories' : item}
+                            <label htmlFor="city">City</label>
+                            <select id="city" className="form-control" value={city} onChange={(e) => setCity(e.target.value)}>
+                                <option value="all">All Cities</option>
+                                {upCities.map((cityName) => (
+                                    <option key={cityName} value={cityName}>
+                                        {cityName}
                                     </option>
                                 ))}
                             </select>
@@ -132,8 +156,8 @@ const Tenders = () => {
                                 <span className={`chip ${tender.isPaidContent ? 'chip--premium' : 'chip--sky'}`}>
                                     {tender.isPaidContent ? 'Premium' : 'Open'}
                                 </span>
-                                <span className="chip">{tender.governmentType || 'general'}</span>
-                                <span className="chip">{tender.category || 'misc'}</span>
+                                <span className="chip">{getGovernmentCategory(tender) === 'uttarpradesh' ? 'Uttar Pradesh' : 'India'}</span>
+                                <span className="chip">{getTenderCity(tender) || 'City Not Specified'}</span>
                             </div>
                             <h2 className="section-title title-md">{tender.title}</h2>
                             <p className="section-subtitle">

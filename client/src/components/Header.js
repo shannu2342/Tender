@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, ArrowUpRight, MessageCircle, Crown, LogOut } from 'lucide-react';
+import { Menu, X, Mail, Phone, ArrowUpRight, Crown, LogOut } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
 import PremiumAccessModal from './PremiumAccessModal';
@@ -47,6 +47,10 @@ const Header = () => {
             <div className="site-header__topbar">
                 <div className="container site-header__topbar-inner">
                     <div className="site-header__contact-group">
+                        <a href={`tel:${site.contact.phoneTel}`} className="site-header__contact-link">
+                            <Phone size={14} />
+                            {site.contact.phoneDisplay}
+                        </a>
                         <a href={`mailto:${site.contact.email}`} className="site-header__contact-link">
                             <Mail size={14} />
                             {site.contact.email}
@@ -60,7 +64,11 @@ const Header = () => {
 
             <div className="container site-header__main">
                 <Link to="/" className="brand" aria-label="Go to home page">
-                    <span className="brand__badge">G</span>
+                    {site.branding.logoUrl ? (
+                        <img src={site.branding.logoUrl} alt={site.branding.logoAlt || site.name} className="brand__logo" />
+                    ) : (
+                        <span className="brand__badge">G</span>
+                    )}
                     <span className="brand__text">
                         <strong>{site.name}</strong>
                         <small>{site.tagline}</small>
@@ -127,7 +135,11 @@ const Header = () => {
                 <div className="mobile-nav__panel">
                     <div className="mobile-nav__head">
                         <Link to="/" className="brand" aria-label="Go to home page">
-                            <span className="brand__badge">G</span>
+                            {site.branding.logoUrl ? (
+                                <img src={site.branding.logoUrl} alt={site.branding.logoAlt || site.name} className="brand__logo" />
+                            ) : (
+                                <span className="brand__badge">G</span>
+                            )}
                             <span className="brand__text">
                                 <strong>{site.name}</strong>
                                 <small>{site.tagline}</small>
@@ -144,24 +156,8 @@ const Header = () => {
                         </button>
                     </div>
 
-                    <div className="mobile-nav__quick" aria-label="Quick actions">
-                        <a className="mobile-nav__quick-btn" href={`tel:${site.contact.phoneTel}`}>
-                            <Phone size={16} />
-                            Call
-                        </a>
-                        <a
-                            className="mobile-nav__quick-btn"
-                            href={`https://wa.me/${site.contact.whatsappNumber}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <MessageCircle size={16} />
-                            WhatsApp
-                        </a>
-                        <Link className="mobile-nav__quick-btn mobile-nav__quick-btn--primary" to="/contact">
-                            Get Proposal <ArrowUpRight size={16} />
-                        </Link>
-                        {site.premium.enabled ? (
+                    {site.premium.enabled ? (
+                        <div className="mobile-nav__quick" aria-label="Quick actions">
                             <button
                                 type="button"
                                 className="mobile-nav__quick-btn mobile-nav__quick-btn--primary"
@@ -170,8 +166,8 @@ const Header = () => {
                                 <Crown size={16} />
                                 {isPremium ? 'Premium Active' : 'Premium Access'}
                             </button>
-                        ) : null}
-                    </div>
+                        </div>
+                    ) : null}
 
                     <div className="mobile-nav__links">
                         {menuItems.map((item) => (

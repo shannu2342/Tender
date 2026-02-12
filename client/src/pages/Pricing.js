@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { pricingPlans } from '../data/siteContent';
 import { useManagedPage } from '../hooks/useManagedPage';
 import { pageTemplates } from '../config/pageTemplates';
+import PlanPurchaseModal from '../components/PlanPurchaseModal';
 
 const Pricing = () => {
     const content = useManagedPage('pricing', pageTemplates.pricing);
     const plans = content.plans || pricingPlans;
+    const [activePlan, setActivePlan] = useState(null);
 
     return (
         <div className="page">
@@ -17,10 +20,11 @@ const Pricing = () => {
 
                 <div className="grid gap-8 md:grid-cols-3">
                     {plans.map((plan) => (
-                        <article key={plan.name} className="card">
+                        <article key={plan.name} className={`card pricing-card ${plan.featured ? 'pricing-card--featured' : ''}`}>
                             <div className="card-body">
                                 {plan.featured ? <span className="chip chip--premium">Most Popular</span> : null}
                                 <h2 className="section-title mt-10">{plan.name}</h2>
+                                <p className="section-subtitle">{plan.description || 'Enterprise-ready procurement support.'}</p>
                                 <p className="plan-price">
                                     {plan.price}
                                     <span className="plan-price__freq">{plan.frequency || ''}</span>
@@ -30,10 +34,19 @@ const Pricing = () => {
                                         <li key={point}>{point}</li>
                                     ))}
                                 </ul>
+                                <div className="notice mt-10">
+                                    <strong>Sample Includes</strong>
+                                    <ul className="list-clean mt-10">
+                                        {(plan.sampleDeliverables || []).map((item) => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                    <p className="section-subtitle mt-10">Timeline: {plan.sampleTimeline || 'As per scope'}</p>
+                                </div>
                                 <div className="cta-row">
-                                    <Link to="/contact" className={`btn ${plan.featured ? 'btn-primary' : 'btn-secondary'}`}>
-                                        {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
-                                    </Link>
+                                    <button type="button" onClick={() => setActivePlan(plan)} className={`btn ${plan.featured ? 'btn-primary' : 'btn-secondary'}`}>
+                                        Select Plan
+                                    </button>
                                 </div>
                             </div>
                         </article>
@@ -48,6 +61,7 @@ const Pricing = () => {
                     </div>
                 </div>
             </div>
+            <PlanPurchaseModal open={Boolean(activePlan)} plan={activePlan} onClose={() => setActivePlan(null)} />
         </div>
     );
 };

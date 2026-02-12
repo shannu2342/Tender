@@ -5,6 +5,11 @@ import { site } from '../config/site';
 let settingsCache = null;
 let settingsPromise = null;
 
+export const clearSiteSettingsCache = () => {
+    settingsCache = null;
+    settingsPromise = null;
+};
+
 const loadSettings = async () => {
     if (settingsCache) return settingsCache;
     if (settingsPromise) return settingsPromise;
@@ -28,6 +33,24 @@ const loadSettings = async () => {
 
 const normalizePhone = (value) => String(value || '').replace(/[^\d+]/g, '');
 const normalizeWhatsApp = (value) => String(value || '').replace(/[^\d]/g, '');
+const normalizeDomain = (url, fallback) => {
+    if (!url) return fallback;
+    try {
+        const normalized = String(url).startsWith('http') ? String(url) : `https://${url}`;
+        return new URL(normalized).hostname || fallback;
+    } catch {
+        return fallback;
+    }
+};
+const parseList = (value, fallback = []) => {
+    if (Array.isArray(value)) return value.filter(Boolean);
+    if (typeof value !== 'string') return fallback;
+    const rows = value
+        .split('\n')
+        .map((item) => item.trim())
+        .filter(Boolean);
+    return rows.length ? rows : fallback;
+};
 
 export const useSiteSettings = () => {
     const [settings, setSettings] = useState(null);
@@ -52,12 +75,39 @@ export const useSiteSettings = () => {
 
         return {
             ...site,
+            domain: normalizeDomain(settings?.websiteUrl, site.domain),
+            name: settings?.siteName || site.name,
+            tagline: settings?.siteTagline || site.tagline,
+            description: settings?.siteDescription || site.description,
+            websiteUrl: settings?.websiteUrl || site.websiteUrl,
             contact: {
                 ...site.contact,
                 phoneDisplay: phoneRaw,
                 phoneTel: normalizePhone(phoneRaw) || site.contact.phoneTel,
                 email: settings?.email || site.contact.email,
-                whatsappNumber: normalizeWhatsApp(whatsappRaw) || site.contact.whatsappNumber
+                whatsappNumber: normalizeWhatsApp(whatsappRaw) || site.contact.whatsappNumber,
+                addressLine: settings?.addressLine || site.contact.addressLine,
+                hours: settings?.businessHours || site.contact.hours
+            },
+            social: {
+                ...site.social,
+                facebook: settings?.facebookUrl || site.social.facebook,
+                linkedin: settings?.linkedinUrl || site.social.linkedin,
+                instagram: settings?.instagramUrl || site.social.instagram
+            },
+            branding: {
+                ...site.branding,
+                logoUrl: settings?.logoUrl || site.branding.logoUrl,
+                logoAlt: settings?.logoAlt || site.branding.logoAlt
+            },
+            footer: {
+                ...site.footer,
+                blurb: settings?.footerBlurb || site.footer.blurb,
+                solutions: parseList(settings?.footerSolutions, site.footer.solutions)
+            },
+            home: {
+                heroImageUrl: settings?.homeHeroImageUrl || '',
+                heroImageAlt: settings?.homeHeroImageAlt || `${settings?.siteName || site.name} hero banner`
             },
             tenderAccessEnabled: settings?.tenderAccessEnabled ?? true,
             premium: {

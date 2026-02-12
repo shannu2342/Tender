@@ -1,4 +1,4 @@
-import { Globe } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 
 const WhatsAppFloat = () => {
@@ -13,7 +13,7 @@ const WhatsAppFloat = () => {
             aria-label="Chat on WhatsApp"
             title="Chat on WhatsApp"
         >
-            <Globe size={18} />
+            <MessageCircle size={18} />
             <span>WhatsApp</span>
         </a>
     );

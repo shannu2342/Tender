@@ -1,6 +1,23 @@
 const mongoose = require('mongoose');
 
 const settingsSchema = new mongoose.Schema({
+    siteName: { type: String },
+    siteTagline: { type: String },
+    siteDescription: { type: String },
+    logoUrl: { type: String },
+    logoAlt: { type: String },
+    websiteUrl: { type: String },
+    phoneNumber: { type: String },
+    whatsappNumber: { type: String },
+    email: { type: String },
+    addressLine: { type: String },
+    businessHours: { type: String },
+    facebookUrl: { type: String },
+    instagramUrl: { type: String },
+    linkedinUrl: { type: String },
+    footerBlurb: { type: String },
+    footerSolutions: [{ type: String }],
+
     // Contact Information
     contact: {
         phone: { type: String, required: true },
@@ -40,6 +57,12 @@ const settingsSchema = new mongoose.Schema({
         googleAnalyticsId: { type: String },
         googleTagManagerId: { type: String },
         favicon: { type: String }
+    },
+
+    // Home Page Settings
+    home: {
+        heroImageUrl: { type: String },
+        heroImageAlt: { type: String }
     },
 
     // Services Settings

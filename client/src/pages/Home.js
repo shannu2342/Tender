@@ -51,7 +51,19 @@ const Home = () => {
     return (
         <div className="page page--tight-top">
             <div className="container">
-                <section className="hero-panel hero-panel--dark">
+                <section
+                    className={`hero-panel hero-panel--dark ${site.home.heroImageUrl ? 'hero-panel--image' : ''}`}
+                    style={
+                        site.home.heroImageUrl
+                            ? {
+                                backgroundImage: `linear-gradient(120deg, rgba(15,23,42,0.78), rgba(15,23,42,0.58)), url("${site.home.heroImageUrl}")`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                            }
+                            : undefined
+                    }
+                    aria-label={site.home.heroImageAlt}
+                >
                     <span className="kicker">{managed.kicker}</span>
                     <h1 className="page__title mt-14">{managed.title || site.name}</h1>
                     <p className="page__lead">{managed.lead}</p>

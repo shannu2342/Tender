@@ -21,43 +21,41 @@ const legalLinks = [
     { name: 'Sitemap', path: '/sitemap' }
 ];
 
-const enterpriseServices = [
-    'GeM Registration',
-    'Catalogue Enablement',
-    'Bid Participation',
-    'Tender Tracking',
-    'Compliance Support',
-    'Enterprise SLA Desk'
-];
-
 const Footer = () => {
     const site = useSiteSettings();
+    const socialLinks = [
+        { key: 'facebook', href: site.social.facebook, label: 'Facebook', icon: <Facebook size={16} /> },
+        { key: 'linkedin', href: site.social.linkedin, label: 'LinkedIn', icon: <Linkedin size={16} /> },
+        { key: 'instagram', href: site.social.instagram, label: 'Instagram', icon: <Instagram size={16} /> }
+    ].filter((item) => Boolean(item.href));
 
     return (
         <footer className="site-footer">
             <div className="container site-footer__grid">
                 <section>
                     <div className="brand brand--footer">
-                        <span className="brand__badge">G</span>
+                        {site.branding.logoUrl ? (
+                            <img src={site.branding.logoUrl} alt={site.branding.logoAlt || site.name} className="brand__logo" />
+                        ) : (
+                            <span className="brand__badge">G</span>
+                        )}
                         <span className="brand__text">
                             <strong>{site.name}</strong>
                             <small>{site.tagline}</small>
                         </span>
                     </div>
                     <p className="site-footer__text">
-                        Enterprise procurement execution for teams that need compliance, speed, and clear ownership from onboarding to award.
+                        {site.footer.blurb}
                     </p>
-                    <div className="site-footer__socials">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                            <Facebook size={16} />
-                        </a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                            <Linkedin size={16} />
-                        </a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                            <Instagram size={16} />
-                        </a>
-                    </div>
+                    {socialLinks.length ? (
+                        <div className="site-footer__socials">
+                            {socialLinks.map((item) => (
+                                <a key={item.key} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.label}>
+                                    {item.icon}
+                                </a>
+                            ))}
+                        </div>
+                    ) : null}
                 </section>
 
                 <section>
@@ -74,7 +72,7 @@ const Footer = () => {
                 <section>
                     <h3 className="site-footer__title">Core Solutions</h3>
                     <ul className="site-footer__list">
-                        {enterpriseServices.map((item) => (
+                        {site.footer.solutions.map((item) => (
                             <li key={item}>{item}</li>
                         ))}
                     </ul>
@@ -115,21 +113,6 @@ const Footer = () => {
                 </div>
                 <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
                 <p>This website is not affiliated with or endorsed by the Government of India.</p>
-            </div>
-
-            <div className="mobile-action-bar">
-                <a href={`tel:${site.contact.phoneTel}`}>
-                    <Phone size={16} />
-                    Call
-                </a>
-                <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle size={16} />
-                    WhatsApp
-                </a>
-                <Link to="/contact">
-                    <Mail size={16} />
-                    Enquiry
-                </Link>
             </div>
         </footer>
     );

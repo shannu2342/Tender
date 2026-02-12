@@ -103,21 +103,42 @@ export const pricingPlans = [
         price: 'Rs. 999',
         frequency: '/month',
         featured: false,
-        points: ['GeM registration assistance', 'Basic catalogue setup', 'Email support', 'Monthly compliance checklist']
+        description: 'For teams starting GeM and basic procurement operations.',
+        points: ['GeM registration assistance', 'Basic catalogue setup', 'Email support', 'Monthly compliance checklist'],
+        sampleDeliverables: [
+            'Seller profile setup checklist',
+            '2 sample catalogue line items',
+            'Compliance readiness tracker'
+        ],
+        sampleTimeline: '3-5 business days'
     },
     {
         name: 'Growth',
         price: 'Rs. 2,999',
         frequency: '/month',
         featured: true,
-        points: ['Everything in Starter', 'Bid participation support', 'Tender tracking desk', 'Priority support window']
+        description: 'For active teams that need bid participation support.',
+        points: ['Everything in Starter', 'Bid participation support', 'Tender tracking desk', 'Priority support window'],
+        sampleDeliverables: [
+            'Bid response template with compliance matrix',
+            'Tender shortlist sheet (weekly)',
+            'Review-ready submission checklist'
+        ],
+        sampleTimeline: '2-3 business days'
     },
     {
         name: 'Enterprise',
         price: 'Custom',
         frequency: '',
         featured: false,
-        points: ['Dedicated account lead', 'SLA-backed support', 'Advanced reporting', 'Custom workflows and integrations']
+        description: 'For large teams requiring SLA-backed procurement operations.',
+        points: ['Dedicated account lead', 'SLA-backed support', 'Advanced reporting', 'Custom workflows and integrations'],
+        sampleDeliverables: [
+            'SLA response model and ownership matrix',
+            'Executive KPI reporting template',
+            'Custom workflow blueprint for your org'
+        ],
+        sampleTimeline: '1-2 business days for proposal draft'
     }
 ];
 

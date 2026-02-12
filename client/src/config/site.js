@@ -4,17 +4,36 @@
 export const site = {
     domain: 'gemservicesindia.in',
     name: 'GeM Services India',
-    tagline: 'Enterprise GeM & Tender Enablement',
+    tagline: 'Government Procurement Enablement Partner',
     description:
-        'Enterprise-grade GeM onboarding, catalogue, bid participation, and tender management services for businesses across India.',
+        'Enterprise-grade GeM onboarding, bid participation, and tender operations support for businesses across India.',
+    websiteUrl: 'https://gemservicesindia.in',
     contact: {
         phoneDisplay: '+91 98765 43210',
         phoneTel: '+919876543210',
         email: 'info@gemservicesindia.in',
         whatsappNumber: '919876543210',
-        addressLine:
-            'Update your office address here (City, State, PIN), India',
+        addressLine: 'Lucknow, Uttar Pradesh, India',
         hours: 'Mon to Fri, 9:00 AM to 6:00 PM IST'
+    },
+    social: {
+        facebook: 'https://facebook.com/gemservicesindia',
+        linkedin: 'https://linkedin.com/company/gemservicesindia',
+        instagram: 'https://instagram.com/gemservicesindia'
+    },
+    branding: {
+        logoUrl: '',
+        logoAlt: 'GeM Services India'
+    },
+    footer: {
+        blurb: 'Trusted procurement operations support for registration, bidding, compliance, and post-award execution.',
+        solutions: [
+            'GeM Registration',
+            'Catalogue Enablement',
+            'Bid Participation',
+            'Tender Tracking',
+            'Compliance Support',
+            'Enterprise SLA Desk'
+        ]
     }
 };
-
