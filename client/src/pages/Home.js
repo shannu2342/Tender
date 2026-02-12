@@ -110,7 +110,7 @@ const Home = () => {
                                         <h3 className="section-title title-md">{service.title}</h3>
                                         <p className="section-subtitle">{service.description || service.shortDescription}</p>
                                         <div className="cta-row">
-                                            <Link to={`/services/${slug}`} className="btn btn-secondary">View Details</Link>
+                                            <Link to={`/services/${slug}`} className="btn btn-primary">View Details</Link>
                                         </div>
                                     </div>
                                 </article>
@@ -152,7 +152,7 @@ const Home = () => {
                         ))}
                     </div>
                     <div className="cta-row mt-24">
-                        <Link to="/tenders" className="btn btn-secondary">See All Tenders</Link>
+                        <Link to="/tenders" className="btn btn-primary">See All Tenders</Link>
                     </div>
                 </div>
             </section>

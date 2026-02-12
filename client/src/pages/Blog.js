@@ -49,7 +49,7 @@ const Blog = () => {
                                         <p>{post.date ? new Date(post.date).toLocaleDateString() : '-'}</p>
                                     </div>
                                     <div className="cta-row">
-                                        <Link to={`/blog/${slug}`} className="btn btn-secondary">Read Article</Link>
+                                        <Link to={`/blog/${slug}`} className="btn btn-primary">Read Article</Link>
                                     </div>
                                 </div>
                             </article>

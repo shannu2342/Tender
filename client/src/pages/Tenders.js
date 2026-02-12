@@ -198,7 +198,7 @@ const Tenders = () => {
                                     {tender.isPaidContent && !isPremium ? <><Lock size={16} /> Preview</> : 'View Details'}
                                 </Link>
                                 {tender.isPaidContent && !isPremium ? (
-                                    <button type="button" className="btn btn-secondary" onClick={handlePremiumAction}>
+                                    <button type="button" className="btn btn-primary" onClick={handlePremiumAction}>
                                         <Crown size={16} /> Premium Access
                                     </button>
                                 ) : null}

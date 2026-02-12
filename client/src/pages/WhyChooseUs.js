@@ -21,7 +21,7 @@ const WhyChooseUs = () => {
                         return (
                             <article key={item.title} className="card">
                                 <div className="card-body">
-                                    <span className="chip chip--sky"><Icon size={14} /> Enterprise Standard</span>
+                                    <span className="chip chip--sky why-card__tag"><Icon size={14} /> Enterprise Standard</span>
                                     <h2 className="section-title mt-12">{item.title}</h2>
                                     <p className="section-subtitle">{item.text}</p>
                                 </div>
