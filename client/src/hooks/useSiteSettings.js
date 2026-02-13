@@ -106,7 +106,7 @@ export const useSiteSettings = () => {
                 solutions: parseList(settings?.footerSolutions, site.footer.solutions)
             },
             home: {
-                heroImageUrl: settings?.homeHeroImageUrl || '',
+                heroImageUrl: settings?.homeHeroImageUrl || site.home?.heroImageUrl || '',
                 heroImageAlt: settings?.homeHeroImageAlt || `${settings?.siteName || site.name} hero banner`
             },
             tenderAccessEnabled: settings?.tenderAccessEnabled ?? true,

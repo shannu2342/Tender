@@ -6,6 +6,7 @@ export const serviceCatalog = [
         longDescription:
             'We handle eligibility checks, profile setup, and document submission so your team can start selling on GeM without process delays.',
         price: 'Starts at Rs. 999',
+        imageUrl: 'https://images.unsplash.com/photo-1554224155-3a589877462f?auto=format&fit=crop&w=1200&q=80',
         features: ['Document checklist and validation', 'Profile creation with category mapping', 'Portal verification support', 'Post-activation guidance'],
         benefits: ['Faster onboarding', 'Reduced rejection risk', 'Clear accountability'],
         process: [
@@ -22,6 +23,7 @@ export const serviceCatalog = [
         longDescription:
             'From image and spec standardization to category mapping, we optimize your catalogue for discoverability and buyer clarity.',
         price: 'Starts at Rs. 1,999',
+        imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
         features: ['SKU structuring and taxonomy', 'Specification cleanup', 'Listing QA', 'Bulk upload assistance'],
         benefits: ['Higher listing quality', 'Reduced buyer confusion', 'Improved conversion'],
         process: [
@@ -38,6 +40,7 @@ export const serviceCatalog = [
         longDescription:
             'We align eligibility, documentation, and pricing inputs to help your organization submit complete and competitive bids on time.',
         price: 'Starts at Rs. 2,999',
+        imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80',
         features: ['Tender shortlist support', 'Bid pack preparation', 'Compliance and clause review', 'Submission-day assistance'],
         benefits: ['Reduced last-minute issues', 'More complete submissions', 'Better bid confidence'],
         process: [
@@ -54,6 +57,7 @@ export const serviceCatalog = [
         longDescription:
             'Our tracking desk monitors relevant portals and alerts your team with actionable summaries and deadlines.',
         price: 'Starts at Rs. 1,499',
+        imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
         features: ['Keyword and category watchlists', 'Deadline alerts', 'Opportunity summaries', 'Bid/no-bid recommendation notes'],
         benefits: ['Improved pipeline visibility', 'Faster decision cycles', 'Lower missed-deadline risk'],
         process: [
@@ -70,6 +74,7 @@ export const serviceCatalog = [
         longDescription:
             'We help maintain accurate, up-to-date documentation required for onboarding and bidding cycles.',
         price: 'Custom engagement',
+        imageUrl: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80',
         features: ['Document control matrix', 'Version tracking', 'Compliance checklist', 'Renewal reminders'],
         benefits: ['Audit readiness', 'Fewer documentation errors', 'Operational continuity'],
         process: [
@@ -86,6 +91,7 @@ export const serviceCatalog = [
         longDescription:
             'Designed for multi-entity teams that require predictable delivery, clear escalation paths, and coordinated support across multiple bids.',
         price: 'Enterprise pricing',
+        imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
         features: ['Dedicated success manager', 'SLA response guarantees', 'Priority queue handling', 'Executive reporting'],
         benefits: ['Predictable support delivery', 'Single point of accountability', 'Better stakeholder visibility'],
         process: [

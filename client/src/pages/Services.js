@@ -36,6 +36,14 @@ const Services = () => {
                         const slug = service.slug || service.id || service._id;
                         return (
                             <article key={service._id || slug} className="card">
+                                {service.imageUrl ? (
+                                    <img
+                                        src={service.imageUrl}
+                                        alt={service.title}
+                                        className="media-cover media-cover--md"
+                                        loading="lazy"
+                                    />
+                                ) : null}
                                 <div className="card-body">
                                     <div className="service-price-box">
                                         <span className="service-price__label">Starting Price</span>

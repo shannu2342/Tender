@@ -25,6 +25,10 @@ export const site = {
         logoUrl: '',
         logoAlt: 'GeM Services India'
     },
+    home: {
+        heroImageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=2000&q=80',
+        heroImageAlt: 'Enterprise team planning procurement operations'
+    },
     footer: {
         blurb: 'Trusted procurement operations support for registration, bidding, compliance, and post-award execution.',
         solutions: [

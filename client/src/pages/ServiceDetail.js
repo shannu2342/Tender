@@ -58,6 +58,9 @@ const ServiceDetail = () => {
             <div className="container">
                 <div className="split-layout">
                     <article className="legal-card prose">
+                        {service.imageUrl ? (
+                            <img src={service.imageUrl} alt={service.title} className="media-cover media-cover--md" style={{ borderRadius: 14 }} />
+                        ) : null}
                         <span className="chip chip--sky">{service.price || 'Custom Engagement'}</span>
                         <h1 className="page__title mt-14">{service.title}</h1>
                         <p className="page__lead mt-12">{service.longDescription || service.description}</p>

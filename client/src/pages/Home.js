@@ -103,6 +103,14 @@ const Home = () => {
                             const slug = service.slug || service.id;
                             return (
                                 <article key={service._id || slug} className="card">
+                                    {service.imageUrl ? (
+                                        <img
+                                            src={service.imageUrl}
+                                            alt={service.title}
+                                            className="media-cover media-cover--md"
+                                            loading="lazy"
+                                        />
+                                    ) : null}
                                     <div className="card-body">
                                         <div className="chip-row mb-0">
                                             <span className="chip chip--sky"><BriefcaseBusiness size={14} /> Service</span>

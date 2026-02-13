@@ -5,6 +5,7 @@ const emptyForm = {
     title: '',
     slug: '',
     description: '',
+    imageUrl: '',
     enabled: true
 };
 
@@ -60,8 +61,23 @@ const AdminServices = () => {
             title: service.title || '',
             slug: service.slug || '',
             description: service.description || '',
+            imageUrl: service.imageUrl || '',
             enabled: Boolean(service.enabled ?? true)
         });
+    };
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            window.alert('Please upload an image file.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            setForm((v) => ({ ...v, imageUrl: String(reader.result || '') }));
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleDelete = async (id) => {
@@ -110,6 +126,19 @@ const AdminServices = () => {
                         <label>Description</label>
                         <textarea className="form-control" rows={3} value={form.description} onChange={(e) => setForm((v) => ({ ...v, description: e.target.value }))} />
                     </div>
+                    <div className="grid gap-8 md:grid-cols-2">
+                        <div className="form-group">
+                            <label>Image URL</label>
+                            <input className="form-control" value={form.imageUrl} onChange={(e) => setForm((v) => ({ ...v, imageUrl: e.target.value }))} placeholder="https://...image.jpg" />
+                        </div>
+                        <div className="form-group">
+                            <label>Upload Image</label>
+                            <input type="file" accept="image/*" className="form-control" onChange={handleImageUpload} />
+                        </div>
+                    </div>
+                    {form.imageUrl ? (
+                        <img src={form.imageUrl} alt="Service preview" className="media-cover media-cover--sm" style={{ borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)' }} />
+                    ) : null}
                     <div className="cta-row">
                         <button type="submit" className="btn btn-primary">{editingId ? 'Update Service' : 'Create Service'}</button>
                         {editingId ? <button type="button" className="btn btn-secondary" onClick={resetForm}>Cancel Edit</button> : null}
@@ -124,6 +153,7 @@ const AdminServices = () => {
                             <tr>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Slug</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Title</th>
+                                <th style={{ textAlign: 'left', padding: '10px' }}>Image</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Status</th>
                                 <th style={{ textAlign: 'left', padding: '10px' }}>Actions</th>
                             </tr>
@@ -133,6 +163,7 @@ const AdminServices = () => {
                                 <tr key={service._id} style={{ borderTop: '1px solid #e2e8f0' }}>
                                     <td style={{ padding: '10px' }}>{service.slug || '-'}</td>
                                     <td style={{ padding: '10px' }}>{service.title}</td>
+                                    <td style={{ padding: '10px' }}>{service.imageUrl ? 'Added' : 'Not Added'}</td>
                                     <td style={{ padding: '10px' }}>{service.enabled ? 'Enabled' : 'Disabled'}</td>
                                     <td style={{ padding: '10px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                         <button type="button" className="btn btn-secondary" onClick={() => handleEdit(service)}>Edit</button>
