@@ -1733,21 +1733,21 @@ a:hover {
 .site-header--glass .site-header__top-cta.btn-glass,
 .site-header--glass .site-header__premium-btn.btn-glass,
 .site-header--glass .mobile-nav__quick-btn.btn-glass {
-    background: var(--header-glass-green-solid) !important;
+    background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
     color: #f8fafc !important;
     border: 1px solid rgba(255, 255, 255, 0.32) !important;
-    box-shadow: 0 10px 24px rgba(20, 83, 45, 0.26) !important;
+    box-shadow: 0 10px 24px rgba(30, 58, 138, 0.3) !important;
 }
 
 .site-header--glass .site-header__top-cta.btn-glass:hover,
 .site-header--glass .site-header__premium-btn.btn-glass:hover,
 .site-header--glass .mobile-nav__quick-btn.btn-glass:hover {
-    background: #1fa65f !important;
+    background: linear-gradient(135deg, #172554, #1e3a8a) !important;
     border-color: rgba(255, 255, 255, 0.42) !important;
 }
 
 .site-header--glass .site-header__premium-btn.btn-glass.is-active {
-    background: #1f9f5b !important;
+    background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
     color: #f8fafc !important;
 }
 
