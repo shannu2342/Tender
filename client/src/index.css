@@ -1701,6 +1701,56 @@ a:hover {
     color: #14532d;
 }
 
+.site-header--glass {
+    background: linear-gradient(135deg, rgba(43, 191, 105, 0.78), rgba(36, 155, 87, 0.76)) !important;
+    backdrop-filter: blur(16px) saturate(135%);
+    -webkit-backdrop-filter: blur(16px) saturate(135%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.16);
+}
+
+.site-header--glass .site-header__topbar {
+    background: rgba(17, 94, 53, 0.58) !important;
+    backdrop-filter: blur(14px) saturate(135%);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+}
+
+.site-header--glass .site-header__main {
+    position: relative;
+}
+
+.btn-glass {
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px) saturate(125%);
+    -webkit-backdrop-filter: blur(10px) saturate(125%);
+    border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.btn-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.03) 55%, rgba(255, 255, 255, 0));
+}
+
+.btn-glass:hover {
+    transform: translateY(-1px) scale(1.01);
+}
+
+.site-header__premium-btn.btn-glass,
+.mobile-nav__quick-btn.btn-glass,
+.btn-success.btn-glass,
+.btn-primary.btn-glass {
+    box-shadow: 0 12px 24px rgba(30, 58, 138, 0.28);
+}
+
+.btn-secondary.btn-glass {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .page__header,
     .card,

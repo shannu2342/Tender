@@ -117,12 +117,12 @@ const TenderDetail = () => {
                             {isLocked ? (
                                 <div className="notice">
                                     <strong><Lock size={14} /> Premium tender content</strong>
-                                    <p>Login with OTP and activate premium to unlock this tender.</p>
+                                    <p>Login with mobile and password, then activate premium to unlock this tender.</p>
                                 </div>
                             ) : null}
                             <div className="cta-row">
                                 {isLocked ? (
-                                    <button type="button" className="btn btn-success" onClick={handlePremiumAction}>
+                                    <button type="button" className="btn btn-success btn-glass" onClick={handlePremiumAction}>
                                         <Crown size={16} /> Premium Access
                                     </button>
                                 ) : (
@@ -134,13 +134,13 @@ const TenderDetail = () => {
                                     </Link>
                                 )}
                                 {!isLocked && firstDoc ? (
-                                    <a href={firstDoc.url} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-                                        <Download size={16} /> Download Documents
+                                    <a href={firstDoc.url} download={firstDoc.name || 'tender-document.pdf'} className="btn btn-secondary btn-glass" target="_blank" rel="noopener noreferrer">
+                                        <Download size={16} /> Download PDF
                                     </a>
                                 ) : (
                                     <Link
                                         to={`/contact?subject=${encodeURIComponent(`Document request: ${tender.title}`)}`}
-                                        className="btn btn-secondary"
+                                        className="btn btn-secondary btn-glass"
                                         title={isLocked ? 'Premium required' : 'Request documents'}
                                     >
                                         <Download size={16} /> {isLocked ? 'Premium Required' : 'Request Documents'}

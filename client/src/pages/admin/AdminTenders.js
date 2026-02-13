@@ -15,7 +15,9 @@ const emptyForm = {
     estimatedValue: '',
     currency: 'INR',
     isPaidContent: false,
-    enabled: true
+    enabled: true,
+    documentName: '',
+    documentUrl: ''
 };
 
 const AdminTenders = () => {
@@ -46,9 +48,19 @@ const AdminTenders = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const documents = [];
+        if (form.documentUrl.trim()) {
+            documents.push({
+                name: form.documentName.trim() || 'Tender Document',
+                url: form.documentUrl.trim(),
+                type: 'application/pdf'
+            });
+        }
+
         const payload = {
             ...form,
-            estimatedValue: Number(form.estimatedValue || 0)
+            estimatedValue: Number(form.estimatedValue || 0),
+            documents
         };
 
         try {
@@ -65,12 +77,15 @@ const AdminTenders = () => {
     };
 
     const handleEdit = (tender) => {
+        const firstDoc = Array.isArray(tender.documents) ? tender.documents.find((doc) => doc?.url) : null;
         setEditingId(tender._id);
         setForm({
             ...emptyForm,
             ...tender,
             lastDate: tender.lastDate ? String(tender.lastDate).slice(0, 10) : '',
-            openingDate: tender.openingDate ? String(tender.openingDate).slice(0, 10) : ''
+            openingDate: tender.openingDate ? String(tender.openingDate).slice(0, 10) : '',
+            documentName: firstDoc?.name || '',
+            documentUrl: firstDoc?.url || ''
         });
     };
 
@@ -97,6 +112,24 @@ const AdminTenders = () => {
 
     if (loading) return <div className="loading">Loading tenders...</div>;
 
+    const handlePdfUpload = (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        if (file.type !== 'application/pdf') {
+            window.alert('Please upload a PDF file only.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            setForm((v) => ({
+                ...v,
+                documentName: file.name,
+                documentUrl: String(reader.result || '')
+            }));
+        };
+        reader.readAsDataURL(file);
+    };
+
     return (
         <div style={{ padding: 20 }}>
             <h1 style={{ fontSize: '1.5rem', marginBottom: 20 }}>Manage Tenders</h1>
@@ -113,6 +146,13 @@ const AdminTenders = () => {
                         <div className="form-group"><label>District</label><input className="form-control" value={form.district} onChange={(e) => setForm((v) => ({ ...v, district: e.target.value }))} /></div>
                         <div className="form-group"><label>Last Date</label><input type="date" className="form-control" value={form.lastDate} onChange={(e) => setForm((v) => ({ ...v, lastDate: e.target.value }))} /></div>
                         <div className="form-group"><label>Estimated Value</label><input type="number" className="form-control" value={form.estimatedValue} onChange={(e) => setForm((v) => ({ ...v, estimatedValue: e.target.value }))} /></div>
+                        <div className="form-group"><label>PDF Name</label><input className="form-control" value={form.documentName} onChange={(e) => setForm((v) => ({ ...v, documentName: e.target.value }))} placeholder="Tender Document.pdf" /></div>
+                        <div className="form-group"><label>PDF URL (optional)</label><input className="form-control" value={form.documentUrl} onChange={(e) => setForm((v) => ({ ...v, documentUrl: e.target.value }))} placeholder="https://.../tender.pdf" /></div>
+                    </div>
+                    <div className="form-group">
+                        <label>Upload PDF</label>
+                        <input type="file" accept="application/pdf" className="form-control" onChange={handlePdfUpload} />
+                        <p className="section-subtitle">You can upload a PDF or provide a direct PDF URL.</p>
                     </div>
                     <div className="form-group">
                         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

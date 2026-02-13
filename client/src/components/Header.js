@@ -51,7 +51,7 @@ const Header = () => {
     };
 
     return (
-        <header className={`site-header ${scrolled ? 'site-header--scrolled' : ''}`}>
+        <header className={`site-header site-header--glass ${scrolled ? 'site-header--scrolled' : ''}`}>
             <div className="site-header__topbar">
                 <div className="container site-header__topbar-inner">
                     <div className="site-header__contact-group">
@@ -64,7 +64,7 @@ const Header = () => {
                             {site.contact.email}
                         </a>
                     </div>
-                    <Link to="/contact" className="site-header__top-cta">
+                    <Link to="/contact" className="site-header__top-cta btn-glass">
                         Enterprise Consultation <ArrowUpRight size={14} />
                     </Link>
                 </div>
@@ -99,7 +99,7 @@ const Header = () => {
                     {site.premium.enabled ? (
                         <button
                             type="button"
-                            className={`site-header__premium-btn ${isPremium ? 'is-active' : ''}`}
+                            className={`site-header__premium-btn btn-glass ${isPremium ? 'is-active' : ''}`}
                             onClick={handlePremiumClick}
                         >
                             <Crown size={16} />
@@ -168,7 +168,7 @@ const Header = () => {
                         <div className="mobile-nav__quick" aria-label="Quick actions">
                             <button
                                 type="button"
-                                className="mobile-nav__quick-btn mobile-nav__quick-btn--primary"
+                            className="mobile-nav__quick-btn mobile-nav__quick-btn--primary btn-glass"
                                 onClick={handlePremiumClick}
                             >
                                 <Crown size={16} />

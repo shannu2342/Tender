@@ -104,9 +104,9 @@ const Tenders = () => {
                         <div>
                             <span className="chip chip--premium"><Crown size={14} /> Premium Access</span>
                             <h2 className="section-title title-sm mt-12">Unlock all premium tenders</h2>
-                            <p className="section-subtitle">Login with OTP and complete Razorpay payment to access all paid opportunities.</p>
+                            <p className="section-subtitle">Login with mobile and password, then complete payment to access all paid opportunities.</p>
                         </div>
-                        <button type="button" className="btn btn-success" onClick={handlePremiumAction}>
+                        <button type="button" className="btn btn-success btn-glass" onClick={handlePremiumAction}>
                             <Crown size={16} /> Activate Premium
                         </button>
                     </section>
@@ -198,7 +198,7 @@ const Tenders = () => {
                                     {tender.isPaidContent && !isPremium ? <><Lock size={16} /> Preview</> : 'View Details'}
                                 </Link>
                                 {tender.isPaidContent && !isPremium ? (
-                                    <button type="button" className="btn btn-primary" onClick={handlePremiumAction}>
+                                    <button type="button" className="btn btn-primary btn-glass" onClick={handlePremiumAction}>
                                         <Crown size={16} /> Premium Access
                                     </button>
                                 ) : null}

@@ -62,6 +62,41 @@ export const CustomerAuthProvider = ({ children }) => {
         return response.data;
     };
 
+    const loginWithPassword = async (payload) => {
+        const response = await customerAuthService.login(payload);
+        const { token, user: userData } = response.data || {};
+        if (token) {
+            localStorage.setItem('customerToken', token);
+        }
+        setUser(userData || null);
+        return response.data;
+    };
+
+    const requestSignupOtp = async (payload) => {
+        const response = await customerAuthService.requestSignupOtp(payload);
+        return response.data;
+    };
+
+    const verifySignupOtp = async (payload) => {
+        const response = await customerAuthService.verifySignupOtp(payload);
+        const { token, user: userData } = response.data || {};
+        if (token) {
+            localStorage.setItem('customerToken', token);
+        }
+        setUser(userData || null);
+        return response.data;
+    };
+
+    const requestForgotOtp = async (payload) => {
+        const response = await customerAuthService.requestForgotOtp(payload);
+        return response.data;
+    };
+
+    const verifyForgotOtp = async (payload) => {
+        const response = await customerAuthService.verifyForgotOtp(payload);
+        return response.data;
+    };
+
     const logout = async () => {
         try {
             await customerAuthService.logout();
@@ -80,6 +115,11 @@ export const CustomerAuthProvider = ({ children }) => {
         isPremium: isActivePremium(user),
         requestOtp,
         verifyOtp,
+        loginWithPassword,
+        requestSignupOtp,
+        verifySignupOtp,
+        requestForgotOtp,
+        verifyForgotOtp,
         refreshProfile,
         setUser,
         logout

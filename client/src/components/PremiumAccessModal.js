@@ -21,15 +21,39 @@ const loadRazorpayScript = () => {
 
 const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAuthenticated }) => {
     const site = useSiteSettings();
-    const { user, isPremium, isLoggedIn, requestOtp, verifyOtp, setUser, refreshProfile } = useCustomerAuth();
+    const {
+        user,
+        isPremium,
+        isLoggedIn,
+        loginWithPassword,
+        requestSignupOtp,
+        verifySignupOtp,
+        requestForgotOtp,
+        verifyForgotOtp,
+        setUser,
+        refreshProfile
+    } = useCustomerAuth();
+
     const [step, setStep] = useState(isLoggedIn ? 2 : 0);
-    const [mobile, setMobile] = useState(user?.mobile || '');
-    const [name, setName] = useState(user?.name || '');
-    const [requestId, setRequestId] = useState('');
-    const [otp, setOtp] = useState('');
-    const [devOtp, setDevOtp] = useState('');
+    const [authView, setAuthView] = useState('login');
     const [busy, setBusy] = useState(false);
     const [message, setMessage] = useState('');
+    const [devOtp, setDevOtp] = useState('');
+
+    const [loginMobile, setLoginMobile] = useState(user?.mobile || '');
+    const [loginPassword, setLoginPassword] = useState('');
+
+    const [signupName, setSignupName] = useState('');
+    const [signupMobile, setSignupMobile] = useState('');
+    const [signupPassword, setSignupPassword] = useState('');
+    const [signupOtp, setSignupOtp] = useState('');
+    const [signupRequestId, setSignupRequestId] = useState('');
+
+    const [forgotMobile, setForgotMobile] = useState('');
+    const [forgotNewPassword, setForgotNewPassword] = useState('');
+    const [forgotOtp, setForgotOtp] = useState('');
+    const [forgotRequestId, setForgotRequestId] = useState('');
+
     const bodyRef = useRef(null);
 
     const amountText = useMemo(() => {
@@ -57,31 +81,95 @@ const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAu
         bodyRef.current.scrollTop = 0;
     }, [open]);
 
+    useEffect(() => {
+        if (!open) return;
+        if (isLoggedIn) {
+            setStep(2);
+        } else {
+            setStep(0);
+            setAuthView('login');
+        }
+    }, [open, isLoggedIn]);
+
     if (!open) return null;
 
-    const closeAndReset = () => {
+    const resetState = () => {
         setStep(isLoggedIn ? 2 : 0);
-        setRequestId('');
-        setOtp('');
-        setDevOtp('');
+        setAuthView('login');
         setMessage('');
+        setDevOtp('');
+        setBusy(false);
+        setLoginPassword('');
+        setSignupOtp('');
+        setSignupRequestId('');
+        setForgotOtp('');
+        setForgotRequestId('');
+    };
+
+    const closeAndReset = () => {
+        resetState();
         onClose?.();
     };
 
-    const handleSendOtp = async () => {
-        const normalizedMobile = normalizeMobile(mobile);
-        if (normalizedMobile.length !== 10) {
+    const handleAuthed = (nextUser) => {
+        if (authOnly) {
+            onAuthenticated?.(nextUser);
+            closeAndReset();
+            return;
+        }
+        setStep(2);
+    };
+
+    const handleLogin = async () => {
+        const mobile = normalizeMobile(loginMobile);
+        if (mobile.length !== 10) {
             setMessage('Enter a valid 10-digit mobile number.');
+            return;
+        }
+        if (!loginPassword) {
+            setMessage('Enter your password.');
             return;
         }
 
         try {
             setBusy(true);
             setMessage('');
-            const data = await requestOtp(normalizedMobile);
-            setRequestId(data.requestId);
+            setDevOtp('');
+            const payload = await loginWithPassword({ mobile, password: loginPassword });
+            setMessage('Login successful.');
+            handleAuthed(payload.user);
+        } catch (error) {
+            setMessage(error?.response?.data?.message || 'Unable to login right now.');
+        } finally {
+            setBusy(false);
+        }
+    };
+
+    const handleSendSignupOtp = async () => {
+        const mobile = normalizeMobile(signupMobile);
+        if (!signupName.trim()) {
+            setMessage('Enter your name.');
+            return;
+        }
+        if (mobile.length !== 10) {
+            setMessage('Enter a valid 10-digit mobile number.');
+            return;
+        }
+        if ((signupPassword || '').length < 6) {
+            setMessage('Password must be at least 6 characters.');
+            return;
+        }
+
+        try {
+            setBusy(true);
+            setMessage('');
+            const data = await requestSignupOtp({
+                name: signupName.trim(),
+                mobile,
+                password: signupPassword
+            });
+            setSignupRequestId(data.requestId);
             setDevOtp(data.devOtp || '');
-            setStep(1);
             setMessage('OTP sent successfully.');
         } catch (error) {
             setMessage(error?.response?.data?.message || 'Unable to send OTP right now.');
@@ -90,25 +178,86 @@ const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAu
         }
     };
 
-    const handleVerifyOtp = async () => {
+    const handleVerifySignupOtp = async () => {
+        if (!signupRequestId) {
+            setMessage('Request OTP first.');
+            return;
+        }
+        if ((signupOtp || '').length < 6) {
+            setMessage('Enter 6-digit OTP.');
+            return;
+        }
+
         try {
             setBusy(true);
             setMessage('');
-            const payload = await verifyOtp({
-                requestId,
-                mobile: normalizeMobile(mobile),
-                otp,
-                name
+            const payload = await verifySignupOtp({
+                requestId: signupRequestId,
+                otp: signupOtp,
+                mobile: normalizeMobile(signupMobile),
+                name: signupName.trim(),
+                password: signupPassword
             });
-            setUser(payload.user);
-            if (authOnly) {
-                setMessage('Login successful.');
-                onAuthenticated?.(payload.user);
-                closeAndReset();
-                return;
-            }
-            setStep(2);
-            setMessage('Login successful.');
+            setMessage('Signup successful.');
+            handleAuthed(payload.user);
+        } catch (error) {
+            setMessage(error?.response?.data?.message || 'OTP verification failed.');
+        } finally {
+            setBusy(false);
+        }
+    };
+
+    const handleSendForgotOtp = async () => {
+        const mobile = normalizeMobile(forgotMobile);
+        if (mobile.length !== 10) {
+            setMessage('Enter a valid 10-digit mobile number.');
+            return;
+        }
+        if ((forgotNewPassword || '').length < 6) {
+            setMessage('New password must be at least 6 characters.');
+            return;
+        }
+
+        try {
+            setBusy(true);
+            setMessage('');
+            const data = await requestForgotOtp({ mobile });
+            setForgotRequestId(data.requestId);
+            setDevOtp(data.devOtp || '');
+            setMessage('OTP sent successfully.');
+        } catch (error) {
+            setMessage(error?.response?.data?.message || 'Unable to send OTP right now.');
+        } finally {
+            setBusy(false);
+        }
+    };
+
+    const handleVerifyForgotOtp = async () => {
+        if (!forgotRequestId) {
+            setMessage('Request OTP first.');
+            return;
+        }
+        if ((forgotOtp || '').length < 6) {
+            setMessage('Enter 6-digit OTP.');
+            return;
+        }
+
+        try {
+            setBusy(true);
+            setMessage('');
+            await verifyForgotOtp({
+                requestId: forgotRequestId,
+                otp: forgotOtp,
+                mobile: normalizeMobile(forgotMobile),
+                newPassword: forgotNewPassword
+            });
+            setMessage('Password updated successfully. Please login.');
+            setAuthView('login');
+            setLoginMobile(normalizeMobile(forgotMobile));
+            setLoginPassword('');
+            setForgotOtp('');
+            setForgotRequestId('');
+            setDevOtp('');
         } catch (error) {
             setMessage(error?.response?.data?.message || 'OTP verification failed.');
         } finally {
@@ -148,12 +297,12 @@ const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAu
                     description: order.planName || site.premium.planName,
                     order_id: order.orderId,
                     prefill: {
-                        name: user?.name || name,
+                        name: user?.name || signupName,
                         email: user?.email || '',
-                        contact: normalizeMobile(user?.mobile || mobile)
+                        contact: normalizeMobile(user?.mobile || loginMobile || signupMobile)
                     },
-                    theme: { color: '#15803d' },
-                    handler: async function (response) {
+                    theme: { color: '#1e3a8a' },
+                    handler: async (response) => {
                         await completePayment(response.razorpay_payment_id, response.razorpay_signature);
                     }
                 };
@@ -190,19 +339,17 @@ const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAu
                     {authOnly ? (
                         <>
                             <h3 className="section-title title-sm">Login to Continue</h3>
-                            <p className="section-subtitle">Verify with OTP. After login you will be redirected to Pricing for payment.</p>
+                            <p className="section-subtitle">Login or signup with mobile number, then you will be redirected to Pricing for payment.</p>
                         </>
                     ) : (
                         <>
                             <h3 className="section-title title-sm">{site.premium.planName}</h3>
                             <p className="section-subtitle">Unlock all premium tenders, complete details, and fast-track opportunity discovery.</p>
-
                             <div className="premium-price">{amountText} <span>/ {site.premium.durationDays} days</span></div>
-
                             <div className="list-clean mt-12">
                                 <div><ShieldCheck size={16} /> Unlimited premium tender visibility</div>
                                 <div><Crown size={16} /> Priority opportunity access</div>
-                                <div><Smartphone size={16} /> OTP-secured account login</div>
+                                <div><Smartphone size={16} /> OTP-verified mobile account security</div>
                             </div>
                         </>
                     )}
@@ -219,29 +366,79 @@ const PremiumAccessModal = ({ open, onClose, onActivated, authOnly = false, onAu
 
                     {!isLoggedIn && step === 0 ? (
                         <div className="grid gap-8 mt-14">
-                            <div className="form-group">
-                                <label>Mobile Number</label>
-                                <input className="form-control" value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder="10-digit mobile" />
+                            <div className="chip-row">
+                                <button type="button" className={`btn ${authView === 'login' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setAuthView('login')}>Login</button>
+                                <button type="button" className={`btn ${authView === 'signup' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setAuthView('signup')}>Signup</button>
+                                <button type="button" className={`btn ${authView === 'forgot' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setAuthView('forgot')}>Forgot Password</button>
                             </div>
-                            <div className="form-group">
-                                <label>Name</label>
-                                <input className="form-control" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
-                            </div>
-                            <button type="button" className="btn btn-primary" disabled={busy} onClick={handleSendOtp}>
-                                {busy ? 'Sending OTP...' : 'Send OTP'}
-                            </button>
-                        </div>
-                    ) : null}
 
-                    {!isLoggedIn && step === 1 ? (
-                        <div className="grid gap-8 mt-14">
-                            <div className="form-group">
-                                <label>Enter OTP</label>
-                                <input className="form-control" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="6-digit OTP" />
-                            </div>
-                            <button type="button" className="btn btn-primary" disabled={busy} onClick={handleVerifyOtp}>
-                                {busy ? 'Verifying...' : 'Verify & Continue'}
-                            </button>
+                            {authView === 'login' ? (
+                                <>
+                                    <div className="form-group">
+                                        <label>Mobile Number</label>
+                                        <input className="form-control" value={loginMobile} onChange={(e) => setLoginMobile(e.target.value)} placeholder="10-digit mobile" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <input type="password" className="form-control" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Password" />
+                                    </div>
+                                    <button type="button" className="btn btn-primary" disabled={busy} onClick={handleLogin}>
+                                        {busy ? 'Logging in...' : 'Login'}
+                                    </button>
+                                </>
+                            ) : null}
+
+                            {authView === 'signup' ? (
+                                <>
+                                    <div className="form-group">
+                                        <label>Name</label>
+                                        <input className="form-control" value={signupName} onChange={(e) => setSignupName(e.target.value)} placeholder="Your name" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Mobile Number</label>
+                                        <input className="form-control" value={signupMobile} onChange={(e) => setSignupMobile(e.target.value)} placeholder="10-digit mobile" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <input type="password" className="form-control" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} placeholder="Create password" />
+                                    </div>
+                                    <div className="cta-row">
+                                        <button type="button" className="btn btn-secondary" disabled={busy} onClick={handleSendSignupOtp}>
+                                            {busy ? 'Sending...' : 'Send OTP'}
+                                        </button>
+                                        <div className="form-group" style={{ marginBottom: 0, flex: '1 1 140px' }}>
+                                            <input className="form-control" value={signupOtp} onChange={(e) => setSignupOtp(e.target.value)} placeholder="Enter OTP" />
+                                        </div>
+                                        <button type="button" className="btn btn-primary" disabled={busy} onClick={handleVerifySignupOtp}>
+                                            {busy ? 'Verifying...' : 'Verify & Signup'}
+                                        </button>
+                                    </div>
+                                </>
+                            ) : null}
+
+                            {authView === 'forgot' ? (
+                                <>
+                                    <div className="form-group">
+                                        <label>Mobile Number</label>
+                                        <input className="form-control" value={forgotMobile} onChange={(e) => setForgotMobile(e.target.value)} placeholder="10-digit mobile" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>New Password</label>
+                                        <input type="password" className="form-control" value={forgotNewPassword} onChange={(e) => setForgotNewPassword(e.target.value)} placeholder="New password" />
+                                    </div>
+                                    <div className="cta-row">
+                                        <button type="button" className="btn btn-secondary" disabled={busy} onClick={handleSendForgotOtp}>
+                                            {busy ? 'Sending...' : 'Send OTP'}
+                                        </button>
+                                        <div className="form-group" style={{ marginBottom: 0, flex: '1 1 140px' }}>
+                                            <input className="form-control" value={forgotOtp} onChange={(e) => setForgotOtp(e.target.value)} placeholder="Enter OTP" />
+                                        </div>
+                                        <button type="button" className="btn btn-primary" disabled={busy} onClick={handleVerifyForgotOtp}>
+                                            {busy ? 'Verifying...' : 'Reset Password'}
+                                        </button>
+                                    </div>
+                                </>
+                            ) : null}
                         </div>
                     ) : null}
 

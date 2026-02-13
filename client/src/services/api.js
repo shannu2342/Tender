@@ -153,6 +153,11 @@ export const usersService = {
 export const customerAuthService = {
     requestOtp: (mobile) => api.post('/customer-auth/request-otp', { mobile }),
     verifyOtp: (payload) => api.post('/customer-auth/verify-otp', payload),
+    login: (payload) => api.post('/customer-auth/login', payload),
+    requestSignupOtp: (payload) => api.post('/customer-auth/signup/request-otp', payload),
+    verifySignupOtp: (payload) => api.post('/customer-auth/signup/verify-otp', payload),
+    requestForgotOtp: (payload) => api.post('/customer-auth/forgot/request-otp', payload),
+    verifyForgotOtp: (payload) => api.post('/customer-auth/forgot/verify-otp', payload),
     getProfile: () => customerApi.get('/customer-auth/me'),
     logout: () => customerApi.post('/customer-auth/logout')
 };

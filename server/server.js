@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 dotenv.config()
 
@@ -85,6 +86,13 @@ const mockData = {
             details: 'Supply, delivery, and inventory support for government departments.',
             estimatedValue: 1800000,
             currency: 'INR',
+            documents: [
+                {
+                    name: 'Office-Supplies-RFP.pdf',
+                    url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                    type: 'application/pdf'
+                }
+            ],
             isPaidContent: false,
             enabled: true,
             createdAt: new Date(),
@@ -104,6 +112,13 @@ const mockData = {
             details: 'Preventive and corrective maintenance for 24x7 operations.',
             estimatedValue: 5600000,
             currency: 'INR',
+            documents: [
+                {
+                    name: 'IT-AMC-Scope.pdf',
+                    url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                    type: 'application/pdf'
+                }
+            ],
             isPaidContent: true,
             enabled: true,
             createdAt: new Date(),
@@ -233,6 +248,7 @@ const mockData = {
             name: 'John Doe',
             email: 'john@example.com',
             mobile: '9876543210',
+            passwordHash: bcrypt.hashSync('User@123', 10),
             role: 'user',
             isPremium: false,
             premiumActiveUntil: null,
