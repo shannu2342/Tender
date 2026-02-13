@@ -1703,12 +1703,14 @@ a:hover {
 }
 
 .site-header--glass {
+    --header-glass-green: rgba(34, 182, 102, 0.74);
+    --header-glass-green-solid: #24b86a;
     position: fixed !important;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    background: linear-gradient(135deg, rgba(43, 191, 105, 0.74), rgba(36, 155, 87, 0.7)) !important;
+    background: var(--header-glass-green) !important;
     backdrop-filter: blur(16px) saturate(135%);
     -webkit-backdrop-filter: blur(16px) saturate(135%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
@@ -1717,8 +1719,6 @@ a:hover {
 
 .site-header--glass .site-header__topbar {
     background: transparent !important;
-    backdrop-filter: blur(14px) saturate(135%);
-    -webkit-backdrop-filter: blur(14px) saturate(135%);
     border-bottom: 0 !important;
 }
 
@@ -1728,6 +1728,27 @@ a:hover {
 
 .site-header--glass .site-header__topbar-inner {
     min-height: 40px;
+}
+
+.site-header--glass .site-header__top-cta.btn-glass,
+.site-header--glass .site-header__premium-btn.btn-glass,
+.site-header--glass .mobile-nav__quick-btn.btn-glass {
+    background: var(--header-glass-green-solid) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.32) !important;
+    box-shadow: 0 10px 24px rgba(20, 83, 45, 0.26) !important;
+}
+
+.site-header--glass .site-header__top-cta.btn-glass:hover,
+.site-header--glass .site-header__premium-btn.btn-glass:hover,
+.site-header--glass .mobile-nav__quick-btn.btn-glass:hover {
+    background: #1fa65f !important;
+    border-color: rgba(255, 255, 255, 0.42) !important;
+}
+
+.site-header--glass .site-header__premium-btn.btn-glass.is-active {
+    background: #1f9f5b !important;
+    color: #f8fafc !important;
 }
 
 .btn-glass {
