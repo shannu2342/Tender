@@ -180,6 +180,39 @@ main {
     }
 }
 
+@keyframes tenderSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-36px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes tenderSlideRight {
+    from {
+        opacity: 0;
+        transform: translateX(36px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes revealMask {
+    from {
+        clip-path: inset(0 100% 0 0 round 16px);
+        opacity: 0.4;
+    }
+    to {
+        clip-path: inset(0 0 0 0 round 16px);
+        opacity: 1;
+    }
+}
+
 .text-secondary {
     color: var(--color-muted);
 }
@@ -1457,11 +1490,79 @@ body.mobile-nav-open .wa-float {
 }
 
 .reveal {
-    opacity: 0;
+    opacity: 1;
 }
 
 .reveal.reveal-in {
     animation: revealUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+}
+
+.home-tender-row {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(186, 230, 253, 0.34), rgba(186, 230, 253, 0) 42%),
+        #ffffff;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.home-tender-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.34) 48%, rgba(255, 255, 255, 0) 80%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+
+.home-tender-row:hover::before {
+    transform: translateX(120%);
+}
+
+.home-tender-row--left {
+    animation: tenderSlideLeft 0.7s ease both;
+}
+
+.home-tender-row--right {
+    animation: tenderSlideRight 0.7s ease both;
+}
+
+.image-showcase-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.image-showcase-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
+    transform-style: preserve-3d;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    animation: revealMask 0.8s ease both;
+}
+
+.image-showcase-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(140deg, rgba(15, 23, 42, 0.06), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+.image-showcase-card:hover {
+    transform: perspective(900px) rotateX(3deg) rotateY(-4deg) translateY(-6px);
+    box-shadow: 0 24px 40px rgba(15, 23, 42, 0.22);
+}
+
+.image-showcase-card--2 {
+    animation-delay: 120ms;
+}
+
+.image-showcase-card--3 {
+    animation-delay: 240ms;
 }
 
 /* Vibrant Premium Theme Overrides */
@@ -1917,6 +2018,11 @@ a:hover {
     .reveal.reveal-in {
         animation: none !important;
     }
+
+    .image-showcase-card {
+        animation: none !important;
+        transform: none !important;
+    }
 }
 
 @media (min-width: 720px) {
@@ -1947,6 +2053,10 @@ a:hover {
 
     .hero-visual-card--right {
         transform: translateX(-18px);
+    }
+
+    .image-showcase-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 

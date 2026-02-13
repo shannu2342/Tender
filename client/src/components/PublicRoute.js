@@ -38,7 +38,14 @@ const PublicRoute = ({ element, isAdminRoute = false }) => {
         );
 
         targets.forEach((node) => observer.observe(node));
-        return () => observer.disconnect();
+        const fallbackTimer = window.setTimeout(() => {
+            targets.forEach((node) => node.classList.add('reveal-in'));
+        }, 900);
+
+        return () => {
+            observer.disconnect();
+            window.clearTimeout(fallbackTimer);
+        };
     }, [isAdminRoute, location.pathname]);
 
     if (loading) {

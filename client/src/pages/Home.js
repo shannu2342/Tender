@@ -19,6 +19,13 @@ const Home = () => {
     const heroPrimaryImage = managed.heroPrimaryImage || site.home.heroImageUrl;
     const heroSecondaryImage =
         managed.heroSecondaryImage || 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80';
+    const showcaseImages = Array.isArray(managed.showcaseImages) && managed.showcaseImages.length
+        ? managed.showcaseImages.slice(0, 3)
+        : [
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80'
+        ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -135,13 +142,37 @@ const Home = () => {
 
             <section className="page page--no-top">
                 <div className="container">
+                    <div className="hero-panel">
+                        <header className="page__header mb-12">
+                            <h2 className="section-title">Execution Highlights</h2>
+                            <p className="section-subtitle">Interactive snapshots from enterprise procurement workflows.</p>
+                        </header>
+                        <div className="image-showcase-grid">
+                            {showcaseImages.map((image, index) => (
+                                <figure
+                                    key={`${image}-${index}`}
+                                    className={`image-showcase-card image-showcase-card--${index + 1}`}
+                                >
+                                    <img src={image} alt={`Execution highlight ${index + 1}`} className="media-cover media-cover--md" loading="lazy" />
+                                </figure>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="page page--no-top">
+                <div className="container">
                     <header className="page__header">
                         <h2 className="section-title">Featured Tenders</h2>
                         <p className="section-subtitle">Curated opportunities with essential context for faster bid decisions.</p>
                     </header>
                     <div className="table-like">
-                        {tenders.map((tender) => (
-                            <article key={tender._id || tender.id} className="table-like__row">
+                        {tenders.map((tender, index) => (
+                            <article
+                                key={tender._id || tender.id}
+                                className={`table-like__row home-tender-row ${index % 2 === 0 ? 'home-tender-row--left' : 'home-tender-row--right'}`}
+                            >
                                 <div className="chip-row">
                                     <span className={`chip ${tender.isPaidContent ? 'chip--premium' : 'chip--sky'}`}>
                                         {tender.isPaidContent ? 'Premium Access' : 'Open Access'}

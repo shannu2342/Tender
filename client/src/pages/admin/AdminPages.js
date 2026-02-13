@@ -10,7 +10,7 @@ const emptyForm = {
 };
 
 const mediaConfigExamples = {
-    home: '{\n  "title": "GeM Services India",\n  "kicker": "Enterprise Procurement Enablement",\n  "lead": "Your hero lead text",\n  "heroPrimaryImage": "https://.../image-left.jpg",\n  "heroSecondaryImage": "https://.../image-right.jpg"\n}',
+    home: '{\n  "title": "GeM Services India",\n  "kicker": "Enterprise Procurement Enablement",\n  "lead": "Your hero lead text",\n  "heroPrimaryImage": "https://.../image-left.jpg",\n  "heroSecondaryImage": "https://.../image-right.jpg",\n  "showcaseImages": [\n    "https://.../showcase-1.jpg",\n    "https://.../showcase-2.jpg",\n    "https://.../showcase-3.jpg"\n  ]\n}',
     about: '{\n  "title": "About Us",\n  "lead": "Your lead",\n  "heroImage": "https://.../about-hero.jpg",\n  "sections": []\n}',
     why_choose_us: '{\n  "title": "Why Choose Us",\n  "lead": "Your lead",\n  "heroImage": "https://.../why-hero.jpg",\n  "items": [\n    {\n      "title": "Specialized Procurement Team",\n      "text": "Description",\n      "imageUrl": "https://.../item-image.jpg"\n    }\n  ]\n}'
 };
