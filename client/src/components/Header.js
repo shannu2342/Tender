@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Mail, Phone, ArrowUpRight, Crown, LogOut } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
@@ -17,6 +17,7 @@ const menuItems = [
 ];
 
 const Header = () => {
+    const headerRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [premiumModalOpen, setPremiumModalOpen] = useState(false);
@@ -41,6 +42,18 @@ const Header = () => {
         return () => document.body.classList.remove(className);
     }, [isMenuOpen]);
 
+    useEffect(() => {
+        const setHeaderOffset = () => {
+            if (!headerRef.current) return;
+            const height = headerRef.current.offsetHeight || 0;
+            document.documentElement.style.setProperty('--header-offset', `${height}px`);
+        };
+
+        setHeaderOffset();
+        window.addEventListener('resize', setHeaderOffset);
+        return () => window.removeEventListener('resize', setHeaderOffset);
+    }, []);
+
     const isActive = (path) => location.pathname === path;
     const handlePremiumClick = () => {
         if (!isLoggedIn) {
@@ -51,7 +64,7 @@ const Header = () => {
     };
 
     return (
-        <header className={`site-header site-header--glass ${scrolled ? 'site-header--scrolled' : ''}`}>
+        <header ref={headerRef} className={`site-header site-header--glass ${scrolled ? 'site-header--scrolled' : ''}`}>
             <div className="site-header__topbar">
                 <div className="container site-header__topbar-inner">
                     <div className="site-header__contact-group">

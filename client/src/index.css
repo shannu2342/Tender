@@ -68,6 +68,7 @@ img {
 
 main {
     flex: 1;
+    padding-top: var(--header-offset, 120px);
 }
 
 .loading {
@@ -1702,7 +1703,12 @@ a:hover {
 }
 
 .site-header--glass {
-    background: linear-gradient(135deg, rgba(43, 191, 105, 0.78), rgba(36, 155, 87, 0.76)) !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(43, 191, 105, 0.74), rgba(36, 155, 87, 0.7)) !important;
     backdrop-filter: blur(16px) saturate(135%);
     -webkit-backdrop-filter: blur(16px) saturate(135%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
@@ -1710,13 +1716,18 @@ a:hover {
 }
 
 .site-header--glass .site-header__topbar {
-    background: rgba(17, 94, 53, 0.58) !important;
+    background: transparent !important;
     backdrop-filter: blur(14px) saturate(135%);
     -webkit-backdrop-filter: blur(14px) saturate(135%);
+    border-bottom: 0 !important;
 }
 
 .site-header--glass .site-header__main {
     position: relative;
+}
+
+.site-header--glass .site-header__topbar-inner {
+    min-height: 40px;
 }
 
 .btn-glass {
@@ -1828,6 +1839,10 @@ a:hover {
         background: linear-gradient(180deg, #2bbf69, #249b57);
         border-color: rgba(43, 191, 105, 0.9);
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    main {
+        padding-top: var(--header-offset, 72px);
     }
 
     .site-header__main {
