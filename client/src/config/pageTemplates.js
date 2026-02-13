@@ -2,7 +2,9 @@ export const pageTemplates = {
     home: {
         title: 'GeM Services India',
         kicker: 'Enterprise Procurement Enablement',
-        lead: 'Built for serious teams that need predictable support for GeM onboarding, catalogue execution, bid participation, and tender delivery timelines.'
+        lead: 'Built for serious teams that need predictable support for GeM onboarding, catalogue execution, bid participation, and tender delivery timelines.',
+        heroPrimaryImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1400&q=80',
+        heroSecondaryImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80'
     },
     contact: {
         title: 'Talk to Our Team',
@@ -19,6 +21,7 @@ export const pageTemplates = {
     about: {
         title: 'About Us',
         lead: 'We are a procurement execution partner focused on GeM operations, tender workflows, and compliance-driven delivery.',
+        heroImage: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1600&q=80',
         sections: [
             {
                 heading: 'Who We Are',
@@ -46,11 +49,28 @@ export const pageTemplates = {
     why_choose_us: {
         title: 'Why Choose Us',
         lead: 'Enterprise teams trust us because we deliver procurement support with operational rigor and consistent communication.',
+        heroImage: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80',
         items: [
-            { title: 'Specialized Procurement Team', text: 'Dedicated resources for GeM, bid preparation, and documentation quality control.' },
-            { title: 'Compliance-Led Execution', text: 'We design each step to reduce non-compliance risk and avoid last-minute submission failures.' },
-            { title: 'Faster Decision Cycles', text: 'Structured data and clear handoffs help your team decide faster on bid participation.' },
-            { title: 'Long-Term Partnership Model', text: 'Our workflows are built for sustained operations, not one-time transactions.' }
+            {
+                title: 'Specialized Procurement Team',
+                text: 'Dedicated resources for GeM, bid preparation, and documentation quality control.',
+                imageUrl: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1200&q=80'
+            },
+            {
+                title: 'Compliance-Led Execution',
+                text: 'We design each step to reduce non-compliance risk and avoid last-minute submission failures.',
+                imageUrl: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80'
+            },
+            {
+                title: 'Faster Decision Cycles',
+                text: 'Structured data and clear handoffs help your team decide faster on bid participation.',
+                imageUrl: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80'
+            },
+            {
+                title: 'Long-Term Partnership Model',
+                text: 'Our workflows are built for sustained operations, not one-time transactions.',
+                imageUrl: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80'
+            }
         ]
     },
     how_it_works: {

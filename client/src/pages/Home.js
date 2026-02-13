@@ -16,6 +16,9 @@ const Home = () => {
     const [services, setServices] = useState([]);
     const [tenders, setTenders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const heroPrimaryImage = managed.heroPrimaryImage || site.home.heroImageUrl;
+    const heroSecondaryImage =
+        managed.heroSecondaryImage || 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80';
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,41 +55,43 @@ const Home = () => {
         <div className="page page--tight-top">
             <div className="container">
                 <section
-                    className={`hero-panel ${site.home.heroImageUrl ? 'hero-panel--dark hero-panel--image' : ''}`}
-                    style={
-                        site.home.heroImageUrl
-                            ? {
-                                backgroundImage: `url("${site.home.heroImageUrl}")`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                backgroundColor: '#0b1220'
-                            }
-                            : undefined
-                    }
-                    aria-label={site.home.heroImageAlt}
+                    className="hero-panel"
+                    aria-label={site.home.heroImageAlt || 'Home hero section'}
                 >
-                    <span className="kicker">{managed.kicker}</span>
-                    <h1 className="page__title mt-14">{managed.title || site.name}</h1>
-                    <p className={`page__lead ${site.home.heroImageUrl ? 'home-hero__lead--light' : 'home-hero__lead--dark'}`}>{managed.lead}</p>
-                    <div className="cta-row">
-                        <Link to="/services" className="btn btn-primary">
-                            Explore Services <ArrowRight size={16} />
-                        </Link>
-                        <Link to="/tenders" className="btn btn-secondary">
-                            Active Tenders <Clock3 size={16} />
-                        </Link>
-                        <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="btn btn-success">
-                            WhatsApp Desk <MessageCircle size={16} />
-                        </a>
-                    </div>
-                    <div className="stats-grid">
-                        <div className="stat-box">
-                            <strong>10+ Years</strong>
-                            <span>Procurement and compliance operations</span>
+                    <div className="home-hero-layout">
+                        <div className="home-hero-copy">
+                            <span className="kicker">{managed.kicker}</span>
+                            <h1 className="page__title mt-14">{managed.title || site.name}</h1>
+                            <p className="page__lead home-hero__lead--dark">{managed.lead}</p>
+                            <div className="cta-row">
+                                <Link to="/services" className="btn btn-primary">
+                                    Explore Services <ArrowRight size={16} />
+                                </Link>
+                                <Link to="/tenders" className="btn btn-secondary">
+                                    Active Tenders <Clock3 size={16} />
+                                </Link>
+                                <a href={`https://wa.me/${site.contact.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="btn btn-success">
+                                    WhatsApp Desk <MessageCircle size={16} />
+                                </a>
+                            </div>
+                            <div className="stats-grid">
+                                <div className="stat-box">
+                                    <strong>10+ Years</strong>
+                                    <span>Procurement and compliance operations</span>
+                                </div>
+                                <div className="stat-box">
+                                    <strong>Pan-India</strong>
+                                    <span>Support across sectors and states</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="stat-box">
-                            <strong>Pan-India</strong>
-                            <span>Support across sectors and states</span>
+                        <div className="home-hero-visuals" aria-hidden="true">
+                            <div className="hero-visual-card hero-visual-card--left">
+                                <img src={heroPrimaryImage} alt="" className="media-cover media-cover--md" />
+                            </div>
+                            <div className="hero-visual-card hero-visual-card--right">
+                                <img src={heroSecondaryImage} alt="" className="media-cover media-cover--md" />
+                            </div>
                         </div>
                     </div>
                 </section>

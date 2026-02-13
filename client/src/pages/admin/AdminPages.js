@@ -9,6 +9,12 @@ const emptyForm = {
     enabled: true
 };
 
+const mediaConfigExamples = {
+    home: '{\n  "title": "GeM Services India",\n  "kicker": "Enterprise Procurement Enablement",\n  "lead": "Your hero lead text",\n  "heroPrimaryImage": "https://.../image-left.jpg",\n  "heroSecondaryImage": "https://.../image-right.jpg"\n}',
+    about: '{\n  "title": "About Us",\n  "lead": "Your lead",\n  "heroImage": "https://.../about-hero.jpg",\n  "sections": []\n}',
+    why_choose_us: '{\n  "title": "Why Choose Us",\n  "lead": "Your lead",\n  "heroImage": "https://.../why-hero.jpg",\n  "items": [\n    {\n      "title": "Specialized Procurement Team",\n      "text": "Description",\n      "imageUrl": "https://.../item-image.jpg"\n    }\n  ]\n}'
+};
+
 const AdminPages = () => {
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -127,6 +133,12 @@ const AdminPages = () => {
                         <label>Content (JSON recommended)</label>
                         <textarea rows={10} className="form-control" value={form.content} onChange={(e) => setForm((v) => ({ ...v, content: e.target.value }))} />
                     </div>
+                    {mediaConfigExamples[form.pageName] ? (
+                        <div className="notice mt-0">
+                            <strong>Image Fields for `{form.pageName}`</strong>
+                            <pre style={{ whiteSpace: 'pre-wrap', marginTop: 8, fontSize: '0.85rem' }}>{mediaConfigExamples[form.pageName]}</pre>
+                        </div>
+                    ) : null}
                     <div className="cta-row">
                         <button className="btn btn-primary" type="submit">{editingId ? 'Update Page' : 'Create Page'}</button>
                         {editingId ? <button className="btn btn-secondary" type="button" onClick={resetForm}>Cancel Edit</button> : null}

@@ -125,6 +125,38 @@ main {
     }
 }
 
+@keyframes slideInLeftSoft {
+    from {
+        opacity: 0;
+        transform: translateX(-46px) translateY(14px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
+@keyframes slideInRightSoft {
+    from {
+        opacity: 0;
+        transform: translateX(46px) translateY(-14px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
+@keyframes floatY {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
 .text-secondary {
     color: var(--color-muted);
 }
@@ -1361,6 +1393,39 @@ body.mobile-nav-open .wa-float {
     line-height: 1.1;
 }
 
+.home-hero-layout {
+    display: grid;
+    gap: 24px;
+}
+
+.home-hero-copy {
+    position: relative;
+    z-index: 2;
+}
+
+.home-hero-visuals {
+    display: grid;
+    gap: 14px;
+    align-content: center;
+}
+
+.hero-visual-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.18);
+    background: #fff;
+    will-change: transform, opacity;
+}
+
+.hero-visual-card--left {
+    animation: slideInLeftSoft 0.8s ease both, floatY 5.8s ease-in-out 1s infinite;
+}
+
+.hero-visual-card--right {
+    animation: slideInRightSoft 0.8s ease both, floatY 6.4s ease-in-out 1.2s infinite;
+}
+
 /* Vibrant Premium Theme Overrides */
 .card,
 .legal-card,
@@ -1803,6 +1868,12 @@ a:hover {
     .wa-float {
         transition: none !important;
     }
+
+    .hero-visual-card--left,
+    .hero-visual-card--right {
+        animation: none !important;
+        transform: none !important;
+    }
 }
 
 @media (min-width: 720px) {
@@ -1820,6 +1891,19 @@ a:hover {
 
     .split-layout {
         grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    }
+
+    .home-hero-layout {
+        grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.95fr);
+        align-items: center;
+    }
+
+    .hero-visual-card--left {
+        transform: translateX(22px);
+    }
+
+    .hero-visual-card--right {
+        transform: translateX(-18px);
     }
 }
 

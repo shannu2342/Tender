@@ -13,6 +13,9 @@ const About = () => {
                 </header>
 
                 <section className="legal-card prose">
+                    {content.heroImage ? (
+                        <img src={content.heroImage} alt={content.title} className="media-cover media-cover--md" style={{ borderRadius: 14, marginBottom: 18 }} />
+                    ) : null}
                     {(content.sections || []).map((section) => (
                         <section key={section.heading}>
                             <h2>{section.heading}</h2>
